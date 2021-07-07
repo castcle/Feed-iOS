@@ -8,8 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		B7928135268F2BDF000ED84A /* Feed.h in Headers */ = {isa = PBXBuildFile; fileRef = B7928133268F2BDF000ED84A /* Feed.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B79281AB26945455000ED84A /* Feed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B79281AA26945455000ED84A /* Feed.storyboard */; };
+		B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79281AC2694546C000ED84A /* FeedViewController.swift */; };
+		B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79281BE269456D7000ED84A /* FeedNibVars.swift */; };
+		B79281C326945707000ED84A /* FeedOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79281C226945707000ED84A /* FeedOpener.swift */; };
+		B79281CA26959A6F000ED84A /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79281C926959A6F000ED84A /* Core.framework */; };
+		B79281CB26959A6F000ED84A /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B79281C926959A6F000ED84A /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B79281CC26959A6F000ED84A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B79281CB26959A6F000ED84A /* Core.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Feed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -18,6 +38,11 @@
 		B7928130268F2BDF000ED84A /* Feed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7928133268F2BDF000ED84A /* Feed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		B7928134268F2BDF000ED84A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B79281AA26945455000ED84A /* Feed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Feed.storyboard; sourceTree = "<group>"; };
+		B79281AC2694546C000ED84A /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		B79281BE269456D7000ED84A /* FeedNibVars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNibVars.swift; sourceTree = "<group>"; };
+		B79281C226945707000ED84A /* FeedOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOpener.swift; sourceTree = "<group>"; };
+		B79281C926959A6F000ED84A /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
+				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +71,7 @@
 		9A7B74152E6B2CC57DEC5DED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B79281C926959A6F000ED84A /* Core.framework */,
 				0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */,
 			);
 			name = Frameworks;
@@ -73,8 +100,20 @@
 			children = (
 				B7928133268F2BDF000ED84A /* Feed.h */,
 				B7928134268F2BDF000ED84A /* Info.plist */,
+				B79281BB269456AB000ED84A /* Utilities */,
+				B79281AA26945455000ED84A /* Feed.storyboard */,
+				B79281AC2694546C000ED84A /* FeedViewController.swift */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		B79281BB269456AB000ED84A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B79281BE269456D7000ED84A /* FeedNibVars.swift */,
+				B79281C226945707000ED84A /* FeedOpener.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,6 +139,7 @@
 				B792812C268F2BDF000ED84A /* Sources */,
 				B792812D268F2BDF000ED84A /* Frameworks */,
 				B792812E268F2BDF000ED84A /* Resources */,
+				B79281CC26959A6F000ED84A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -120,6 +160,7 @@
 				TargetAttributes = {
 					B792812F268F2BDF000ED84A = {
 						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1250;
 					};
 				};
 			};
@@ -146,6 +187,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B79281AB26945455000ED84A /* Feed.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,6 +223,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
+				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
+				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +358,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AE884B44656FAD13A8A0F66 /* Pods-Feed.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -328,6 +374,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.castcle.Feed;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -337,6 +384,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6C550B89C4EF1448C32C78D8 /* Pods-Feed.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
