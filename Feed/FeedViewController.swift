@@ -16,19 +16,7 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
         FeedViewController.castcleTabbarDelegate = self
     }
     
-    func castcleTabbar(didSelectButtonBar button: Int) {
+    func castcleTabbar(didSelectButtonBar button: BarButtonActionType) {
         print(button)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
