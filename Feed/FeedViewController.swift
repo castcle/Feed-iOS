@@ -6,18 +6,18 @@
 //
 
 import UIKit
-import Core
+import Component
 
-class FeedViewController: UIViewController {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    
+class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.Asset.lightBlue
-        self.titleLabel.font = UIFont.asset(.medium, fontSize: .title)
+        self.customNavigationBar(.primary, title: "For You", leftBarButton: .logo, rightBarButton: [.menu])
+        FeedViewController.castcleTabbarDelegate = self
+    }
+    
+    func castcleTabbar(didSelectButtonBar button: Int) {
+        print(button)
     }
     
 

@@ -8,11 +8,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Kanit-Medium.ttf">
-            <string>Kanit-Medium</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Feed View Controller-->
         <scene sceneID="s0d-6b-0kx">
@@ -21,24 +16,9 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ewg-p3-Wie">
-                                <rect key="frame" x="166" y="30" width="43.5" height="30"/>
-                                <fontDescription key="fontDescription" name="Kanit-Medium" family="Kanit" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" name="darkGraphiteBlue"/>
-                        <constraints>
-                            <constraint firstItem="ewg-p3-Wie" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="ffA-eb-JBm"/>
-                            <constraint firstItem="ewg-p3-Wie" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="30" id="iuJ-wG-UF3"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="titleLabel" destination="ewg-p3-Wie" id="Pi1-H9-BgE"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
