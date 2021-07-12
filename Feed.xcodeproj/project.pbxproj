@@ -3,14 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B75528D8269B6CAA005D5EB5 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D7269B6CAA005D5EB5 /* Feed.swift */; };
+		B75528DB269B6DE3005D5EB5 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */; };
+		B75528DC269B6DE3005D5EB5 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */; };
+		B75528DE269B71BB005D5EB5 /* PostSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528DD269B71BA005D5EB5 /* PostSectionController.swift */; };
+		B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B75528E4269B82AB005D5EB5 /* Kingfisher */; };
 		B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; };
 		B75E62B2269713C5003E1ADA /* Component.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B75E62B826989AFF003E1ADA /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75E62B626989AFF003E1ADA /* PostTableViewCell.swift */; };
-		B75E62B926989AFF003E1ADA /* PostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75E62B726989AFF003E1ADA /* PostTableViewCell.xib */; };
 		B7928135268F2BDF000ED84A /* Feed.h in Headers */ = {isa = PBXBuildFile; fileRef = B7928133268F2BDF000ED84A /* Feed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B79281AB26945455000ED84A /* Feed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B79281AA26945455000ED84A /* Feed.storyboard */; };
 		B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79281AC2694546C000ED84A /* FeedViewController.swift */; };
@@ -42,9 +45,11 @@
 		7AE884B44656FAD13A8A0F66 /* Pods-Feed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug.xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug.xcconfig"; sourceTree = "<group>"; };
 		873E0A601CA489F3F5DC455B /* Pods-Feed.debug (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (development).xcconfig"; sourceTree = "<group>"; };
 		A6EDCA42C0CE37F502CE39C3 /* Pods-Feed.debug (production).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (production).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (production).xcconfig"; sourceTree = "<group>"; };
+		B75528D7269B6CAA005D5EB5 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
+		B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
+		B75528DD269B71BA005D5EB5 /* PostSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSectionController.swift; sourceTree = "<group>"; };
 		B75E62B0269713C5003E1ADA /* Component.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Component.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B75E62B626989AFF003E1ADA /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
-		B75E62B726989AFF003E1ADA /* PostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostTableViewCell.xib; sourceTree = "<group>"; };
 		B7928130268F2BDF000ED84A /* Feed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7928133268F2BDF000ED84A /* Feed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		B7928134268F2BDF000ED84A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */,
 				B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
@@ -125,8 +131,10 @@
 				B79281BB269456AB000ED84A /* Utilities */,
 				B79281AA26945455000ED84A /* Feed.storyboard */,
 				B79281AC2694546C000ED84A /* FeedViewController.swift */,
-				B75E62B626989AFF003E1ADA /* PostTableViewCell.swift */,
-				B75E62B726989AFF003E1ADA /* PostTableViewCell.xib */,
+				B75528D7269B6CAA005D5EB5 /* Feed.swift */,
+				B75528DD269B71BA005D5EB5 /* PostSectionController.swift */,
+				B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */,
+				B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -170,6 +178,9 @@
 			dependencies = (
 			);
 			name = Feed;
+			packageProductDependencies = (
+				B75528E4269B82AB005D5EB5 /* Kingfisher */,
+			);
 			productName = Feed;
 			productReference = B7928130268F2BDF000ED84A /* Feed.framework */;
 			productType = "com.apple.product-type.framework";
@@ -197,6 +208,9 @@
 				Base,
 			);
 			mainGroup = B7928126268F2BDF000ED84A;
+			packageReferences = (
+				B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = B7928131268F2BDF000ED84A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -211,8 +225,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B75528DC269B6DE3005D5EB5 /* PostCollectionViewCell.xib in Resources */,
 				B79281AB26945455000ED84A /* Feed.storyboard in Resources */,
-				B75E62B926989AFF003E1ADA /* PostTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,10 +262,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B75528DB269B6DE3005D5EB5 /* PostCollectionViewCell.swift in Sources */,
 				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
+				B75528D8269B6CAA005D5EB5 /* Feed.swift in Sources */,
+				B75528DE269B71BB005D5EB5 /* PostSectionController.swift in Sources */,
 				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
 				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
-				B75E62B826989AFF003E1ADA /* PostTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -807,6 +823,25 @@
 			defaultConfigurationName = "Release (Production)";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B75528E4269B82AB005D5EB5 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B7928127268F2BDF000ED84A /* Project object */;
 }
