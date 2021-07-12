@@ -60,7 +60,7 @@ extension FeedViewController: ListAdapterDataSource {
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
 //        if object is Int {
-          return PostSectionController()
+          return NewPostSectionController()
 //        } else {
 //          return ListSectionController()
 //        }

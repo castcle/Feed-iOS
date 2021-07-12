@@ -1,5 +1,5 @@
 //
-//  PostSectionController.swift
+//  NewPostSectionController.swift
 //  Feed
 //
 //  Created by Tanakorn Phoochaliaw on 12/7/2564 BE.
@@ -8,7 +8,7 @@
 import Core
 import IGListKit
 
-class PostSectionController: ListSectionController {
+class NewPostSectionController: ListSectionController {
     override init() {
         super.init()
         inset = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 0)
@@ -16,7 +16,7 @@ class PostSectionController: ListSectionController {
 }
 
 // MARK: - Data Provider
-extension PostSectionController {
+extension NewPostSectionController {
     override func numberOfItems() -> Int {
         return 1
     }
@@ -27,11 +27,11 @@ extension PostSectionController {
           else {
             return .zero
         }
-        return PostCollectionViewCell.cellSize(width: context.containerSize.width)
+        return NewPostCell.cellSize(width: context.containerSize.width)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.post, bundle: ConfigBundle.feed, for: self, at: index) ?? PostCollectionViewCell()
+        let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.post, bundle: ConfigBundle.feed, for: self, at: index) ?? NewPostCell()
         cell.backgroundColor = UIColor.Asset.darkGray
         return cell
     }

@@ -22,6 +22,6 @@ public struct FeedNibVars {
     
     // MARK: - CollectionViewCell
     public struct CollectionViewCell {
-        public static let post = "PostCollectionViewCell"
+        public static let post = "NewPostCell"
     }
 }

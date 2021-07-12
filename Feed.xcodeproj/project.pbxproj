@@ -8,10 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		B75528D8269B6CAA005D5EB5 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D7269B6CAA005D5EB5 /* Feed.swift */; };
-		B75528DB269B6DE3005D5EB5 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */; };
-		B75528DC269B6DE3005D5EB5 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */; };
-		B75528DE269B71BB005D5EB5 /* PostSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528DD269B71BA005D5EB5 /* PostSectionController.swift */; };
+		B75528DB269B6DE3005D5EB5 /* NewPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D9269B6DE3005D5EB5 /* NewPostCell.swift */; };
+		B75528DC269B6DE3005D5EB5 /* NewPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75528DA269B6DE3005D5EB5 /* NewPostCell.xib */; };
+		B75528DE269B71BB005D5EB5 /* NewPostSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528DD269B71BA005D5EB5 /* NewPostSectionController.swift */; };
 		B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B75528E4269B82AB005D5EB5 /* Kingfisher */; };
+		B7552931269C4466005D5EB5 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = B7552930269C4466005D5EB5 /* Moya */; };
+		B7552934269C44A0005D5EB5 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B7552933269C44A0005D5EB5 /* SwiftyJSON */; };
+		B755293F269C4592005D5EB5 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = B755293E269C4592005D5EB5 /* SwiftDate */; };
 		B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; };
 		B75E62B2269713C5003E1ADA /* Component.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7928135268F2BDF000ED84A /* Feed.h in Headers */ = {isa = PBXBuildFile; fileRef = B7928133268F2BDF000ED84A /* Feed.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -46,9 +49,9 @@
 		873E0A601CA489F3F5DC455B /* Pods-Feed.debug (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (development).xcconfig"; sourceTree = "<group>"; };
 		A6EDCA42C0CE37F502CE39C3 /* Pods-Feed.debug (production).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (production).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (production).xcconfig"; sourceTree = "<group>"; };
 		B75528D7269B6CAA005D5EB5 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
-		B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
-		B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
-		B75528DD269B71BA005D5EB5 /* PostSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSectionController.swift; sourceTree = "<group>"; };
+		B75528D9269B6DE3005D5EB5 /* NewPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostCell.swift; sourceTree = "<group>"; };
+		B75528DA269B6DE3005D5EB5 /* NewPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewPostCell.xib; sourceTree = "<group>"; };
+		B75528DD269B71BA005D5EB5 /* NewPostSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostSectionController.swift; sourceTree = "<group>"; };
 		B75E62B0269713C5003E1ADA /* Component.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Component.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7928130268F2BDF000ED84A /* Feed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7928133268F2BDF000ED84A /* Feed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
@@ -69,9 +72,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7552934269C44A0005D5EB5 /* SwiftyJSON in Frameworks */,
 				B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */,
 				B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
+				B755293F269C4592005D5EB5 /* SwiftDate in Frameworks */,
+				B7552931269C4466005D5EB5 /* Moya in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,9 +138,9 @@
 				B79281AA26945455000ED84A /* Feed.storyboard */,
 				B79281AC2694546C000ED84A /* FeedViewController.swift */,
 				B75528D7269B6CAA005D5EB5 /* Feed.swift */,
-				B75528DD269B71BA005D5EB5 /* PostSectionController.swift */,
-				B75528D9269B6DE3005D5EB5 /* PostCollectionViewCell.swift */,
-				B75528DA269B6DE3005D5EB5 /* PostCollectionViewCell.xib */,
+				B75528DD269B71BA005D5EB5 /* NewPostSectionController.swift */,
+				B75528D9269B6DE3005D5EB5 /* NewPostCell.swift */,
+				B75528DA269B6DE3005D5EB5 /* NewPostCell.xib */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -180,6 +186,9 @@
 			name = Feed;
 			packageProductDependencies = (
 				B75528E4269B82AB005D5EB5 /* Kingfisher */,
+				B7552930269C4466005D5EB5 /* Moya */,
+				B7552933269C44A0005D5EB5 /* SwiftyJSON */,
+				B755293E269C4592005D5EB5 /* SwiftDate */,
 			);
 			productName = Feed;
 			productReference = B7928130268F2BDF000ED84A /* Feed.framework */;
@@ -210,6 +219,9 @@
 			mainGroup = B7928126268F2BDF000ED84A;
 			packageReferences = (
 				B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */,
+				B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */,
 			);
 			productRefGroup = B7928131268F2BDF000ED84A /* Products */;
 			projectDirPath = "";
@@ -225,7 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B75528DC269B6DE3005D5EB5 /* PostCollectionViewCell.xib in Resources */,
+				B75528DC269B6DE3005D5EB5 /* NewPostCell.xib in Resources */,
 				B79281AB26945455000ED84A /* Feed.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,10 +274,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B75528DB269B6DE3005D5EB5 /* PostCollectionViewCell.swift in Sources */,
+				B75528DB269B6DE3005D5EB5 /* NewPostCell.swift in Sources */,
 				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
 				B75528D8269B6CAA005D5EB5 /* Feed.swift in Sources */,
-				B75528DE269B71BB005D5EB5 /* PostSectionController.swift in Sources */,
+				B75528DE269B71BB005D5EB5 /* NewPostSectionController.swift in Sources */,
 				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
 				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
 			);
@@ -833,6 +845,30 @@
 				minimumVersion = 6.3.0;
 			};
 		};
+		B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.0.1;
+			};
+		};
+		B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+		B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/malcommac/SwiftDate.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -840,6 +876,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		B7552930269C4466005D5EB5 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		B7552933269C44A0005D5EB5 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		B755293E269C4592005D5EB5 /* SwiftDate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */;
+			productName = SwiftDate;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
