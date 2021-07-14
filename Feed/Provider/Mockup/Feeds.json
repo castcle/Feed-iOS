@@ -1,0 +1,334 @@
+{
+    "message": "success message",
+    "payload": {
+        "feed": [
+            {
+                "feature": {
+                    "id": "{UUID}",
+                    "slug": "feed",
+                    "name": "Feed",
+                    "key": "feature.feed"
+                },
+                "type": "post",
+                "id": "{UUID}",
+                "header": "header",
+                "content": "body",
+                "photo": [
+                    {
+                        "url": "url"
+                    }
+                ],
+                "link": [
+                    {
+                        "type": "youtube",
+                        "url": "url"
+                    }
+                ],
+                "aggregator": {
+                    "type": "friend",
+                    "id": "{UUID}",
+                    "action": "liked",
+                    "message": "A liked",
+                },
+                "liked": {
+                    "count": 1234,
+                    "liked": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "commented": {
+                    "count": 1234,
+                    "commented": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "recasted": {
+                    "count": 1234,
+                    "recasted": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "author": {
+                    "type": "people",
+                    "id": "{UUID}",
+                    "name": "Tommy Cruise",
+                    "firstName": "Tom",
+                    "lastName": "Cruise",
+                    "avatar": "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    "verified": true,
+                    "followed": false,
+                },
+                "quoteCast": {},
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            },
+            {
+                "feature": {
+                    "id": "{UUID}",
+                    "slug": "feed",
+                    "name": "Feed",
+                    "key": "feature.feed"
+                },
+                "type": "post",
+                "id": "{UUID}",
+                "header": "header",
+                "content": "body",
+                "photo": [
+                    {
+                        "url": "url"
+                    }
+                ],
+                "link": [
+                    {
+                        "type": "youtube",
+                        "url": "url"
+                    }
+                ],
+                "aggregator": {
+                    "type": "friend",
+                    "id": "{UUID}",
+                    "action": "liked",
+                    "message": "A liked",
+                },
+                "liked": {
+                    "count": 1234,
+                    "liked": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "commented": {
+                    "count": 1234,
+                    "commented": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "recasted": {
+                    "count": 1234,
+                    "recasted": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "author": {
+                    "type": "people",
+                    "id": "{UUID}",
+                    "name": "Tommy Cruise",
+                    "firstName": "Tom",
+                    "lastName": "Cruise",
+                    "avatar": "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    "verified": true,
+                    "followed": false,
+                },
+                "quoteCast": {},
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            },
+            {
+                "feature": {
+                    "id": "{UUID}",
+                    "slug": "feed",
+                    "name": "Feed",
+                    "key": "feature.feed"
+                },
+                "type": "post",
+                "id": "{UUID}",
+                "header": "header",
+                "content": "body",
+                "photo": [
+                    {
+                        "url": "url"
+                    }
+                ],
+                "link": [
+                    {
+                        "type": "youtube",
+                        "url": "url"
+                    }
+                ],
+                "aggregator": {
+                    "type": "friend",
+                    "id": "{UUID}",
+                    "action": "liked",
+                    "message": "A liked",
+                },
+                "liked": {
+                    "count": 1234,
+                    "liked": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "commented": {
+                    "count": 1234,
+                    "commented": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "recasted": {
+                    "count": 1234,
+                    "recasted": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "author": {
+                    "type": "people",
+                    "id": "{UUID}",
+                    "name": "Tommy Cruise",
+                    "firstName": "Tom",
+                    "lastName": "Cruise",
+                    "avatar": "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    "verified": true,
+                    "followed": false,
+                },
+                "quoteCast": {},
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            },
+            {
+                "feature": {
+                    "id": "{UUID}",
+                    "slug": "feed",
+                    "name": "Feed",
+                    "key": "feature.feed"
+                },
+                "type": "post",
+                "id": "{UUID}",
+                "header": "header",
+                "content": "body",
+                "photo": [
+                    {
+                        "url": "url"
+                    }
+                ],
+                "link": [
+                    {
+                        "type": "youtube",
+                        "url": "url"
+                    }
+                ],
+                "aggregator": {
+                    "type": "friend",
+                    "id": "{UUID}",
+                    "action": "liked",
+                    "message": "A liked",
+                },
+                "liked": {
+                    "count": 1234,
+                    "liked": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "commented": {
+                    "count": 1234,
+                    "commented": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "recasted": {
+                    "count": 1234,
+                    "recasted": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "author": {
+                    "type": "people",
+                    "id": "{UUID}",
+                    "name": "Tommy Cruise",
+                    "firstName": "Tom",
+                    "lastName": "Cruise",
+                    "avatar": "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    "verified": true,
+                    "followed": false,
+                },
+                "quoteCast": {},
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            }
+            
+        ],
+        "pagination": {
+            "previous": 1,
+            "self": 2,
+            "next": 3,
+            "limit": 25
+        },
+        "suggestion": [
+            {
+                "type": "page",
+                "id": "{UUID}",
+                "name": "display name",
+                "firstName": "first name",
+                "lastName": "last name",
+                "avatar": "url",
+                "verified": true,
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            }
+        ],
+        "reminder": [
+            {
+                "type": "N/A",
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-06-05T15:40:29Z"
+            }
+        ],
+    }
+}

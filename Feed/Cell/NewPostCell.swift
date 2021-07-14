@@ -19,8 +19,8 @@ class NewPostCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        self.searchView.custom(color: UIColor.Asset.darkGray, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.black)
-        self.profileImage.circle(color: UIColor.Asset.black)
+        self.searchView.custom(color: UIColor.Asset.darkGray, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.darkGraphiteBlue)
+        self.profileImage.circle(color: UIColor.Asset.darkGraphiteBlue)
         self.placeholderLabel.font = UIFont.asset(.light, fontSize: .overline)
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
         
@@ -32,6 +32,7 @@ class NewPostCell: UICollectionViewCell {
 //        let labelBounds = TextSize.size(text, font: MessageCell.font, width: width, insets: CommonInsets)
         return CGSize(width: width, height: 60)
     }
+    
     @IBAction func postAction(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: "Go to post view", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))

@@ -14,7 +14,7 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
     
     let collectionView: UICollectionView = {
       let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        view.backgroundColor = UIColor.Asset.black
+        view.backgroundColor = UIColor.Asset.darkGraphiteBlue
       return view
     }()
     
@@ -22,8 +22,11 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
       return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
     
+    var viewModel = FeedViewModel()
+    
     enum FeedType: Int {
         case newPost = 0
+        case hashtag
     }
     
     override func viewDidLoad() {
@@ -32,15 +35,30 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
         self.customNavigationBar(.primary, title: "For You", leftBarButton: .logo, rightBarButton: [.menu])
         FeedViewController.castcleTabbarDelegate = self
         
-        collectionView.alwaysBounceVertical = true
-        view.addSubview(collectionView)
-        adapter.collectionView = collectionView
-        adapter.dataSource = self
+        self.collectionView.alwaysBounceVertical = true
+        self.view.addSubview(self.collectionView)
+        self.adapter.collectionView = self.collectionView
+        self.adapter.dataSource = self
+        
+        self.collectionView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                self.collectionView.cr.endHeaderRefresh()
+            })
+        }
+        
+        self.viewModel.didLoadHashtagsFinish = {
+            self.adapter.performUpdates(animated: true)
+        }
+        
+        self.viewModel.didLoadFeedgsFinish = {
+            self.adapter.performUpdates(animated: true)
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
+        self.collectionView.frame = view.bounds
     }
     
     func castcleTabbar(didSelectButtonBar button: BarButtonActionType) {
@@ -51,19 +69,24 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
 // MARK: - ListAdapterDataSource
 extension FeedViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        let items = [FeedType.newPost.rawValue] as [ListDiffable]
-//        items += loader.entries as [ListDiffable]
-//        items += pathfinder.messages as [ListDiffable]
+        var items: [ListDiffable] = [FeedType.newPost.rawValue] as [ListDiffable]
+        if self.viewModel.hashtagShelf.hashtags.count > 0 {
+            items.append(self.viewModel.hashtagShelf as ListDiffable)
+        }
+        
+        self.viewModel.feedShelf.feeds.forEach { feed in
+            items.append(feed as ListDiffable)
+        }
         
         return items
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-//        if object is Int {
-          return NewPostSectionController()
-//        } else {
-//          return ListSectionController()
-//        }
+        if object is HashtagShelf {
+            return HashtagSectionController()
+        } else {
+            return NewPostSectionController()
+        }
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {

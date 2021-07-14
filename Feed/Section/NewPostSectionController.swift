@@ -11,7 +11,7 @@ import IGListKit
 class NewPostSectionController: ListSectionController {
     override init() {
         super.init()
-        inset = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 0)
+        inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
 
@@ -22,9 +22,7 @@ extension NewPostSectionController {
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
-        guard
-          let context = collectionContext
-          else {
+        guard let context = collectionContext else {
             return .zero
         }
         return NewPostCell.cellSize(width: context.containerSize.width)

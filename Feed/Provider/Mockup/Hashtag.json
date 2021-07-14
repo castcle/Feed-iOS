@@ -1,0 +1,45 @@
+{
+    "message": "success message",
+    "payload": [
+        {
+            "id": "{UUID}",
+            "slug": "#all",
+            "name": "All",
+            "key": "hashtag.all",
+            "created": "2021-06-05T15:40:29Z",
+            "updated": "2021-06-05T15:40:29Z"
+        },
+        {
+            "id": "{UUID}",
+            "slug": "#bitcoin",
+            "name": "#Bitcoin",
+            "key": "hashtag.bitcoin",
+            "created": "2021-06-05T15:40:29Z",
+            "updated": "2021-06-05T15:40:29Z"
+        },
+        {
+            "id": "{UUID}",
+            "slug": "#dogecoin",
+            "name": "#Dogecoin",
+            "key": "hashtag.dogecoin",
+            "created": "2021-06-05T15:40:29Z",
+            "updated": "2021-06-05T15:40:29Z"
+        },
+        {
+            "id": "{UUID}",
+            "slug": "#bnb",
+            "name": "#BNB",
+            "key": "hashtag.bnb",
+            "created": "2021-06-05T15:40:29Z",
+            "updated": "2021-06-05T15:40:29Z"
+        },
+        {
+            "id": "{UUID}",
+            "slug": "#bsc",
+            "name": "#bsc",
+            "key": "hashtag.bsc",
+            "created": "2021-06-05T15:40:29Z",
+            "updated": "2021-06-05T15:40:29Z"
+        }
+    ]
+}
