@@ -25,5 +25,7 @@ public struct FeedNibVars {
         public static let post = "NewPostCell"
         public static let hashtag = "HashtagCell"
         public static let hashtagCapsule = "HashtagCapsuleCell"
+        public static let headerFeed = "HeaderFeedCell"
+        public static let footerFeed = "FooterFeedCell"
     }
 }

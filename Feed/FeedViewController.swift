@@ -84,6 +84,8 @@ extension FeedViewController: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if object is HashtagShelf {
             return HashtagSectionController()
+        } else if object is Feed {
+            return FeedSectionController()
         } else {
             return NewPostSectionController()
         }

@@ -13,7 +13,7 @@ class HashtagSectionController: ListSectionController {
     
     override init() {
         super.init()
-        inset = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 0)
+        inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
 
@@ -33,11 +33,11 @@ extension HashtagSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.hashtag, bundle: ConfigBundle.feed, for: self, at: index) as? HashtagCell
         cell?.backgroundColor = UIColor.Asset.darkGraphiteBlue
-        cell?.hashtagShelf = hashtagShelf
+        cell?.hashtagShelf = self.hashtagShelf
         return cell ?? HashtagCell()
     }
     
     override func didUpdate(to object: Any) {
-        hashtagShelf = object as? HashtagShelf
+        self.hashtagShelf = object as? HashtagShelf
     }
 }

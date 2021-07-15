@@ -29,7 +29,6 @@ class NewPostCell: UICollectionViewCell {
     }
     
     static func cellSize(width: CGFloat) -> CGSize {
-//        let labelBounds = TextSize.size(text, font: MessageCell.font, width: width, insets: CommonInsets)
         return CGSize(width: width, height: 60)
     }
     

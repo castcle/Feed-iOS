@@ -5,6 +5,7 @@
 //  Created by Tanakorn Phoochaliaw on 14/7/2564 BE.
 //
 
+import Core
 import SwiftyJSON
 
 // MARK: - Feed
@@ -51,6 +52,10 @@ public class Feed: NSObject {
 //    let quoteCast: Feed
     let created: String
     let updated: String
+    
+    var postDate: Date {
+        return Date.stringToDate(str: self.updated)
+    }
     
     init(json: JSON) {
         
