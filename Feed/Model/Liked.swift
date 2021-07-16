@@ -16,7 +16,7 @@ public enum LikedKey: String, Codable {
 
 public class Liked: NSObject {
     let count: Int
-    let liked: Bool
+    var liked: Bool
     let participant: [Participant]
     
     init(json: JSON) {

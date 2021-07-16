@@ -51,6 +51,11 @@
 		B79281C326945707000ED84A /* FeedOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79281C226945707000ED84A /* FeedOpener.swift */; };
 		B79281CA26959A6F000ED84A /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B79281C926959A6F000ED84A /* Core.framework */; };
 		B79281CB26959A6F000ED84A /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B79281C926959A6F000ED84A /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7B1E39226A06CA1006E2FF6 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E39026A06CA1006E2FF6 /* TextCell.swift */; };
+		B7B1E39326A06CA1006E2FF6 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E39126A06CA1006E2FF6 /* TextCell.xib */; };
+		B7B1E39626A06CF8006E2FF6 /* ActiveLabel in Frameworks */ = {isa = PBXBuildFile; productRef = B7B1E39526A06CF8006E2FF6 /* ActiveLabel */; };
+		B7B1E39F26A165AC006E2FF6 /* TextLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E39D26A165AC006E2FF6 /* TextLinkCell.swift */; };
+		B7B1E3A026A165AC006E2FF6 /* TextLinkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E39E26A165AC006E2FF6 /* TextLinkCell.xib */; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +120,10 @@
 		B79281BE269456D7000ED84A /* FeedNibVars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNibVars.swift; sourceTree = "<group>"; };
 		B79281C226945707000ED84A /* FeedOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOpener.swift; sourceTree = "<group>"; };
 		B79281C926959A6F000ED84A /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7B1E39026A06CA1006E2FF6 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
+		B7B1E39126A06CA1006E2FF6 /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
+		B7B1E39D26A165AC006E2FF6 /* TextLinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLinkCell.swift; sourceTree = "<group>"; };
+		B7B1E39E26A165AC006E2FF6 /* TextLinkCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextLinkCell.xib; sourceTree = "<group>"; };
 		C22DC872E5C9933F81C4C9B8 /* Pods-Feed.release (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (development).xcconfig"; sourceTree = "<group>"; };
 		C9A6A819CC9CFCB3AD78E186 /* Pods-Feed.release (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (staging).xcconfig"; sourceTree = "<group>"; };
 		EE2210B164B73BDD8332BDFF /* Pods-Feed.debug (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (staging).xcconfig"; sourceTree = "<group>"; };
@@ -133,6 +142,7 @@
 				B755293F269C4592005D5EB5 /* SwiftDate in Frameworks */,
 				B7552931269C4466005D5EB5 /* Moya in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
+				B7B1E39626A06CF8006E2FF6 /* ActiveLabel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +188,7 @@
 				B75529D8269FDB0A005D5EB5 /* HeaderFeedCell.xib */,
 				B75529DA269FDB0B005D5EB5 /* FooterFeedCell.swift */,
 				B75529D7269FDB0A005D5EB5 /* FooterFeedCell.xib */,
+				B7B1E38F26A068BE006E2FF6 /* Feed Type */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -299,6 +310,17 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		B7B1E38F26A068BE006E2FF6 /* Feed Type */ = {
+			isa = PBXGroup;
+			children = (
+				B7B1E39026A06CA1006E2FF6 /* TextCell.swift */,
+				B7B1E39126A06CA1006E2FF6 /* TextCell.xib */,
+				B7B1E39D26A165AC006E2FF6 /* TextLinkCell.swift */,
+				B7B1E39E26A165AC006E2FF6 /* TextLinkCell.xib */,
+			);
+			path = "Feed Type";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -334,6 +356,7 @@
 				B7552930269C4466005D5EB5 /* Moya */,
 				B7552933269C44A0005D5EB5 /* SwiftyJSON */,
 				B755293E269C4592005D5EB5 /* SwiftDate */,
+				B7B1E39526A06CF8006E2FF6 /* ActiveLabel */,
 			);
 			productName = Feed;
 			productReference = B7928130268F2BDF000ED84A /* Feed.framework */;
@@ -367,6 +390,7 @@
 				B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */,
 				B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */,
+				B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */,
 			);
 			productRefGroup = B7928131268F2BDF000ED84A /* Products */;
 			projectDirPath = "";
@@ -386,8 +410,10 @@
 				B75529A8269E0CF4005D5EB5 /* HashtagCapsuleCell.xib in Resources */,
 				B7552993269D6A9E005D5EB5 /* Hashtag.json in Resources */,
 				B75529DB269FDB0B005D5EB5 /* FooterFeedCell.xib in Resources */,
+				B7B1E3A026A165AC006E2FF6 /* TextLinkCell.xib in Resources */,
 				B75528DC269B6DE3005D5EB5 /* NewPostCell.xib in Resources */,
 				B79281AB26945455000ED84A /* Feed.storyboard in Resources */,
+				B7B1E39326A06CA1006E2FF6 /* TextCell.xib in Resources */,
 				B755298D269D654F005D5EB5 /* HashtagCell.xib in Resources */,
 				B75529AC269E935E005D5EB5 /* Feeds.json in Resources */,
 			);
@@ -433,8 +459,10 @@
 				B755299E269D7624005D5EB5 /* HashtagSectionController.swift in Sources */,
 				B75529C1269EE9C4005D5EB5 /* Commented.swift in Sources */,
 				B75529B5269EA455005D5EB5 /* Feature.swift in Sources */,
+				B7B1E39F26A165AC006E2FF6 /* TextLinkCell.swift in Sources */,
 				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
 				B75529AF269E9454005D5EB5 /* HashtagShelf.swift in Sources */,
+				B7B1E39226A06CA1006E2FF6 /* TextCell.swift in Sources */,
 				B75529BD269EE7C5005D5EB5 /* Participant.swift in Sources */,
 				B75528DE269B71BB005D5EB5 /* NewPostSectionController.swift in Sources */,
 				B75529C8269F68CF005D5EB5 /* FeedSectionController.swift in Sources */,
@@ -1041,6 +1069,14 @@
 				minimumVersion = 6.3.1;
 			};
 		};
+		B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/optonaut/ActiveLabel.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1063,6 +1099,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */;
 			productName = SwiftDate;
+		};
+		B7B1E39526A06CF8006E2FF6 /* ActiveLabel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */;
+			productName = ActiveLabel;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

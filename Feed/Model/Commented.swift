@@ -16,7 +16,7 @@ public enum CommentedKey: String, Codable {
 
 public class Commented: NSObject {
     let count: Int
-    let commented: Bool
+    var commented: Bool
     let participant: [Participant]
     
     init(json: JSON) {

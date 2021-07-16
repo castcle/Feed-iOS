@@ -22,7 +22,7 @@ class FeedSectionController: ListSectionController {
 extension FeedSectionController {
     enum FeedCellSection: Int, CaseIterable {
         case header = 0
-//        case content
+        case content
         case footer
     }
     
@@ -40,6 +40,12 @@ extension FeedSectionController {
             return HeaderFeedCell.cellSize(width: context.containerSize.width)
         case FeedCellSection.footer.rawValue:
             return FooterFeedCell.cellSize(width: context.containerSize.width)
+        case FeedCellSection.content.rawValue:
+            if self.feed?.feedDisplayType == .postText {
+                return TextCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
+            } else {
+                return TextLinkCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
+            }
         default:
             return .zero
         }
@@ -57,6 +63,20 @@ extension FeedSectionController {
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.feed = self.feed
             return cell ?? FooterFeedCell()
+        case FeedCellSection.content.rawValue:
+            if self.feed?.feedDisplayType == .postText {
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postText, bundle: ConfigBundle.feed, for: self, at: index) as? TextCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.feed = self.feed
+                return cell ?? TextCell()
+            } else if self.feed?.feedDisplayType == .postLink {
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postTextLinkCell, bundle: ConfigBundle.feed, for: self, at: index) as? TextLinkCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.feed = self.feed
+                return cell ?? TextLinkCell()
+            } else {
+                return UICollectionViewCell()
+            }
         default:
             return UICollectionViewCell()
         }

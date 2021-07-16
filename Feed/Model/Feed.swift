@@ -36,6 +36,12 @@ public enum FeedType: String, Codable {
     case live
 }
 
+public enum FeedDisplayType {
+    case postText
+    case postLink
+    case postYoutube
+}
+
 public class Feed: NSObject {
     let feature: Feature
     let type: FeedType
@@ -55,6 +61,26 @@ public class Feed: NSObject {
     
     var postDate: Date {
         return Date.stringToDate(str: self.updated)
+    }
+    
+    var feedDisplayType: FeedDisplayType {
+        if self.type == .post {
+            if self.link.count > 0 {
+                if let link = link.first {
+                    if link.type == .youtube {
+                        return .postYoutube
+                    } else {
+                        return .postLink
+                    }
+                } else {
+                    return .postText
+                }
+            } else {
+                return .postText
+            }
+        } else {
+            return .postText
+        }
     }
     
     init(json: JSON) {

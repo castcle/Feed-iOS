@@ -23,9 +23,6 @@ class FooterFeedCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.likeLabel.font = UIFont.asset(.regular, fontSize: .overline)
-        self.commentLabel.font = UIFont.asset(.regular, fontSize: .overline)
-        self.recastLabel.font = UIFont.asset(.regular, fontSize: .overline)
     }
     
     public static func cellSize(width: CGFloat) -> CGSize {
@@ -34,6 +31,10 @@ class FooterFeedCell: UICollectionViewCell {
     
     private func updateUi() {
         guard let feed = self.feed else { return }
+        self.likeLabel.font = UIFont.asset(.regular, fontSize: .overline)
+        self.commentLabel.font = UIFont.asset(.regular, fontSize: .overline)
+        self.recastLabel.font = UIFont.asset(.regular, fontSize: .overline)
+        
         if feed.liked.liked {
             self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.liked.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
         } else {
@@ -54,6 +55,17 @@ class FooterFeedCell: UICollectionViewCell {
     }
     
     @IBAction func likeAction(_ sender: Any) {
+        guard let feed = self.feed else { return }
+        feed.liked.liked.toggle()
+        self.updateUi()
+        
+        if feed.liked.liked {
+            let impliesAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
+            impliesAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
+            impliesAnimation.duration = 0.3 * 2
+            impliesAnimation.calculationMode = CAAnimationCalculationMode.cubic
+            self.likeLabel.layer.add(impliesAnimation, forKey: nil)
+        }
     }
     
     @IBAction func commentAction(_ sender: Any) {

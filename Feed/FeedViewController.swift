@@ -36,6 +36,8 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
         FeedViewController.castcleTabbarDelegate = self
         
         self.collectionView.alwaysBounceVertical = true
+        self.collectionView.showsHorizontalScrollIndicator = false
+        self.collectionView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.collectionView)
         self.adapter.collectionView = self.collectionView
         self.adapter.dataSource = self

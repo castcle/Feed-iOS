@@ -16,7 +16,7 @@ public enum RecastedKey: String, Codable {
 
 public class Recasted: NSObject {
     let count: Int
-    let recasted: Bool
+    var recasted: Bool
     let participant: [Participant]
     
     init(json: JSON) {

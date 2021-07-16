@@ -11,25 +11,11 @@
                 },
                 "type": "post",
                 "id": "{UUID}",
-                "header": "header",
-                "content": "body",
-                "photo": [
-                    {
-                        "url": "url"
-                    }
-                ],
-                "link": [
-                    {
-                        "type": "youtube",
-                        "url": "url"
-                    }
-                ],
-                "aggregator": {
-                    "type": "friend",
-                    "id": "{UUID}",
-                    "action": "liked",
-                    "message": "A liked",
-                },
+                "header": "",
+                "content": "Win a legendary DappRadar x @MOBOX_Official #NFT.\nDon't miss your chance and register now :)",
+                "photo": [],
+                "link": [],
+                "aggregator": {},
                 "liked": {
                     "count": 34,
                     "liked": false,
@@ -87,16 +73,12 @@
                 "type": "post",
                 "id": "{UUID}",
                 "header": "header",
-                "content": "body",
-                "photo": [
-                    {
-                        "url": "url"
-                    }
-                ],
+                "content": "Win a legendary DappRadar x @MOBOX_Official #NFT.\nDon't miss your chance and register now :)",
+                "photo": [],
                 "link": [
                     {
-                        "type": "youtube",
-                        "url": "url"
+                        "type": "other",
+                        "url": "https://www.blockchain.com"
                     }
                 ],
                 "aggregator": {
@@ -151,158 +133,7 @@
                 "quoteCast": {},
                 "created": "2021-06-05T15:40:29Z",
                 "updated": "2021-07-15T02:38:29Z"
-            },
-            {
-                "feature": {
-                    "id": "{UUID}",
-                    "slug": "feed",
-                    "name": "Feed",
-                    "key": "feature.feed"
-                },
-                "type": "post",
-                "id": "{UUID}",
-                "header": "header",
-                "content": "body",
-                "photo": [
-                    {
-                        "url": "url"
-                    }
-                ],
-                "link": [
-                    {
-                        "type": "youtube",
-                        "url": "url"
-                    }
-                ],
-                "aggregator": {
-                    "type": "friend",
-                    "id": "{UUID}",
-                    "action": "liked",
-                    "message": "A liked",
-                },
-                "liked": {
-                    "count": 1234,
-                    "liked": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "commented": {
-                    "count": 1234,
-                    "commented": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "recasted": {
-                    "count": 1234,
-                    "recasted": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "author": {
-                    "type": "people",
-                    "id": "{UUID}",
-                    "name": "John Christopher Depp",
-                    "firstName": "John",
-                    "lastName": "Depp",
-                    "avatar": "https://thestandard.co/wp-content/uploads/2020/12/johnny-depp-wished-the-year-2021.jpg",
-                    "verified": true,
-                    "followed": false,
-                },
-                "quoteCast": {},
-                "created": "2021-06-05T15:40:29Z",
-                "updated": "2021-07-12T04:38:29Z"
-            },
-            {
-                "feature": {
-                    "id": "{UUID}",
-                    "slug": "feed",
-                    "name": "Feed",
-                    "key": "feature.feed"
-                },
-                "type": "post",
-                "id": "{UUID}",
-                "header": "header",
-                "content": "body",
-                "photo": [
-                    {
-                        "url": "url"
-                    }
-                ],
-                "link": [
-                    {
-                        "type": "youtube",
-                        "url": "url"
-                    }
-                ],
-                "aggregator": {
-                    "type": "friend",
-                    "id": "{UUID}",
-                    "action": "liked",
-                    "message": "A liked",
-                },
-                "liked": {
-                    "count": 1234,
-                    "liked": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "commented": {
-                    "count": 1234,
-                    "commented": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "recasted": {
-                    "count": 1234,
-                    "recasted": false,
-                    "participant": [
-                        {
-                            "type": "people",
-                            "id": "{UUID}",
-                            "name": "display name",
-                        }
-                    ]
-                },
-                "author": {
-                    "type": "people",
-                    "id": "{UUID}",
-                    "name": "Tommy Cruise",
-                    "firstName": "Tom",
-                    "lastName": "Cruise",
-                    "avatar": "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
-                    "verified": true,
-                    "followed": false,
-                },
-                "quoteCast": {},
-                "created": "2021-06-05T15:40:29Z",
-                "updated": "2021-06-05T15:40:29Z"
             }
-            
         ],
         "pagination": {
             "previous": 1,
