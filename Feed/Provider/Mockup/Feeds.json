@@ -133,6 +133,77 @@
                 "quoteCast": {},
                 "created": "2021-06-05T15:40:29Z",
                 "updated": "2021-07-15T02:38:29Z"
+            },
+            {
+                "feature": {
+                    "id": "{UUID}",
+                    "slug": "feed",
+                    "name": "Feed",
+                    "key": "feature.feed"
+                },
+                "type": "post",
+                "id": "{UUID}",
+                "header": "header",
+                "content": "Win a legendary DappRadar x @MOBOX_Official #NFT.\nDon't miss your chance and register now :)",
+                "photo": [],
+                "link": [
+                    {
+                        "type": "youtube",
+                        "url": "https://youtu.be/C8E7u_Pq0F8"
+                    }
+                ],
+                "aggregator": {
+                    "type": "friend",
+                    "id": "{UUID}",
+                    "action": "liked",
+                    "message": "A liked",
+                },
+                "liked": {
+                    "count": 1234,
+                    "liked": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "commented": {
+                    "count": 1234,
+                    "commented": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "recasted": {
+                    "count": 1234,
+                    "recasted": false,
+                    "participant": [
+                        {
+                            "type": "people",
+                            "id": "{UUID}",
+                            "name": "display name",
+                        }
+                    ]
+                },
+                "author": {
+                    "type": "people",
+                    "id": "{UUID}",
+                    "name": "John Christopher Depp",
+                    "firstName": "John",
+                    "lastName": "Depp",
+                    "avatar": "https://thestandard.co/wp-content/uploads/2020/12/johnny-depp-wished-the-year-2021.jpg",
+                    "verified": true,
+                    "followed": false,
+                },
+                "quoteCast": {},
+                "created": "2021-06-05T15:40:29Z",
+                "updated": "2021-07-12T04:38:29Z"
             }
         ],
         "pagination": {

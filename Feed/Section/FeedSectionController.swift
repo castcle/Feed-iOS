@@ -69,7 +69,7 @@ extension FeedSectionController {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? TextCell()
-            } else if self.feed?.feedDisplayType == .postLink {
+            } else if self.feed?.feedDisplayType == .postLink || self.feed?.feedDisplayType == .postYoutube {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postTextLinkCell, bundle: ConfigBundle.feed, for: self, at: index) as? TextLinkCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
