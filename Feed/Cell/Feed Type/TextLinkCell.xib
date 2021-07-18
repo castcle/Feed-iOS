@@ -12,10 +12,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="TextLinkCell" customModule="Feed" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="265"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="265"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZr-lw-sE5" customClass="ActiveLabel" customModule="ActiveLabel">
@@ -30,7 +30,6 @@
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="290" id="6LC-3h-g5F"/>
                             <constraint firstAttribute="width" secondItem="jem-AV-duF" secondAttribute="height" multiplier="29:20" id="RmH-yS-eu1"/>
-                            <constraint firstAttribute="height" constant="200" id="pVJ-l3-287"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -39,7 +38,7 @@
             <constraints>
                 <constraint firstItem="jem-AV-duF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="CYa-YA-IBj"/>
                 <constraint firstItem="hZr-lw-sE5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="Mxu-4T-y4e"/>
-                <constraint firstAttribute="bottom" secondItem="jem-AV-duF" secondAttribute="bottom" constant="20" id="R34-jn-ygM"/>
+                <constraint firstAttribute="bottom" secondItem="jem-AV-duF" secondAttribute="bottom" constant="10" id="R34-jn-ygM"/>
                 <constraint firstItem="jem-AV-duF" firstAttribute="top" secondItem="hZr-lw-sE5" secondAttribute="bottom" constant="25" id="Tfe-R5-Lb2"/>
                 <constraint firstItem="hZr-lw-sE5" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="aN1-XK-4U9"/>
                 <constraint firstAttribute="trailing" secondItem="hZr-lw-sE5" secondAttribute="trailing" constant="15" id="aiT-ec-JHq"/>

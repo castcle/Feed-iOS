@@ -1,16 +1,16 @@
 //
-//  TextLinkCell.swift
+//  ImageX1Cell.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 16/7/2564 BE.
+//  Created by Tanakorn Phoochaliaw on 18/7/2564 BE.
 //
 
 import UIKit
-import LinkPresentation
 import Core
 import ActiveLabel
+import Lightbox
 
-class TextLinkCell: UICollectionViewCell {
+class ImageX1Cell: UICollectionViewCell {
 
     @IBOutlet var detailLabel: ActiveLabel! {
         didSet {
@@ -26,9 +26,9 @@ class TextLinkCell: UICollectionViewCell {
         }
     }
     
-    @IBOutlet var linkContainer: UIView!
+    @IBOutlet var imageContainer: UIView!
+    @IBOutlet var imageView: UIImageView!
     
-    private var linkView: LPLinkView = LPLinkView(metadata: LPLinkMetadata())
     var feed: Feed? {
         didSet {
             guard let feed = self.feed else { return }
@@ -48,15 +48,18 @@ class TextLinkCell: UICollectionViewCell {
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
                 Utility.currentViewController().present(alert, animated: true, completion: nil)
             }
-            self.addLinkViewToLinkLinkContainer()
-            self.fetchPreview(feed: feed)
+            
+            if let imageUrl = feed.photo.first {
+                let url = URL(string: imageUrl.url)
+                self.imageView.kf.setImage(with: url)
+            }
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.linkContainer.custom(cornerRadius: 12)
+        self.imageContainer.custom(cornerRadius: 12)
     }
     
     static func cellSize(width: CGFloat, text: String) -> CGSize {
@@ -68,31 +71,37 @@ class TextLinkCell: UICollectionViewCell {
         label.font = UIFont.asset(.regular, fontSize: .body)
         label.text = text
         label.sizeToFit()
-        let imageHeight = UIView.aspectRatioCalculator(ratioWidth: 29, ratioHeight: 20, pixelsWidth: Double(width - 30))
+        let imageHeight = UIView.aspectRatioCalculator(ratioWidth: 16, ratioHeight: 9, pixelsWidth: Double(width - 30))
         return CGSize(width: width, height: (label.frame.height + 45 + CGFloat(imageHeight)))
     }
     
-    private func addLinkViewToLinkLinkContainer() {
-        DispatchQueue.main.async {
-            self.linkView.frame = self.linkContainer.bounds
-            self.linkContainer.addSubview(self.linkView)
-            self.linkContainer.sizeToFit()
-        }
-    }
-
-    private func fetchPreview(feed: Feed) {
-        if let link = feed.link.first, let url = URL(string: link.url) {
-            let metaDataProvider = LPMetadataProvider()
+    @IBAction func viewImageAction(_ sender: Any) {
+        if let feed = self.feed, let image = feed.photo.first {
+            let images = [
+                LightboxImage(imageURL: URL(string: image.url)!)
+            ]
             
-            metaDataProvider.startFetchingMetadata(for: url) { [weak self]  (metaData, error) in
-                if let error = error {
-                    print(error)
-                } else if let metaData = metaData {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.linkView.metadata = metaData
-                    }
-                }
-            }
+            LightboxConfig.CloseButton.textAttributes = [
+                .font: UIFont.asset(.medium, fontSize: .body),
+                .foregroundColor: UIColor.Asset.white
+              ]
+            LightboxConfig.CloseButton.text = "Close"
+            
+            let controller = LightboxController(images: images)
+            controller.pageDelegate = self
+            controller.dismissalDelegate = self
+            controller.dynamicBackground = true
+            controller.footerView.isHidden = true
+
+            Utility.currentViewController().present(controller, animated: true, completion: nil)
         }
     }
+}
+
+extension ImageX1Cell: LightboxControllerPageDelegate {
+    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) { }
+}
+
+extension ImageX1Cell: LightboxControllerDismissalDelegate {
+    func lightboxControllerWillDismiss(_ controller: LightboxController) { }
 }

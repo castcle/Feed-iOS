@@ -72,7 +72,7 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
 extension FeedViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         var items: [ListDiffable] = [FeedType.newPost.rawValue] as [ListDiffable]
-        if self.viewModel.hashtagShelf.hashtags.count > 0 {
+        if !self.viewModel.hashtagShelf.hashtags.isEmpty {
             items.append(self.viewModel.hashtagShelf as ListDiffable)
         }
         

@@ -29,5 +29,9 @@ public struct FeedNibVars {
         public static let footerFeed = "FooterFeedCell"
         public static let postText = "TextCell"
         public static let postTextLinkCell = "TextLinkCell"
+        public static let imageX1Cell = "ImageX1Cell"
+        public static let imageX2Cell = "ImageX2Cell"
+        public static let imageX3Cell = "ImageX3Cell"
+        public static let imageXMoreCell = "ImageXMoreCell"
     }
 }

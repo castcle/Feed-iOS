@@ -40,6 +40,10 @@ public enum FeedDisplayType {
     case postText
     case postLink
     case postYoutube
+    case postImageX1
+    case postImageX2
+    case postImageX3
+    case postImageXMore
 }
 
 public class Feed: NSObject {
@@ -65,7 +69,17 @@ public class Feed: NSObject {
     
     var feedDisplayType: FeedDisplayType {
         if self.type == .post {
-            if self.link.count > 0 {
+            if !self.photo.isEmpty {
+                if self.photo.count == 1 {
+                    return .postImageX1
+                } else if self.photo.count == 2 {
+                    return .postImageX2
+                } else if self.photo.count == 3 {
+                    return .postImageX3
+                } else {
+                    return .postImageXMore
+                }
+            } else if !self.link.isEmpty {
                 if let link = link.first {
                     if link.type == .youtube {
                         return .postYoutube

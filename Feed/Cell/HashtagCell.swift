@@ -16,7 +16,7 @@ class HashtagCell: UICollectionViewCell {
     var hashtagShelf: HashtagShelf? {
         didSet {
             if let hashtagShelf = self.hashtagShelf {
-                if hashtagShelf.hashtags.count > 0 {
+                if !hashtagShelf.hashtags.isEmpty {
                     self.selectIndex = 0
                 }
             } else {
