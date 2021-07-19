@@ -46,9 +46,9 @@ extension FeedSectionController {
             } else if self.feed?.feedDisplayType == .postImageX2 {
                 return ImageX2Cell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
             } else if self.feed?.feedDisplayType == .postImageX3 {
-                return .zero
+                return ImageX3Cell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
             } else if self.feed?.feedDisplayType == .postImageXMore {
-                return .zero
+                return ImageXMoreCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
             } else if self.feed?.feedDisplayType == .postText {
                 return TextCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
             } else {
@@ -81,11 +81,17 @@ extension FeedSectionController {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageX2Cell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageX2Cell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
-                return cell ?? TextCell()
+                return cell ?? ImageX2Cell()
             } else if self.feed?.feedDisplayType == .postImageX3 {
-                return UICollectionViewCell()
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageX3Cell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageX3Cell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.feed = self.feed
+                return cell ?? ImageX3Cell()
             } else if self.feed?.feedDisplayType == .postImageXMore {
-                return UICollectionViewCell()
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageXMoreCell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageXMoreCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.feed = self.feed
+                return cell ?? ImageXMoreCell()
             } else if self.feed?.feedDisplayType == .postText {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postText, bundle: ConfigBundle.feed, for: self, at: index) as? TextCell
                 cell?.backgroundColor = UIColor.Asset.darkGray

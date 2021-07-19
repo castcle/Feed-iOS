@@ -79,7 +79,6 @@
                 <constraint firstAttribute="trailing" secondItem="Pvi-Vn-tcg" secondAttribute="trailing" constant="15" id="YDO-5h-he0"/>
                 <constraint firstItem="pba-tF-rEs" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="avs-ro-6ve"/>
                 <constraint firstAttribute="bottom" secondItem="Pvi-Vn-tcg" secondAttribute="bottom" constant="10" id="fra-5r-A6c"/>
-                <constraint firstItem="Pvi-Vn-tcg" firstAttribute="width" secondItem="Pvi-Vn-tcg" secondAttribute="height" multiplier="16:9" id="sVC-jf-HFW"/>
             </constraints>
             <size key="customSize" width="320" height="238"/>
             <connections>
