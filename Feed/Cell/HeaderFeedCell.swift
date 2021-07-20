@@ -7,6 +7,7 @@
 
 import UIKit
 import Core
+import SnackBar_swift
 
 public class HeaderFeedCell: UICollectionViewCell {
 
@@ -48,10 +49,6 @@ public class HeaderFeedCell: UICollectionViewCell {
         
         self.moreButton.setImage(UIImage.init(icon: .castcle(.ellipsisV), size: CGSize(width: 20, height: 20), textColor: UIColor.Asset.white).withRenderingMode(.alwaysOriginal), for: .normal)
     }
-    
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
-        
-    }
 
     public static func cellSize(width: CGFloat) -> CGSize {
         return CGSize(width: width, height: 80)
@@ -59,6 +56,9 @@ public class HeaderFeedCell: UICollectionViewCell {
     
     @IBAction func followAction(_ sender: Any) {
         self.followButton.isHidden = true
+        AppSnackBar.make(in: Utility.currentViewController().view, message: "You've followed @{userSlug}", duration: .lengthLong).setAction(with: "Undo", action: {
+            self.followButton.isHidden = false
+        }).show()
     }
     
     @IBAction func viewProfileAction(_ sender: Any) {
@@ -71,5 +71,20 @@ public class HeaderFeedCell: UICollectionViewCell {
         let alert = UIAlertController(title: nil, message: "Go to more action", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         Utility.currentViewController().present(alert, animated: true, completion: nil)
+    }
+}
+
+class AppSnackBar: SnackBar {
+    override var style: SnackBarStyle {
+        var style = SnackBarStyle()
+        style.background = UIColor.Asset.darkGray
+        style.textColor = UIColor.Asset.white
+        style.font = UIFont.asset(.medium, fontSize: .overline)
+        
+        style.actionTextColor = UIColor.Asset.lightBlue
+        style.actionFont = UIFont.asset(.medium, fontSize: .body)
+        style.actionTextColorAlpha = 1.0
+        
+        return style
     }
 }

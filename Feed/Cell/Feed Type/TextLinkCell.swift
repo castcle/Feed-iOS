@@ -66,7 +66,6 @@ class TextLinkCell: UICollectionViewCell {
         label.text = text
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = UIFont.asset(.regular, fontSize: .body)
-        label.text = text
         label.sizeToFit()
         let imageHeight = UIView.aspectRatioCalculator(ratioWidth: 29, ratioHeight: 20, pixelsWidth: Double(width - 30))
         return CGSize(width: width, height: (label.frame.height + 45 + CGFloat(imageHeight)))

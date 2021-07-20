@@ -59,7 +59,6 @@ class TextCell: UICollectionViewCell {
         label.text = text
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = UIFont.asset(.regular, fontSize: .body)
-        label.text = text
         label.sizeToFit()
         return CGSize(width: width, height: (label.frame.height + 30.0))
     }

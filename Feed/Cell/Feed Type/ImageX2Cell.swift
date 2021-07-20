@@ -74,7 +74,6 @@ class ImageX2Cell: UICollectionViewCell {
         label.text = text
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = UIFont.asset(.regular, fontSize: .body)
-        label.text = text
         label.sizeToFit()
         let imageHeight = UIView.aspectRatioCalculator(ratioWidth: 16, ratioHeight: 9, pixelsWidth: Double(width - 30))
         return CGSize(width: width, height: (label.frame.height + 45 + CGFloat(imageHeight)))
