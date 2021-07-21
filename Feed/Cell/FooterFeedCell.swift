@@ -55,31 +55,31 @@ class FooterFeedCell: UICollectionViewCell {
         self.commentLabel.font = UIFont.asset(.regular, fontSize: .overline)
         self.recastLabel.font = UIFont.asset(.regular, fontSize: .overline)
         
-        if feed.liked.liked {
-            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.liked.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+        if feed.feedPayload.liked.liked {
+            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
         } else {
-            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.liked.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
         }
         
-        if feed.commented.commented {
-            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.commented.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+        if feed.feedPayload.commented.commented {
+            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
         } else {
-            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.commented.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
         }
         
-        if feed.recasted.recasted {
-            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.recasted.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+        if feed.feedPayload.recasted.recasted {
+            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
         } else {
-            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.recasted.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
         }
     }
     
     @IBAction func likeAction(_ sender: Any) {
         guard let feed = self.feed else { return }
-        feed.liked.liked.toggle()
+        feed.feedPayload.liked.liked.toggle()
         self.updateUi()
         
-        if feed.liked.liked {
+        if feed.feedPayload.liked.liked {
             let impliesAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
             impliesAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
             impliesAnimation.duration = 0.3 * 2

@@ -1,8 +1,3 @@
-//  Copyright (c) 2021, Castcle and/or its affiliates. All rights reserved.
-//  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-//
-//  This code is free software; you can redistribute it and/or modify it
-//  under the terms of the GNU General Public License version 3 only, as
 //  published by the Free Software Foundation.
 //
 //  This code is distributed in the hope that it will be useful, but WITHOUT
@@ -19,34 +14,32 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  FeedShelf.swift
+//  Circle.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 14/7/2564 BE.
+//  Created by Tanakorn Phoochaliaw on 21/7/2564 BE.
 //
 
 import SwiftyJSON
 
-// MARK: - Hashtag List
-public enum FeedShelfKey: String, Codable {
-    case message
-    case payload
-    case pagination
+// MARK: - Circle
+public enum CircleKey: String, Codable {
+    case id
+    case slug
+    case name
+    case key
 }
 
-class FeedShelf: NSObject {
-    var feeds: [Feed] = []
-    
-    override init() { }
+public class Circle: NSObject {
+    let id: String
+    let slug: String
+    let name: String
+    let key: String
     
     init(json: JSON) {
-        let payload = json[FeedShelfKey.payload.rawValue].arrayValue
-        
-        var feeds: [Feed] = []
-        payload.forEach() { item in
-            feeds.append(Feed(json: item))
-        }
-        
-        self.feeds = feeds
+        self.id = json[CircleKey.id.rawValue].stringValue
+        self.slug = json[CircleKey.slug.rawValue].stringValue
+        self.name = json[CircleKey.name.rawValue].stringValue
+        self.key = json[CircleKey.key.rawValue].stringValue
     }
 }

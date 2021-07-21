@@ -37,7 +37,7 @@ class ImageX1Cell: UICollectionViewCell {
             self.detailLabel.customize { label in
                 label.font = UIFont.asset(.regular, fontSize: .body)
                 label.numberOfLines = 0
-                label.enabledTypes = [.mention, .hashtag, .url, .email]
+                label.enabledTypes = [.mention, .hashtag, .url]
                 label.textColor = UIColor.Asset.white
                 label.hashtagColor = UIColor.Asset.lightBlue
                 label.mentionColor = UIColor.Asset.lightBlue
@@ -52,7 +52,7 @@ class ImageX1Cell: UICollectionViewCell {
     var feed: Feed? {
         didSet {
             guard let feed = self.feed else { return }
-            self.detailLabel.text = feed.content
+            self.detailLabel.text = feed.feedPayload.contentPayload.content
             self.detailLabel.handleHashtagTap { hashtag in
                 let alert = UIAlertController(title: nil, message: "Go to hastag view", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -69,7 +69,7 @@ class ImageX1Cell: UICollectionViewCell {
                 Utility.currentViewController().present(alert, animated: true, completion: nil)
             }
             
-            if let imageUrl = feed.photo.first {
+            if let imageUrl = feed.feedPayload.contentPayload.photo.first {
                 let url = URL(string: imageUrl.url)
                 self.imageView.kf.setImage(with: url)
             }
@@ -95,7 +95,7 @@ class ImageX1Cell: UICollectionViewCell {
     }
     
     @IBAction func viewImageAction(_ sender: Any) {
-        if let feed = self.feed, let image = feed.photo.first {
+        if let feed = self.feed, let image = feed.feedPayload.contentPayload.photo.first {
             let images = [
                 LightboxImage(imageURL: URL(string: image.url)!)
             ]

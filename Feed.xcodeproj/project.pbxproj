@@ -3,17 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		B75528DB269B6DE3005D5EB5 /* NewPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528D9269B6DE3005D5EB5 /* NewPostCell.swift */; };
 		B75528DC269B6DE3005D5EB5 /* NewPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75528DA269B6DE3005D5EB5 /* NewPostCell.xib */; };
 		B75528DE269B71BB005D5EB5 /* NewPostSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75528DD269B71BA005D5EB5 /* NewPostSectionController.swift */; };
-		B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B75528E4269B82AB005D5EB5 /* Kingfisher */; };
-		B7552931269C4466005D5EB5 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = B7552930269C4466005D5EB5 /* Moya */; };
-		B7552934269C44A0005D5EB5 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B7552933269C44A0005D5EB5 /* SwiftyJSON */; };
-		B755293F269C4592005D5EB5 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = B755293E269C4592005D5EB5 /* SwiftDate */; };
 		B755298C269D654F005D5EB5 /* HashtagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B755298A269D654F005D5EB5 /* HashtagCell.swift */; };
 		B755298D269D654F005D5EB5 /* HashtagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B755298B269D654F005D5EB5 /* HashtagCell.xib */; };
 		B7552990269D6600005D5EB5 /* FeedApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B755298F269D6600005D5EB5 /* FeedApi.swift */; };
@@ -53,7 +49,6 @@
 		B79281CB26959A6F000ED84A /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B79281C926959A6F000ED84A /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7B1E39226A06CA1006E2FF6 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E39026A06CA1006E2FF6 /* TextCell.swift */; };
 		B7B1E39326A06CA1006E2FF6 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E39126A06CA1006E2FF6 /* TextCell.xib */; };
-		B7B1E39626A06CF8006E2FF6 /* ActiveLabel in Frameworks */ = {isa = PBXBuildFile; productRef = B7B1E39526A06CF8006E2FF6 /* ActiveLabel */; };
 		B7B1E39F26A165AC006E2FF6 /* TextLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E39D26A165AC006E2FF6 /* TextLinkCell.swift */; };
 		B7B1E3A026A165AC006E2FF6 /* TextLinkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E39E26A165AC006E2FF6 /* TextLinkCell.xib */; };
 		B7B1E3A526A34E32006E2FF6 /* ImageX1Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3A326A34E32006E2FF6 /* ImageX1Cell.swift */; };
@@ -64,9 +59,11 @@
 		B7B1E3AE26A51470006E2FF6 /* ImageX3Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E3AC26A51470006E2FF6 /* ImageX3Cell.xib */; };
 		B7B1E3B126A51B1B006E2FF6 /* ImageXMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3AF26A51B1B006E2FF6 /* ImageXMoreCell.swift */; };
 		B7B1E3B226A51B1B006E2FF6 /* ImageXMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E3B026A51B1B006E2FF6 /* ImageXMoreCell.xib */; };
-		B7B1E3B526A5213A006E2FF6 /* SwiftColor in Frameworks */ = {isa = PBXBuildFile; productRef = B7B1E3B426A5213A006E2FF6 /* SwiftColor */; };
 		B7B1E3B826A563CC006E2FF6 /* BlogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3B626A563CC006E2FF6 /* BlogCell.swift */; };
 		B7B1E3B926A563CC006E2FF6 /* BlogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E3B726A563CC006E2FF6 /* BlogCell.xib */; };
+		B7B1E3BB26A7FAFA006E2FF6 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BA26A7FAFA006E2FF6 /* Circle.swift */; };
+		B7B1E3BD26A7FBF2006E2FF6 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BC26A7FBF2006E2FF6 /* Content.swift */; };
+		B7B1E3BF26A80724006E2FF6 /* ContentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BE26A80724006E2FF6 /* ContentPayload.swift */; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
 /* End PBXBuildFile section */
 
@@ -145,6 +142,9 @@
 		B7B1E3B026A51B1B006E2FF6 /* ImageXMoreCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageXMoreCell.xib; sourceTree = "<group>"; };
 		B7B1E3B626A563CC006E2FF6 /* BlogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogCell.swift; sourceTree = "<group>"; };
 		B7B1E3B726A563CC006E2FF6 /* BlogCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlogCell.xib; sourceTree = "<group>"; };
+		B7B1E3BA26A7FAFA006E2FF6 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
+		B7B1E3BC26A7FBF2006E2FF6 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		B7B1E3BE26A80724006E2FF6 /* ContentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPayload.swift; sourceTree = "<group>"; };
 		C22DC872E5C9933F81C4C9B8 /* Pods-Feed.release (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (development).xcconfig"; sourceTree = "<group>"; };
 		C9A6A819CC9CFCB3AD78E186 /* Pods-Feed.release (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (staging).xcconfig"; sourceTree = "<group>"; };
 		EE2210B164B73BDD8332BDFF /* Pods-Feed.debug (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (staging).xcconfig"; sourceTree = "<group>"; };
@@ -156,15 +156,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7552934269C44A0005D5EB5 /* SwiftyJSON in Frameworks */,
-				B75528E5269B82AB005D5EB5 /* Kingfisher in Frameworks */,
 				B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
-				B755293F269C4592005D5EB5 /* SwiftDate in Frameworks */,
-				B7552931269C4466005D5EB5 /* Moya in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
-				B7B1E39626A06CF8006E2FF6 /* ActiveLabel in Frameworks */,
-				B7B1E3B526A5213A006E2FF6 /* SwiftColor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +252,9 @@
 				B7552998269D6CBC005D5EB5 /* Hashtag.swift */,
 				B75529B2269E9536005D5EB5 /* Feed.swift */,
 				B75529B4269EA455005D5EB5 /* Feature.swift */,
+				B7B1E3BA26A7FAFA006E2FF6 /* Circle.swift */,
+				B7B1E3BC26A7FBF2006E2FF6 /* Content.swift */,
+				B7B1E3BE26A80724006E2FF6 /* ContentPayload.swift */,
 				B75529B6269EE02A005D5EB5 /* Photo.swift */,
 				B75529B8269EE21E005D5EB5 /* Link.swift */,
 				B75529BA269EE4E5005D5EB5 /* Aggregator.swift */,
@@ -384,12 +381,6 @@
 			);
 			name = Feed;
 			packageProductDependencies = (
-				B75528E4269B82AB005D5EB5 /* Kingfisher */,
-				B7552930269C4466005D5EB5 /* Moya */,
-				B7552933269C44A0005D5EB5 /* SwiftyJSON */,
-				B755293E269C4592005D5EB5 /* SwiftDate */,
-				B7B1E39526A06CF8006E2FF6 /* ActiveLabel */,
-				B7B1E3B426A5213A006E2FF6 /* SwiftColor */,
 			);
 			productName = Feed;
 			productReference = B7928130268F2BDF000ED84A /* Feed.framework */;
@@ -419,12 +410,6 @@
 			);
 			mainGroup = B7928126268F2BDF000ED84A;
 			packageReferences = (
-				B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */,
-				B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */,
-				B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */,
-				B7B1E3B326A5213A006E2FF6 /* XCRemoteSwiftPackageReference "SwiftColor" */,
 			);
 			productRefGroup = B7928131268F2BDF000ED84A /* Products */;
 			projectDirPath = "";
@@ -490,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7B1E3BB26A7FAFA006E2FF6 /* Circle.swift in Sources */,
 				B75529B1269E9507005D5EB5 /* FeedShelf.swift in Sources */,
 				B7552996269D6C2F005D5EB5 /* FeedRepository.swift in Sources */,
 				B7B1E3A526A34E32006E2FF6 /* ImageX1Cell.swift in Sources */,
@@ -509,9 +495,11 @@
 				B75528DE269B71BB005D5EB5 /* NewPostSectionController.swift in Sources */,
 				B75529C8269F68CF005D5EB5 /* FeedSectionController.swift in Sources */,
 				B75529DE269FDB0B005D5EB5 /* FooterFeedCell.swift in Sources */,
+				B7B1E3BF26A80724006E2FF6 /* ContentPayload.swift in Sources */,
 				B75529A7269E0CF4005D5EB5 /* HashtagCapsuleCell.swift in Sources */,
 				B75529B3269E9536005D5EB5 /* Feed.swift in Sources */,
 				B75529B7269EE02A005D5EB5 /* Photo.swift in Sources */,
+				B7B1E3BD26A7FBF2006E2FF6 /* Content.swift in Sources */,
 				B755299C269D735E005D5EB5 /* FeedViewModel.swift in Sources */,
 				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
 				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
@@ -1079,90 +1067,6 @@
 			defaultConfigurationName = "Release (Production)";
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.3.0;
-			};
-		};
-		B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Moya/Moya.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 14.0.1;
-			};
-		};
-		B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.1;
-			};
-		};
-		B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/malcommac/SwiftDate.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.3.1;
-			};
-		};
-		B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/optonaut/ActiveLabel.swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.5;
-			};
-		};
-		B7B1E3B326A5213A006E2FF6 /* XCRemoteSwiftPackageReference "SwiftColor" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/icodesign/SwiftColor.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B75528E4269B82AB005D5EB5 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B75528E3269B82AB005D5EB5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		B7552930269C4466005D5EB5 /* Moya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B755292F269C4466005D5EB5 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = Moya;
-		};
-		B7552933269C44A0005D5EB5 /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B7552932269C44A0005D5EB5 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
-		B755293E269C4592005D5EB5 /* SwiftDate */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B755293D269C4592005D5EB5 /* XCRemoteSwiftPackageReference "SwiftDate" */;
-			productName = SwiftDate;
-		};
-		B7B1E39526A06CF8006E2FF6 /* ActiveLabel */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B7B1E39426A06CF8006E2FF6 /* XCRemoteSwiftPackageReference "ActiveLabel.swift" */;
-			productName = ActiveLabel;
-		};
-		B7B1E3B426A5213A006E2FF6 /* SwiftColor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B7B1E3B326A5213A006E2FF6 /* XCRemoteSwiftPackageReference "SwiftColor" */;
-			productName = SwiftColor;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B7928127268F2BDF000ED84A /* Project object */;
 }

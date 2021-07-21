@@ -32,6 +32,7 @@ public enum ParticipantKey: String, Codable {
     case type
     case id
     case name
+    case avatar
 }
 
 public enum ParticipantType: String, Codable {
@@ -44,10 +45,12 @@ public class Participant: NSObject {
     let type: ParticipantType
     let id: String
     let name: String
+    let avatar: String
     
     init(json: JSON) {
         self.type = ParticipantType(rawValue: json[ParticipantKey.type.rawValue].stringValue) ?? .unknown
         self.id = json[ParticipantKey.id.rawValue].stringValue
         self.name = json[ParticipantKey.name.rawValue].stringValue
+        self.avatar = json[ParticipantKey.avatar.rawValue].stringValue
     }
 }

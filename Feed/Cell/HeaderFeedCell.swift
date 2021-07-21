@@ -42,10 +42,10 @@ public class HeaderFeedCell: UICollectionViewCell {
     var feed: Feed? {
         didSet {
             if let feed = self.feed {
-                let url = URL(string: feed.author.avatar)
+                let url = URL(string: feed.feedPayload.author.avatar)
                 self.avatarImage.kf.setImage(with: url)
-                self.displayNameLabel.text = feed.author.name
-                self.dateLabel.text = feed.postDate.timeAgoDisplay()
+                self.displayNameLabel.text = feed.feedPayload.author.displayName
+                self.dateLabel.text = feed.feedPayload.postDate.timeAgoDisplay()
             } else {
                 return
             }

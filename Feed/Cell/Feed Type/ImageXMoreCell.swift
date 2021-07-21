@@ -39,7 +39,7 @@ class ImageXMoreCell: UICollectionViewCell {
             self.detailLabel.customize { label in
                 label.font = UIFont.asset(.regular, fontSize: .body)
                 label.numberOfLines = 0
-                label.enabledTypes = [.mention, .hashtag, .url, .email]
+                label.enabledTypes = [.mention, .hashtag, .url]
                 label.textColor = UIColor.Asset.white
                 label.hashtagColor = UIColor.Asset.lightBlue
                 label.mentionColor = UIColor.Asset.lightBlue
@@ -59,7 +59,7 @@ class ImageXMoreCell: UICollectionViewCell {
     var feed: Feed? {
         didSet {
             guard let feed = self.feed else { return }
-            self.detailLabel.text = feed.content
+            self.detailLabel.text = feed.feedPayload.contentPayload.content
             self.detailLabel.handleHashtagTap { hashtag in
                 let alert = UIAlertController(title: nil, message: "Go to hastag view", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -79,27 +79,27 @@ class ImageXMoreCell: UICollectionViewCell {
             self.moreImageView.image = UIColor.Asset.black.toImage()
             self.moreLabel.font = UIFont.asset(.medium, fontSize: .custom(size: 45))
             
-            if feed.photo.count > 4 {
+            if feed.feedPayload.contentPayload.photo.count > 4 {
                 self.moreImageView.isHidden = false
                 self.moreImageView.alpha = 0.5
                 self.moreLabel.isHidden = false
-                self.moreLabel.text = "+\(feed.photo.count - 3)"
+                self.moreLabel.text = "+\(feed.feedPayload.contentPayload.photo.count - 3)"
             } else {
                 self.moreImageView.isHidden = true
                 self.moreLabel.isHidden = true
             }
             
-            if feed.photo.count >= 4 {
-                let firstUrl = URL(string: feed.photo[0].url)
+            if feed.feedPayload.contentPayload.photo.count >= 4 {
+                let firstUrl = URL(string: feed.feedPayload.contentPayload.photo[0].url)
                 self.firstImageView.kf.setImage(with: firstUrl)
                 
-                let secondUrl = URL(string: feed.photo[1].url)
+                let secondUrl = URL(string: feed.feedPayload.contentPayload.photo[1].url)
                 self.secondImageView.kf.setImage(with: secondUrl)
                 
-                let thirdUrl = URL(string: feed.photo[2].url)
+                let thirdUrl = URL(string: feed.feedPayload.contentPayload.photo[2].url)
                 self.thirdImageView.kf.setImage(with: thirdUrl)
                 
-                let fourthUrl = URL(string: feed.photo[3].url)
+                let fourthUrl = URL(string: feed.feedPayload.contentPayload.photo[3].url)
                 self.fourthImageView.kf.setImage(with: fourthUrl)
             }
         }
@@ -140,10 +140,10 @@ class ImageXMoreCell: UICollectionViewCell {
     }
     
     private func openImage(index: Int) {
-        if let feed = self.feed, !feed.photo.isEmpty {
+        if let feed = self.feed, !feed.feedPayload.contentPayload.photo.isEmpty {
             
             var images: [LightboxImage] = []
-            feed.photo.forEach { photo in
+            feed.feedPayload.contentPayload.photo.forEach { photo in
                 images.append(LightboxImage(imageURL: URL(string: photo.url)!))
             }
             

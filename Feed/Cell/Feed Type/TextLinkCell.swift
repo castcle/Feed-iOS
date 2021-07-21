@@ -37,7 +37,7 @@ class TextLinkCell: UICollectionViewCell {
             self.detailLabel.customize { label in
                 label.font = UIFont.asset(.regular, fontSize: .body)
                 label.numberOfLines = 0
-                label.enabledTypes = [.mention, .hashtag, .url, .email]
+                label.enabledTypes = [.mention, .hashtag, .url]
                 label.textColor = UIColor.Asset.white
                 label.hashtagColor = UIColor.Asset.lightBlue
                 label.mentionColor = UIColor.Asset.lightBlue
@@ -52,7 +52,7 @@ class TextLinkCell: UICollectionViewCell {
     var feed: Feed? {
         didSet {
             guard let feed = self.feed else { return }
-            self.detailLabel.text = feed.content
+            self.detailLabel.text = feed.feedPayload.contentPayload.content
             self.detailLabel.handleHashtagTap { hashtag in
                 let alert = UIAlertController(title: nil, message: "Go to hastag view", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -100,7 +100,7 @@ class TextLinkCell: UICollectionViewCell {
     }
 
     private func fetchPreview(feed: Feed) {
-        if let link = feed.link.first, let url = URL(string: link.url) {
+        if let link = feed.feedPayload.contentPayload.link.first, let url = URL(string: link.url) {
             let metaDataProvider = LPMetadataProvider()
             
             metaDataProvider.startFetchingMetadata(for: url) { [weak self]  (metaData, error) in

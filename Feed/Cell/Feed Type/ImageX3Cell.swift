@@ -38,7 +38,7 @@ class ImageX3Cell: UICollectionViewCell {
             self.detailLabel.customize { label in
                 label.font = UIFont.asset(.regular, fontSize: .body)
                 label.numberOfLines = 0
-                label.enabledTypes = [.mention, .hashtag, .url, .email]
+                label.enabledTypes = [.mention, .hashtag, .url]
                 label.textColor = UIColor.Asset.white
                 label.hashtagColor = UIColor.Asset.lightBlue
                 label.mentionColor = UIColor.Asset.lightBlue
@@ -55,7 +55,7 @@ class ImageX3Cell: UICollectionViewCell {
     var feed: Feed? {
         didSet {
             guard let feed = self.feed else { return }
-            self.detailLabel.text = feed.content
+            self.detailLabel.text = feed.feedPayload.contentPayload.content
             self.detailLabel.handleHashtagTap { hashtag in
                 let alert = UIAlertController(title: nil, message: "Go to hastag view", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -72,14 +72,14 @@ class ImageX3Cell: UICollectionViewCell {
                 Utility.currentViewController().present(alert, animated: true, completion: nil)
             }
             
-            if feed.photo.count >= 3 {
-                let firstUrl = URL(string: feed.photo[0].url)
+            if feed.feedPayload.contentPayload.photo.count >= 3 {
+                let firstUrl = URL(string: feed.feedPayload.contentPayload.photo[0].url)
                 self.firstImageView.kf.setImage(with: firstUrl)
                 
-                let secondUrl = URL(string: feed.photo[1].url)
+                let secondUrl = URL(string: feed.feedPayload.contentPayload.photo[1].url)
                 self.secondImageView.kf.setImage(with: secondUrl)
                 
-                let thirdUrl = URL(string: feed.photo[2].url)
+                let thirdUrl = URL(string: feed.feedPayload.contentPayload.photo[2].url)
                 self.thirdImageView.kf.setImage(with: thirdUrl)
             }
         }
@@ -116,10 +116,10 @@ class ImageX3Cell: UICollectionViewCell {
     }
     
     private func openImage(index: Int) {
-        if let feed = self.feed, !feed.photo.isEmpty {
+        if let feed = self.feed, !feed.feedPayload.contentPayload.photo.isEmpty {
             
             var images: [LightboxImage] = []
-            feed.photo.forEach { photo in
+            feed.feedPayload.contentPayload.photo.forEach { photo in
                 images.append(LightboxImage(imageURL: URL(string: photo.url)!))
             }
             

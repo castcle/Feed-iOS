@@ -61,18 +61,18 @@ extension FeedSectionController {
         case FeedCellSection.footer.rawValue:
             return FooterFeedCell.cellSize(width: context.containerSize.width)
         case FeedCellSection.content.rawValue:
-            if self.feed?.feedDisplayType == .postImageX1 {
-                return ImageX1Cell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
-            } else if self.feed?.feedDisplayType == .postImageX2 {
-                return ImageX2Cell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
-            } else if self.feed?.feedDisplayType == .postImageX3 {
-                return ImageX3Cell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
-            } else if self.feed?.feedDisplayType == .postImageXMore {
-                return ImageXMoreCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
-            } else if self.feed?.feedDisplayType == .postText {
-                return TextCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
+            if feed?.feedPayload.feedDisplayType == .postImageX1 {
+                return ImageX1Cell.cellSize(width: context.containerSize.width, text: feed?.feedPayload.contentPayload.content ?? "")
+            } else if feed?.feedPayload.feedDisplayType == .postImageX2 {
+                return ImageX2Cell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
+            } else if feed?.feedPayload.feedDisplayType == .postImageX3 {
+                return ImageX3Cell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
+            } else if self.feed?.feedPayload.feedDisplayType == .postImageXMore {
+                return ImageXMoreCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
+            } else if self.feed?.feedPayload.feedDisplayType == .postText {
+                return TextCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
             } else {
-                return TextLinkCell.cellSize(width: context.containerSize.width, text: self.feed?.content ?? "")
+                return TextLinkCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
             }
         default:
             return .zero
@@ -92,32 +92,32 @@ extension FeedSectionController {
             cell?.feed = self.feed
             return cell ?? FooterFeedCell()
         case FeedCellSection.content.rawValue:
-            if self.feed?.feedDisplayType == .postImageX1 {
+            if self.feed?.feedPayload.feedDisplayType == .postImageX1 {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageX1Cell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageX1Cell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? TextCell()
-            } else if self.feed?.feedDisplayType == .postImageX2 {
+            } else if self.feed?.feedPayload.feedDisplayType == .postImageX2 {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageX2Cell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageX2Cell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? ImageX2Cell()
-            } else if self.feed?.feedDisplayType == .postImageX3 {
+            } else if self.feed?.feedPayload.feedDisplayType == .postImageX3 {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageX3Cell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageX3Cell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? ImageX3Cell()
-            } else if self.feed?.feedDisplayType == .postImageXMore {
+            } else if self.feed?.feedPayload.feedDisplayType == .postImageXMore {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.imageXMoreCell, bundle: ConfigBundle.feed, for: self, at: index) as? ImageXMoreCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? ImageXMoreCell()
-            } else if self.feed?.feedDisplayType == .postText {
+            } else if self.feed?.feedPayload.feedDisplayType == .postText {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postText, bundle: ConfigBundle.feed, for: self, at: index) as? TextCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? TextCell()
-            } else if self.feed?.feedDisplayType == .postLink || self.feed?.feedDisplayType == .postYoutube {
+            } else if self.feed?.feedPayload.feedDisplayType == .postLink || self.feed?.feedPayload.feedDisplayType == .postYoutube {
                 let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.postTextLinkCell, bundle: ConfigBundle.feed, for: self, at: index) as? TextLinkCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
