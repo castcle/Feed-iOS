@@ -55,6 +55,8 @@ public enum FeedDisplayType {
     case postImageX2
     case postImageX3
     case postImageXMore
+    case blogImage
+    case blogNoImage
 }
 
 public class Content: NSObject {
@@ -98,6 +100,12 @@ public class Content: NSObject {
                 } else {
                     return .postImageXMore
                 }
+            }
+        } else if self.type == .blog {
+            if self.contentPayload.cover.isEmpty {
+                return .blogNoImage
+            } else {
+                return .blogImage
             }
         } else {
             return .postText

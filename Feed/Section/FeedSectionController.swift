@@ -71,6 +71,10 @@ extension FeedSectionController {
                 return ImageXMoreCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
             } else if self.feed?.feedPayload.feedDisplayType == .postText {
                 return TextCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
+            } else if self.feed?.feedPayload.feedDisplayType == .blogImage {
+                return BlogCell.cellSize(width: context.containerSize.width, header: self.feed?.feedPayload.contentPayload.header ?? "", body: self.feed?.feedPayload.contentPayload.content ?? "")
+            } else if self.feed?.feedPayload.feedDisplayType == .blogNoImage {
+                return BlogNoImageCell.cellSize(width: context.containerSize.width, body: self.feed?.feedPayload.contentPayload.content ?? "")
             } else {
                 return TextLinkCell.cellSize(width: context.containerSize.width, text: self.feed?.feedPayload.contentPayload.content ?? "")
             }
@@ -122,6 +126,16 @@ extension FeedSectionController {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.feed = self.feed
                 return cell ?? TextLinkCell()
+            } else if self.feed?.feedPayload.feedDisplayType == .blogImage {
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.blogCell, bundle: ConfigBundle.feed, for: self, at: index) as? BlogCell
+                cell?.backgroundColor = UIColor.Asset.darkGraphiteBlue
+                cell?.feed = self.feed
+                return cell ?? BlogCell()
+            } else if self.feed?.feedPayload.feedDisplayType == .blogNoImage {
+                let cell = collectionContext?.dequeueReusableCell(withNibName: FeedNibVars.CollectionViewCell.blogNoImageCell, bundle: ConfigBundle.feed, for: self, at: index) as? BlogNoImageCell
+                cell?.backgroundColor = UIColor.Asset.darkGraphiteBlue
+                cell?.feed = self.feed
+                return cell ?? BlogNoImageCell()
             } else {
                 return UICollectionViewCell()
             }

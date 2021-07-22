@@ -64,6 +64,8 @@
 		B7B1E3BB26A7FAFA006E2FF6 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BA26A7FAFA006E2FF6 /* Circle.swift */; };
 		B7B1E3BD26A7FBF2006E2FF6 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BC26A7FBF2006E2FF6 /* Content.swift */; };
 		B7B1E3BF26A80724006E2FF6 /* ContentPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3BE26A80724006E2FF6 /* ContentPayload.swift */; };
+		B7B1E3E226A962F4006E2FF6 /* BlogNoImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B1E3E026A962F4006E2FF6 /* BlogNoImageCell.swift */; };
+		B7B1E3E326A962F4006E2FF6 /* BlogNoImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B1E3E126A962F4006E2FF6 /* BlogNoImageCell.xib */; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
 /* End PBXBuildFile section */
 
@@ -145,6 +147,8 @@
 		B7B1E3BA26A7FAFA006E2FF6 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		B7B1E3BC26A7FBF2006E2FF6 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		B7B1E3BE26A80724006E2FF6 /* ContentPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPayload.swift; sourceTree = "<group>"; };
+		B7B1E3E026A962F4006E2FF6 /* BlogNoImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogNoImageCell.swift; sourceTree = "<group>"; };
+		B7B1E3E126A962F4006E2FF6 /* BlogNoImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlogNoImageCell.xib; sourceTree = "<group>"; };
 		C22DC872E5C9933F81C4C9B8 /* Pods-Feed.release (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (development).xcconfig"; sourceTree = "<group>"; };
 		C9A6A819CC9CFCB3AD78E186 /* Pods-Feed.release (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (staging).xcconfig"; sourceTree = "<group>"; };
 		EE2210B164B73BDD8332BDFF /* Pods-Feed.debug (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (staging).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (staging).xcconfig"; sourceTree = "<group>"; };
@@ -346,6 +350,8 @@
 				B7B1E3B026A51B1B006E2FF6 /* ImageXMoreCell.xib */,
 				B7B1E3B626A563CC006E2FF6 /* BlogCell.swift */,
 				B7B1E3B726A563CC006E2FF6 /* BlogCell.xib */,
+				B7B1E3E026A962F4006E2FF6 /* BlogNoImageCell.swift */,
+				B7B1E3E126A962F4006E2FF6 /* BlogNoImageCell.xib */,
 			);
 			path = "Feed Type";
 			sourceTree = "<group>";
@@ -433,6 +439,7 @@
 				B7B1E3B226A51B1B006E2FF6 /* ImageXMoreCell.xib in Resources */,
 				B75528DC269B6DE3005D5EB5 /* NewPostCell.xib in Resources */,
 				B79281AB26945455000ED84A /* Feed.storyboard in Resources */,
+				B7B1E3E326A962F4006E2FF6 /* BlogNoImageCell.xib in Resources */,
 				B7B1E3A626A34E32006E2FF6 /* ImageX1Cell.xib in Resources */,
 				B7B1E39326A06CA1006E2FF6 /* TextCell.xib in Resources */,
 				B7B1E3AA26A3F7CE006E2FF6 /* ImageX2Cell.xib in Resources */,
@@ -475,6 +482,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7B1E3E226A962F4006E2FF6 /* BlogNoImageCell.swift in Sources */,
 				B7B1E3BB26A7FAFA006E2FF6 /* Circle.swift in Sources */,
 				B75529B1269E9507005D5EB5 /* FeedShelf.swift in Sources */,
 				B7552996269D6C2F005D5EB5 /* FeedRepository.swift in Sources */,

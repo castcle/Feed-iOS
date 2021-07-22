@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="BlogNoImageCell" customModule="Feed" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="230"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="230"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9BD-5a-Npz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="9BD-5a-Npz" secondAttribute="height" multiplier="16:9" id="ROv-7m-Oee"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="wmr-bs-V23"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efZ-eh-sTV" customClass="NantesLabel" customModule="Nantes">
+                        <rect key="frame" x="15" y="195" width="290" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01p-FG-9Rw">
+                        <rect key="frame" x="15" y="78" width="290" height="24"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="9BD-5a-Npz" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3f1-BB-vfQ"/>
+                <constraint firstItem="01p-FG-9Rw" firstAttribute="centerX" secondItem="9BD-5a-Npz" secondAttribute="centerX" id="3wV-eK-aE9"/>
+                <constraint firstItem="9BD-5a-Npz" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="8T2-K8-150"/>
+                <constraint firstAttribute="bottom" secondItem="efZ-eh-sTV" secondAttribute="bottom" constant="15" id="BDs-NK-bo9"/>
+                <constraint firstItem="9BD-5a-Npz" firstAttribute="width" secondItem="9BD-5a-Npz" secondAttribute="height" multiplier="16:9" id="CVd-fU-8hT"/>
+                <constraint firstAttribute="trailing" secondItem="9BD-5a-Npz" secondAttribute="trailing" id="Ejf-Om-Dg0"/>
+                <constraint firstItem="01p-FG-9Rw" firstAttribute="centerY" secondItem="9BD-5a-Npz" secondAttribute="centerY" id="Es3-eG-7Eq"/>
+                <constraint firstAttribute="trailing" secondItem="01p-FG-9Rw" secondAttribute="trailing" constant="15" id="J8b-BA-3EN"/>
+                <constraint firstAttribute="trailing" secondItem="efZ-eh-sTV" secondAttribute="trailing" constant="15" id="Te9-WY-ef6"/>
+                <constraint firstItem="efZ-eh-sTV" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="af1-ZA-fYF"/>
+                <constraint firstItem="01p-FG-9Rw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="bOw-mD-8pO"/>
+                <constraint firstItem="efZ-eh-sTV" firstAttribute="top" secondItem="9BD-5a-Npz" secondAttribute="bottom" constant="15" id="k8n-fB-Xko"/>
+            </constraints>
+            <size key="customSize" width="320" height="229"/>
+            <connections>
+                <outlet property="blogImageView" destination="9BD-5a-Npz" id="Kdl-t9-2sA"/>
+                <outlet property="detailLabel" destination="efZ-eh-sTV" id="8QJ-iE-Vg9"/>
+                <outlet property="headerLabel" destination="01p-FG-9Rw" id="BJ7-HG-aOr"/>
+            </connections>
+            <point key="canvasLocation" x="243.47826086956525" y="137.61160714285714"/>
+        </collectionViewCell>
+    </objects>
+    <designables>
+        <designable name="efZ-eh-sTV">
+            <size key="intrinsicContentSize" width="39.5" height="19.5"/>
+        </designable>
+    </designables>
+</document>

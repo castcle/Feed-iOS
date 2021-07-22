@@ -54,5 +54,6 @@ public struct FeedNibVars {
         public static let imageX3Cell = "ImageX3Cell"
         public static let imageXMoreCell = "ImageXMoreCell"
         public static let blogCell = "BlogCell"
+        public static let blogNoImageCell = "BlogNoImageCell"
     }
 }
