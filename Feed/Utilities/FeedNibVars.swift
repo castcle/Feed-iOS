@@ -29,6 +29,7 @@ public struct FeedNibVars {
     // MARK: - View Controller
     public struct ViewController {
         public static let feed = "FeedViewController"
+        public static let recastPopup = "RecastPopupViewController"
     }
     
     // MARK: - View

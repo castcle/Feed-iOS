@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import PanModal
 
 class FooterFeedCell: UICollectionViewCell {
 
@@ -40,9 +41,12 @@ class FooterFeedCell: UICollectionViewCell {
         }
     }
     
+    //MARK: Private
+    private var likeRepository: LikeRepository = LikeRepositoryImpl()
+    private var recastRepository: RecastRepository = RecastRepositoryImpl()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     public static func cellSize(width: CGFloat) -> CGSize {
@@ -76,6 +80,17 @@ class FooterFeedCell: UICollectionViewCell {
     
     @IBAction func likeAction(_ sender: Any) {
         guard let feed = self.feed else { return }
+        
+        if feed.feedPayload.liked.liked {
+            self.likeRepository.unliked(feedUuid: feed.feedPayload.id) { success in
+                print("Unliked : \(success)")
+            }
+        } else {
+            self.likeRepository.liked(feedUuid: feed.feedPayload.id) { success in
+                print("Liked : \(success)")
+            }
+        }
+        
         feed.feedPayload.liked.liked.toggle()
         self.updateUi()
         
@@ -95,9 +110,32 @@ class FooterFeedCell: UICollectionViewCell {
     }
     
     @IBAction func recastAction(_ sender: Any) {
-        let alert = UIAlertController(title: nil, message: "Go to recast view", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        Utility.currentViewController().present(alert, animated: true, completion: nil)
+        guard let feed = self.feed else { return }
+        let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
+        let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.recastPopup) as? RecastPopupViewController
+        vc?.delegate = self
+        vc?.viewModel = RecastPopupViewModel(isRecasted: feed.feedPayload.recasted.recasted)
+        Utility.currentViewController().presentPanModal(vc ?? RecastPopupViewController())
     }
-    
+}
+
+extension FooterFeedCell: RecastPopupViewControllerDelegate {
+    func recastPopupViewController(_ view: RecastPopupViewController, didSelectRecastAction recastAction: RecastAction) {
+        guard let feed = self.feed else { return }
+        
+        if feed.feedPayload.recasted.recasted {
+            self.recastRepository.unrecasted(feedUuid: feed.feedPayload.id) { success in
+                print("Unrecasted : \(success)")
+            }
+        } else {
+            self.recastRepository.recasted(feedUuid: feed.feedPayload.id) { success in
+                print("Recasted : \(success)")
+            }
+        }
+        
+        if recastAction == .recast {
+            feed.feedPayload.recasted.recasted.toggle()
+            self.updateUi()
+        }
+    }
 }
