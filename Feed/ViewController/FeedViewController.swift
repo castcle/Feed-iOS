@@ -28,9 +28,10 @@
 import UIKit
 import Core
 import Component
+import Authen
 import IGListKit
 
-class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
+class FeedViewController: UIViewController {
     
     let collectionView: UICollectionView = {
       let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -52,9 +53,8 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.customNavigationBar(.primary, title: "For You", leftBarButton: .logo, rightBarButton: [.menu])
-        FeedViewController.castcleTabbarDelegate = self
-        
+        self.setupNevBar()
+
         self.collectionView.alwaysBounceVertical = true
         self.collectionView.showsHorizontalScrollIndicator = false
         self.collectionView.showsVerticalScrollIndicator = false
@@ -83,15 +83,41 @@ class FeedViewController: UIViewController, CastcleTabbarDeleDelegate {
         self.collectionView.frame = view.bounds
     }
     
+    private func setupNevBar() {
+        self.customNavigationBar(.primary, title: "For You", rightBarButton: [(Authen.shared.isLogin ? .menu : .profile)])
+        
+        let icon = NavBarButtonType.logo.barButton
+        icon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: icon)
+    }
+    
+    @objc private func leftButtonAction() {
+        self.navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "http://www.google.co.th")!)), animated: true)
+    }
+    
     func castcleTabbar(didSelectButtonBar button: BarButtonActionType) {
-        print(button)
+        if button == .firstRightButton {
+            if Authen.shared.isLogin {
+                Authen.shared.logout()
+            } else {
+                Authen.shared.login()
+            }
+            
+            self.setupNevBar()
+            self.adapter.performUpdates(animated: true)
+        }
     }
 }
 
 // MARK: - ListAdapterDataSource
 extension FeedViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        var items: [ListDiffable] = [FeedType.newPost.rawValue] as [ListDiffable]
+        var items: [ListDiffable] = [] as [ListDiffable]
+        
+        if Authen.shared.isLogin {
+            items.append(FeedType.newPost.rawValue as ListDiffable)
+        }
+        
         if !self.viewModel.hashtagShelf.hashtags.isEmpty {
             items.append(self.viewModel.hashtagShelf as ListDiffable)
         }
