@@ -30,6 +30,7 @@ import Core
 import Component
 import Authen
 import IGListKit
+import PanModal
 
 class FeedViewController: UIViewController {
     
@@ -110,14 +111,17 @@ class FeedViewController: UIViewController {
     }
     
     @objc private func rightButtonAction() {
-        if Authen.shared.isLogin {
-            Authen.shared.logout()
-        } else {
-            Authen.shared.login()
-        }
+        let vc = AuthenOpener.open(.signUpMethod)
+        Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
         
-        self.setupNevBar()
-        self.adapter.performUpdates(animated: true)
+//        if Authen.shared.isLogin {
+//            Authen.shared.logout()
+//        } else {
+//            Authen.shared.login()
+//        }
+//
+//        self.setupNevBar()
+//        self.adapter.performUpdates(animated: true)
     }
 }
 
