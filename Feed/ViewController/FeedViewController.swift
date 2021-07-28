@@ -84,28 +84,40 @@ class FeedViewController: UIViewController {
     }
     
     private func setupNevBar() {
-        self.customNavigationBar(.primary, title: "For You", rightBarButton: [(Authen.shared.isLogin ? .menu : .profile)])
+        self.customNavigationBar(.primary, title: "For You")
         
         let icon = NavBarButtonType.logo.barButton
         icon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: icon)
+        
+        var rightButton: [UIBarButtonItem] = []
+        
+        if Authen.shared.isLogin {
+            let rightIcon = NavBarButtonType.menu.barButton
+            rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
+            rightButton.append(UIBarButtonItem(customView: rightIcon))
+        } else {
+            let rightIcon = NavBarButtonType.profile.barButton
+            rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
+            rightButton.append(UIBarButtonItem(customView: rightIcon))
+        }
+        
+        self.navigationItem.rightBarButtonItems = rightButton
     }
     
     @objc private func leftButtonAction() {
-        self.navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "http://www.google.co.th")!)), animated: true)
+        self.navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "https://www.google.co.th")!)), animated: true)
     }
     
-    func castcleTabbar(didSelectButtonBar button: BarButtonActionType) {
-        if button == .firstRightButton {
-            if Authen.shared.isLogin {
-                Authen.shared.logout()
-            } else {
-                Authen.shared.login()
-            }
-            
-            self.setupNevBar()
-            self.adapter.performUpdates(animated: true)
+    @objc private func rightButtonAction() {
+        if Authen.shared.isLogin {
+            Authen.shared.logout()
+        } else {
+            Authen.shared.login()
         }
+        
+        self.setupNevBar()
+        self.adapter.performUpdates(animated: true)
     }
 }
 
