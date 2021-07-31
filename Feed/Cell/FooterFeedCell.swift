@@ -111,8 +111,7 @@ class FooterFeedCell: UICollectionViewCell {
     
     @IBAction func recastAction(_ sender: Any) {
         guard let feed = self.feed else { return }
-        let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-        let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.recastPopup) as? RecastPopupViewController
+        let vc = FeedOpener.open(.recastPopup) as? RecastPopupViewController
         vc?.delegate = self
         vc?.viewModel = RecastPopupViewModel(isRecasted: feed.feedPayload.recasted.recasted)
         Utility.currentViewController().presentPanModal(vc ?? RecastPopupViewController())

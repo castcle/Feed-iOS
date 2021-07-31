@@ -35,20 +35,19 @@ import PanModal
 class FeedViewController: UIViewController {
     
     let collectionView: UICollectionView = {
-      let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         view.backgroundColor = UIColor.Asset.darkGraphiteBlue
-      return view
+        return view
     }()
     
     lazy var adapter: ListAdapter = {
-      return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
+        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
     
     var viewModel = FeedViewModel()
     
     enum FeedType: Int {
         case newPost = 0
-        case hashtag
     }
     
     override func viewDidLoad() {
@@ -85,11 +84,7 @@ class FeedViewController: UIViewController {
     }
     
     private func setupNevBar() {
-        self.customNavigationBar(.primary, title: "For You")
-        
-        let icon = NavBarButtonType.logo.barButton
-        icon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: icon)
+        self.customNavigationBar(.primary, title: "For You", leftBarButton: .logo)
         
         var rightButton: [UIBarButtonItem] = []
         
@@ -104,10 +99,6 @@ class FeedViewController: UIViewController {
         }
         
         self.navigationItem.rightBarButtonItems = rightButton
-    }
-    
-    @objc private func leftButtonAction() {
-        self.navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "https://www.google.co.th")!)), animated: true)
     }
     
     @objc private func rightButtonAction() {

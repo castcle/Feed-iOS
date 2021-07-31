@@ -30,6 +30,7 @@ import Core
 
 public enum FeedScene {
     case feed
+    case recastPopup
 }
 
 public struct FeedOpener {
@@ -39,6 +40,10 @@ public struct FeedOpener {
         case .feed:
             let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
             let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
+            return vc
+        case .recastPopup:
+            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
+            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.recastPopup)
             return vc
         }
     }
