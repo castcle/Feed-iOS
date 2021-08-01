@@ -46,11 +46,6 @@ public class ContentPayload: NSObject {
         self.cover = photoCoverJson[ContentPayloadKey.url.rawValue].stringValue
         
         // MARK: - Link
-        let linkJson = json[ContentPayloadKey.link.rawValue].arrayValue
-        var linkArr: [Link] = []
-        linkJson.forEach { item in
-            linkArr.append(Link(json: item))
-        }
-        self.link = linkArr
+        self.link = (json[ContentPayloadKey.link.rawValue].arrayValue).map { Link(json: $0) }
     }
 }

@@ -40,13 +40,6 @@ class FeedShelf: NSObject {
     override init() { }
     
     init(json: JSON) {
-        let payload = json[FeedShelfKey.payload.rawValue].arrayValue
-        
-        var feeds: [Feed] = []
-        payload.forEach() { item in
-            feeds.append(Feed(json: item))
-        }
-        
-        self.feeds = feeds
+        self.feeds = (json[FeedShelfKey.payload.rawValue].arrayValue).map { Feed(json: $0) }
     }
 }

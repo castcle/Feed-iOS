@@ -38,13 +38,6 @@ class HashtagShelf: NSObject {
     override init() { }
     
     init(json: JSON) {
-        let payload = json[HashtagShelfKey.payload.rawValue].arrayValue
-        
-        var hashtags: [Hashtag] = []
-        payload.forEach() { item in
-            hashtags.append(Hashtag(json: item))
-        }
-        
-        self.hashtags = hashtags
+        self.hashtags = (json[HashtagShelfKey.payload.rawValue].arrayValue).map { Hashtag(json: $0) }
     }
 }

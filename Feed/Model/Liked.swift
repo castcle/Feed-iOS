@@ -44,11 +44,6 @@ public class Liked: NSObject {
         self.liked = json[LikedKey.liked.rawValue].boolValue
         
         // MARK: - Participant
-        let participantJson = json[LikedKey.participant.rawValue].arrayValue
-        var participantArr: [Participant] = []
-        participantJson.forEach { item in
-            participantArr.append(Participant(json: item))
-        }
-        self.participant = participantArr
+        self.participant = (json[LikedKey.participant.rawValue].arrayValue).map { Participant(json: $0) }
     }
 }

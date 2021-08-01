@@ -44,11 +44,6 @@ public class Recasted: NSObject {
         self.recasted = json[RecastedKey.recasted.rawValue].boolValue
         
         // MARK: - Participant
-        let participantJson = json[RecastedKey.participant.rawValue].arrayValue
-        var participantArr: [Participant] = []
-        participantJson.forEach { item in
-            participantArr.append(Participant(json: item))
-        }
-        self.participant = participantArr
+        self.participant = (json[RecastedKey.participant.rawValue].arrayValue).map { Participant(json: $0) }
     }
 }

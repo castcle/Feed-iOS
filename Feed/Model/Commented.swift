@@ -44,11 +44,6 @@ public class Commented: NSObject {
         self.commented = json[CommentedKey.commented.rawValue].boolValue
         
         // MARK: - Participant
-        let participantJson = json[CommentedKey.participant.rawValue].arrayValue
-        var participantArr: [Participant] = []
-        participantJson.forEach { item in
-            participantArr.append(Participant(json: item))
-        }
-        self.participant = participantArr
+        self.participant = (json[CommentedKey.participant.rawValue].arrayValue).map { Participant(json: $0) }
     }
 }
