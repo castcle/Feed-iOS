@@ -101,18 +101,22 @@ class FeedViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = rightButton
     }
     
-    @objc private func rightButtonAction() {
-        let vc = AuthenOpener.open(.signUpMethod)
-        Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-//        if Authen.shared.isLogin {
-//            Authen.shared.logout()
-//        } else {
-//            Authen.shared.login()
-//        }
-//
-//        self.setupNevBar()
-//        self.adapter.performUpdates(animated: true)
+        if Authen.shared.isLogin {
+            self.setupNevBar()
+            self.adapter.performUpdates(animated: true)
+        }
+    }
+    
+    @objc private func rightButtonAction() {
+        if Authen.shared.isLogin {
+            // TO DO
+        } else {
+            let vc = AuthenOpener.open(.signUpMethod)
+            Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
+        }
     }
 }
 
