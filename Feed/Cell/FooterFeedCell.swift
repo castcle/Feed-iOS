@@ -60,21 +60,21 @@ class FooterFeedCell: UICollectionViewCell {
         self.recastLabel.font = UIFont.asset(.regular, fontSize: .overline)
         
         if feed.feedPayload.liked.liked {
-            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 18)
         } else {
-            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.likeLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.like), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.liked.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 18)
         }
         
         if feed.feedPayload.commented.commented {
-            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 15)
         } else {
-            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.commentLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.comment), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.commented.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 15)
         }
         
         if feed.feedPayload.recasted.recasted {
-            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 14)
+            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.lightBlue, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.lightBlue, size: nil, iconSize: 18)
         } else {
-            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 14)
+            self.recastLabel.setIcon(prefixText: "", prefixTextColor: .clear, icon: .castcle(.recast), iconColor: UIColor.Asset.white, postfixText: "  \(String.displayCount(count: feed.feedPayload.recasted.count))", postfixTextColor: UIColor.Asset.white, size: nil, iconSize: 18)
         }
     }
     

@@ -93,7 +93,7 @@ class FeedViewController: UIViewController {
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
         } else {
-            let rightIcon = NavBarButtonType.profile.barButton
+            let rightIcon = NavBarButtonType.righProfile.barButton
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
         }
