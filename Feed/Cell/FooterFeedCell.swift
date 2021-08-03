@@ -131,8 +131,7 @@ class FooterFeedCell: UICollectionViewCell {
     }
     
     private func openSignUpMethod() {
-        let vc = AuthenOpener.open(.signUpMethod)
-        Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
     }
 }
 

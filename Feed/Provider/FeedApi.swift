@@ -51,7 +51,7 @@ extension FeedApi: TargetType {
         switch self {
         case .getHashtags:
             return .get
-        case .getFeeds(_, _):
+        case .getFeeds:
             return .get
         }
     }
@@ -69,7 +69,7 @@ extension FeedApi: TargetType {
             } else {
                 return Data()
             }
-        case .getFeeds(_, _):
+        case .getFeeds:
             if let path = ConfigBundle.feed.path(forResource: "Feeds", ofType: "json") {
                 do {
                     let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
@@ -87,7 +87,7 @@ extension FeedApi: TargetType {
         switch self {
         case .getHashtags:
             return .requestPlain
-        case .getFeeds(_, _):
+        case .getFeeds:
             return .requestPlain
         }
     }

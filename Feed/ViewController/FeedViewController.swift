@@ -114,8 +114,7 @@ class FeedViewController: UIViewController {
         if Authen.shared.isLogin {
             // TO DO
         } else {
-            let vc = AuthenOpener.open(.signUpMethod)
-            Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
+            Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
         }
     }
 }
