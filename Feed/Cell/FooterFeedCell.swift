@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Authen
 import PanModal
 
 class FooterFeedCell: UICollectionViewCell {
@@ -79,42 +80,59 @@ class FooterFeedCell: UICollectionViewCell {
     }
     
     @IBAction func likeAction(_ sender: Any) {
-        guard let feed = self.feed else { return }
-        
-        if feed.feedPayload.liked.liked {
-            self.likeRepository.unliked(feedUuid: feed.feedPayload.id) { success in
-                print("Unliked : \(success)")
+        if Authen.shared.isLogin {
+            guard let feed = self.feed else { return }
+            
+            if feed.feedPayload.liked.liked {
+                self.likeRepository.unliked(feedUuid: feed.feedPayload.id) { success in
+                    print("Unliked : \(success)")
+                }
+            } else {
+                self.likeRepository.liked(feedUuid: feed.feedPayload.id) { success in
+                    print("Liked : \(success)")
+                }
+            }
+            
+            feed.feedPayload.liked.liked.toggle()
+            self.updateUi()
+            
+            if feed.feedPayload.liked.liked {
+                let impliesAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
+                impliesAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
+                impliesAnimation.duration = 0.3 * 2
+                impliesAnimation.calculationMode = CAAnimationCalculationMode.cubic
+                self.likeLabel.layer.add(impliesAnimation, forKey: nil)
             }
         } else {
-            self.likeRepository.liked(feedUuid: feed.feedPayload.id) { success in
-                print("Liked : \(success)")
-            }
-        }
-        
-        feed.feedPayload.liked.liked.toggle()
-        self.updateUi()
-        
-        if feed.feedPayload.liked.liked {
-            let impliesAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
-            impliesAnimation.values = [1.0 ,1.4, 0.9, 1.15, 0.95, 1.02, 1.0]
-            impliesAnimation.duration = 0.3 * 2
-            impliesAnimation.calculationMode = CAAnimationCalculationMode.cubic
-            self.likeLabel.layer.add(impliesAnimation, forKey: nil)
+            self.openSignUpMethod()
         }
     }
     
     @IBAction func commentAction(_ sender: Any) {
-        let alert = UIAlertController(title: nil, message: "Go to comment view", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        Utility.currentViewController().present(alert, animated: true, completion: nil)
+        if Authen.shared.isLogin {
+            let alert = UIAlertController(title: nil, message: "Go to comment view", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            Utility.currentViewController().present(alert, animated: true, completion: nil)
+        } else {
+            self.openSignUpMethod()
+        }
     }
     
     @IBAction func recastAction(_ sender: Any) {
-        guard let feed = self.feed else { return }
-        let vc = FeedOpener.open(.recastPopup) as? RecastPopupViewController
-        vc?.delegate = self
-        vc?.viewModel = RecastPopupViewModel(isRecasted: feed.feedPayload.recasted.recasted)
-        Utility.currentViewController().presentPanModal(vc ?? RecastPopupViewController())
+        if Authen.shared.isLogin {
+            guard let feed = self.feed else { return }
+            let vc = FeedOpener.open(.recastPopup) as? RecastPopupViewController
+            vc?.delegate = self
+            vc?.viewModel = RecastPopupViewModel(isRecasted: feed.feedPayload.recasted.recasted)
+            Utility.currentViewController().presentPanModal(vc ?? RecastPopupViewController())
+        } else {
+            self.openSignUpMethod()
+        }
+    }
+    
+    private func openSignUpMethod() {
+        let vc = AuthenOpener.open(.signUpMethod)
+        Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
     }
 }
 

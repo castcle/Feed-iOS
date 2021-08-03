@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Authen
 import SnackBar_swift
 
 public class HeaderFeedCell: UICollectionViewCell {
@@ -75,10 +76,14 @@ public class HeaderFeedCell: UICollectionViewCell {
     }
     
     @IBAction func followAction(_ sender: Any) {
-        self.followButton.isHidden = true
-        AppSnackBar.make(in: Utility.currentViewController().view, message: "You've followed @{userSlug}", duration: .lengthLong).setAction(with: "Undo", action: {
-            self.followButton.isHidden = false
-        }).show()
+        if Authen.shared.isLogin {
+            self.followButton.isHidden = true
+            AppSnackBar.make(in: Utility.currentViewController().view, message: "You've followed @{userSlug}", duration: .lengthLong).setAction(with: "Undo", action: {
+                self.followButton.isHidden = false
+            }).show()
+        } else {
+            self.openSignUpMethod()
+        }
     }
     
     @IBAction func viewProfileAction(_ sender: Any) {
@@ -91,6 +96,11 @@ public class HeaderFeedCell: UICollectionViewCell {
         let alert = UIAlertController(title: nil, message: "Go to more action", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         Utility.currentViewController().present(alert, animated: true, completion: nil)
+    }
+    
+    private func openSignUpMethod() {
+        let vc = AuthenOpener.open(.signUpMethod)
+        Utility.currentViewController().presentPanModal(vc as! SignUpMethodViewController)
     }
 }
 
