@@ -88,7 +88,7 @@ public class HeaderFeedCell: UICollectionViewCell {
     }
     
     @IBAction func viewProfileAction(_ sender: Any) {
-        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: true))), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: false))), animated: true)
     }
     
     @IBAction func moreAction(_ sender: Any) {

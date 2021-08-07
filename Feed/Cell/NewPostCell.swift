@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Profile
 import Kingfisher
 
 class NewPostCell: UICollectionViewCell {
@@ -59,8 +60,6 @@ class NewPostCell: UICollectionViewCell {
     }
     
     @IBAction func profileAction(_ sender: Any) {
-        let alert = UIAlertController(title: nil, message: "Go to profile view", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        Utility.currentViewController().present(alert, animated: true, completion: nil)
+        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: true))), animated: true)
     }
 }
