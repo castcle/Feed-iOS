@@ -27,7 +27,6 @@
         <!--Recast Popup View Controller-->
         <scene sceneID="iRS-VI-9y5">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Lj-2d-t5x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="RecastPopupViewController" id="B0Q-Xz-bBa" customClass="RecastPopupViewController" customModule="Feed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hn8-6V-01R">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -168,6 +167,7 @@
                         <outlet property="subTitleLabel" destination="Vkj-ay-0qq" id="O0T-jg-9kP"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Lj-2d-t5x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="728.79999999999995" y="68.815592203898049"/>
         </scene>
