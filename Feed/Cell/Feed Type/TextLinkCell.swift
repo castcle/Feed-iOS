@@ -28,6 +28,7 @@
 import UIKit
 import LinkPresentation
 import Core
+import Networking
 import ActiveLabel
 
 class TextLinkCell: UICollectionViewCell {

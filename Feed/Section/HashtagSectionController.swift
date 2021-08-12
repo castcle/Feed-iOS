@@ -26,6 +26,7 @@
 //
 
 import Core
+import Networking
 import IGListKit
 
 class HashtagSectionController: ListSectionController {

@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Networking
 
 class HashtagCell: UICollectionViewCell {
     

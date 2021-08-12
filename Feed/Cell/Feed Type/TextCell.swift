@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Networking
 import ActiveLabel
 
 class TextCell: UICollectionViewCell {
