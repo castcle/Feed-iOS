@@ -29,7 +29,6 @@ public struct FeedNibVars {
     // MARK: - View Controller
     public struct ViewController {
         public static let feed = "FeedViewController"
-        public static let recastPopup = "RecastPopupViewController"
     }
     
     // MARK: - View
@@ -46,15 +45,5 @@ public struct FeedNibVars {
         public static let post = "NewPostCell"
         public static let hashtag = "HashtagCell"
         public static let hashtagCapsule = "HashtagCapsuleCell"
-        public static let headerFeed = "HeaderFeedCell"
-        public static let footerFeed = "FooterFeedCell"
-        public static let postText = "TextCell"
-        public static let postTextLinkCell = "TextLinkCell"
-        public static let imageX1Cell = "ImageX1Cell"
-        public static let imageX2Cell = "ImageX2Cell"
-        public static let imageX3Cell = "ImageX3Cell"
-        public static let imageXMoreCell = "ImageXMoreCell"
-        public static let blogCell = "BlogCell"
-        public static let blogNoImageCell = "BlogNoImageCell"
     }
 }

@@ -27,9 +27,11 @@
 
 import UIKit
 import Core
+import Share
 import Networking
 import Component
 import Authen
+import Profile
 import IGListKit
 import PanModal
 
@@ -90,7 +92,7 @@ class FeedViewController: UIViewController {
         
         var rightButton: [UIBarButtonItem] = []
         
-        if Authen.shared.isLogin {
+        if UserState.shared.isLogin {
             let rightIcon = NavBarButtonType.menu.barButton
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
@@ -106,14 +108,14 @@ class FeedViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if Authen.shared.isLogin {
+        if UserState.shared.isLogin {
             self.setupNevBar()
             self.adapter.performUpdates(animated: true)
         }
     }
     
     @objc private func rightButtonAction() {
-        if Authen.shared.isLogin {
+        if UserState.shared.isLogin {
             // TO DO
         } else {
             Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
@@ -126,7 +128,7 @@ extension FeedViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         var items: [ListDiffable] = [] as [ListDiffable]
         
-        if Authen.shared.isLogin {
+        if UserState.shared.isLogin {
             items.append(FeedType.newPost.rawValue as ListDiffable)
         }
         
@@ -145,7 +147,9 @@ extension FeedViewController: ListAdapterDataSource {
         if object is HashtagShelf {
             return HashtagSectionController()
         } else if object is Feed {
-            return FeedSectionController()
+            let section = FeedSectionController()
+            section.delegate = self
+            return section
         } else {
             return NewPostSectionController()
         }
@@ -153,5 +157,22 @@ extension FeedViewController: ListAdapterDataSource {
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
+    }
+}
+
+extension FeedViewController: FeedSectionControllerDelegate {
+    func didTabProfile() {
+        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail), animated: true)
+        //        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: false))), animated: true)
+    }
+    
+    func didTabComment() {
+        let alert = UIAlertController(title: nil, message: "Go to comment view", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        Utility.currentViewController().present(alert, animated: true, completion: nil)
+    }
+    
+    func didAuthen() {
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
     }
 }
