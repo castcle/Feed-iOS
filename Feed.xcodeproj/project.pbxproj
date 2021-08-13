@@ -20,8 +20,6 @@
 		B75529A8269E0CF4005D5EB5 /* HashtagCapsuleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B75529A6269E0CF4005D5EB5 /* HashtagCapsuleCell.xib */; };
 		B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; };
 		B75E62B2269713C5003E1ADA /* Component.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75E62B0269713C5003E1ADA /* Component.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B787962F26C662B800FECC21 /* Share.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B787962E26C662B800FECC21 /* Share.framework */; };
-		B787963026C662B800FECC21 /* Share.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B787962E26C662B800FECC21 /* Share.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7910DE926AFCD770097C94E /* Authen.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7910DE826AFCD770097C94E /* Authen.framework */; };
 		B7910DEA26AFCD770097C94E /* Authen.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7910DE826AFCD770097C94E /* Authen.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7928135268F2BDF000ED84A /* Feed.h in Headers */ = {isa = PBXBuildFile; fileRef = B7928133268F2BDF000ED84A /* Feed.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,7 +39,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B787963026C662B800FECC21 /* Share.framework in Embed Frameworks */,
 				B74CEF1026C50718006B1F2C /* Networking.framework in Embed Frameworks */,
 				B75E62B2269713C5003E1ADA /* Component.framework in Embed Frameworks */,
 				B79281CB26959A6F000ED84A /* Core.framework in Embed Frameworks */,
@@ -94,7 +91,6 @@
 				B7910DE926AFCD770097C94E /* Authen.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
 				B74CEF0F26C50717006B1F2C /* Networking.framework in Frameworks */,
-				B787962F26C662B800FECC21 /* Share.framework in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

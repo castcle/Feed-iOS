@@ -27,7 +27,6 @@
 
 import UIKit
 import Core
-import Share
 import Networking
 import Component
 import Authen
@@ -163,7 +162,6 @@ extension FeedViewController: ListAdapterDataSource {
 extension FeedViewController: FeedSectionControllerDelegate {
     func didTabProfile() {
         Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail), animated: true)
-        //        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: false))), animated: true)
     }
     
     func didTabComment() {
