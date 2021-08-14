@@ -161,7 +161,7 @@ extension FeedViewController: ListAdapterDataSource {
 
 extension FeedViewController: FeedSectionControllerDelegate {
     func didTabProfile() {
-        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail(UserDetailViewModel(isMe: false))), animated: true)
     }
     
     func didTabComment() {

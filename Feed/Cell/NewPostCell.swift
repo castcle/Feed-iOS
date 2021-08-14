@@ -60,6 +60,6 @@ class NewPostCell: UICollectionViewCell {
     }
     
     @IBAction func profileAction(_ sender: Any) {
-        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.me(MeViewModel(isMe: true))), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail(UserDetailViewModel(isMe: true))), animated: true)
     }
 }
