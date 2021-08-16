@@ -28,7 +28,7 @@
 import Foundation
 import Networking
 
-final class FeedViewModel  {
+final class FeedViewModel {
    
     //MARK: Private
     private var feedRepository: FeedRepository

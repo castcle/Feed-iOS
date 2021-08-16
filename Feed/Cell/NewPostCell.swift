@@ -28,6 +28,7 @@
 import UIKit
 import Core
 import Profile
+import Post
 import Kingfisher
 
 class NewPostCell: UICollectionViewCell {
@@ -38,14 +39,13 @@ class NewPostCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
+
         self.searchView.custom(color: UIColor.Asset.darkGray, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.darkGraphiteBlue)
         self.profileImage.circle(color: UIColor.Asset.darkGraphiteBlue)
         self.placeholderLabel.font = UIFont.asset(.light, fontSize: .overline)
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
         
-        let url = URL(string: "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg")
+        let url = URL(string: UserState.shared.avatar)
         self.profileImage.kf.setImage(with: url)
     }
     
@@ -54,9 +54,9 @@ class NewPostCell: UICollectionViewCell {
     }
     
     @IBAction func postAction(_ sender: Any) {
-        let alert = UIAlertController(title: nil, message: "Go to post view", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        Utility.currentViewController().present(alert, animated: true, completion: nil)
+        let vc = PostOpener.open(.post)
+        vc.modalPresentationStyle = .fullScreen
+        Utility.currentViewController().present(vc, animated: true, completion: nil)
     }
     
     @IBAction func profileAction(_ sender: Any) {
