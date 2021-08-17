@@ -54,7 +54,7 @@ class NewPostCell: UICollectionViewCell {
     }
     
     @IBAction func postAction(_ sender: Any) {
-        let vc = PostOpener.open(.post)
+        let vc = PostOpener.open(.post(PostViewModel(postType: .newCast)))
         vc.modalPresentationStyle = .fullScreen
         Utility.currentViewController().present(vc, animated: true, completion: nil)
     }
