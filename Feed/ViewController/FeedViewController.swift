@@ -32,6 +32,7 @@ import Component
 import Post
 import Authen
 import Profile
+import Setting
 import IGListKit
 import PanModal
 
@@ -116,7 +117,7 @@ class FeedViewController: UIViewController {
     
     @objc private func rightButtonAction() {
         if UserState.shared.isLogin {
-            // TO DO
+            Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
         } else {
             Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
         }
