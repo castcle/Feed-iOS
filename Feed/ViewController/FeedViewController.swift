@@ -35,6 +35,7 @@ import Profile
 import Setting
 import IGListKit
 import PanModal
+import ShiftTransitions
 
 class FeedViewController: UIViewController {
     
@@ -166,10 +167,10 @@ extension FeedViewController: FeedSectionControllerDelegate {
         Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail(UserDetailViewModel(isMe: false))), animated: true)
     }
     
-    func didTabComment() {
-        let alert = UIAlertController(title: nil, message: "Go to comment view", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        Utility.currentViewController().present(alert, animated: true, completion: nil)
+    func didTabComment(feed: Feed) {
+        let vc = PostOpener.open(.comment(CommentViewModel(feed: feed)))
+        vc.shift.enable()
+        Utility.currentViewController().present(vc, animated: true)
     }
     
     func didTabQuoteCast(feed: Feed, page: Page) {
