@@ -176,7 +176,7 @@ extension FeedViewController: FeedSectionControllerDelegate {
     func didTabQuoteCast(feed: Feed, page: Page) {
         let vc = PostOpener.open(.post(PostViewModel(postType: .quoteCast, feed: feed, page: page)))
         vc.modalPresentationStyle = .fullScreen
-        tabBarController?.present(vc, animated: true, completion: nil)
+        Utility.currentViewController().present(vc, animated: true, completion: nil)
     }
     
     func didAuthen() {
