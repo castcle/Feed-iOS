@@ -109,11 +109,8 @@ class FeedViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if UserState.shared.isLogin {
-            self.setupNevBar()
-            self.adapter.performUpdates(animated: true)
-        }
+        self.setupNevBar()
+        self.adapter.performUpdates(animated: true)
     }
     
     @objc private func rightButtonAction() {
