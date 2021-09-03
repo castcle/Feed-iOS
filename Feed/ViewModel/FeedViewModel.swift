@@ -51,13 +51,13 @@ final class FeedViewModel {
             if success {
                 self.feedShelf = feedShelf
             }
-            self.didLoadFeedgsFinish?()
+            self.didLoadFeedsFinish?()
         }
     }
     
     //MARK: Output
     var didLoadHashtagsFinish: (() -> ())?
-    var didLoadFeedgsFinish: (() -> ())?
+    var didLoadFeedsFinish: (() -> ())?
     
     public init(feedRepository: FeedRepository = FeedRepositoryImpl()) {
         self.feedRepository = feedRepository

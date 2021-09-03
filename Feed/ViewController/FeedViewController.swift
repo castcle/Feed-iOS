@@ -79,7 +79,7 @@ class FeedViewController: UIViewController {
             self.adapter.performUpdates(animated: true)
         }
         
-        self.viewModel.didLoadFeedgsFinish = {
+        self.viewModel.didLoadFeedsFinish = {
             self.adapter.performUpdates(animated: true)
         }
     }
