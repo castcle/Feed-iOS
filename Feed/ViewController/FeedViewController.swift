@@ -35,7 +35,6 @@ import Profile
 import Setting
 import IGListKit
 import PanModal
-import ShiftTransitions
 
 class FeedViewController: UIViewController {
     
@@ -165,9 +164,10 @@ extension FeedViewController: FeedSectionControllerDelegate {
     }
     
     func didTabComment(feed: Feed) {
-        let vc = ComponentOpener.open(.comment(CommentViewModel(feed: feed)))
-        vc.shift.enable()
-        Utility.currentViewController().present(vc, animated: true)
+        let commentNavi: UINavigationController = UINavigationController(rootViewController: ComponentOpener.open(.comment(CommentViewModel(feed: feed))))
+        commentNavi.modalPresentationStyle = .fullScreen
+        commentNavi.modalTransitionStyle = .crossDissolve
+        Utility.currentViewController().present(commentNavi, animated: true)
     }
     
     func didTabQuoteCast(feed: Feed, page: Page) {
