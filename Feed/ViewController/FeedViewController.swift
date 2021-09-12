@@ -89,7 +89,7 @@ class FeedViewController: UIViewController {
     }
     
     private func setupNevBar() {
-        self.customNavigationBar(.primary, title: "For You", leftBarButton: .logo)
+        self.customNavigationBar(.primary, title: "For You", textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
         
         var rightButton: [UIBarButtonItem] = []
         
