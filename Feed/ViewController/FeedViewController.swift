@@ -35,6 +35,7 @@ import Profile
 import Setting
 import IGListKit
 import PanModal
+import Defaults
 
 class FeedViewController: UIViewController {
     
@@ -110,6 +111,7 @@ class FeedViewController: UIViewController {
         super.viewWillAppear(animated)
         self.setupNevBar()
         self.adapter.performUpdates(animated: true)
+        Defaults[.screenId] = ScreenId.feed.rawValue
     }
     
     @objc private func rightButtonAction() {
