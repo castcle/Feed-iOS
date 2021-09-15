@@ -46,7 +46,7 @@ class NewPostCell: UICollectionViewCell {
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
         
         let url = URL(string: UserState.shared.avatar)
-        self.profileImage.kf.setImage(with: url)
+        self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.placeholder, options: [.transition(.fade(0.5))])
     }
     
     static func cellSize(width: CGFloat) -> CGSize {
