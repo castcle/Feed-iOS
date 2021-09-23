@@ -38,11 +38,11 @@ public struct FeedNibVars {
     
     // MARK: - TableViewCell
     public struct TableViewCell {
+        public static let post = "NewPostTableViewCell"
     }
     
     // MARK: - CollectionViewCell
     public struct CollectionViewCell {
-        public static let post = "NewPostCell"
         public static let hashtag = "HashtagCell"
         public static let hashtagCapsule = "HashtagCapsuleCell"
     }

@@ -16,13 +16,71 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vix-aI-W9d">
+                                <rect key="frame" x="67.5" y="173" width="240" height="321.5"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trouble-feed" translatesAutoresizingMaskIntoConstraints="NO" id="f2L-Gv-Oak">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="240"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="240" id="3gA-JX-mZh"/>
+                                            <constraint firstAttribute="width" constant="240" id="srj-4k-OeZ"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trouble Loading News Feed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gI-Vg-MLJ">
+                                        <rect key="frame" x="0.0" y="260" width="240" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1D3-JY-dRP">
+                                        <rect key="frame" x="0.0" y="289.5" width="240" height="32"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="Tap To Retry"/>
+                                        <connections>
+                                            <action selector="retryAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="6cV-MK-Xxb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="f2L-Gv-Oak" firstAttribute="top" secondItem="vix-aI-W9d" secondAttribute="top" id="3Vb-Ve-x3X"/>
+                                    <constraint firstItem="8gI-Vg-MLJ" firstAttribute="top" secondItem="f2L-Gv-Oak" secondAttribute="bottom" constant="20" id="4V4-hA-LUS"/>
+                                    <constraint firstItem="8gI-Vg-MLJ" firstAttribute="leading" secondItem="vix-aI-W9d" secondAttribute="leading" id="9Im-Jf-Glx"/>
+                                    <constraint firstAttribute="trailing" secondItem="8gI-Vg-MLJ" secondAttribute="trailing" id="9yO-Ct-Ida"/>
+                                    <constraint firstItem="1D3-JY-dRP" firstAttribute="leading" secondItem="vix-aI-W9d" secondAttribute="leading" id="Fab-3B-0yR"/>
+                                    <constraint firstItem="1D3-JY-dRP" firstAttribute="top" secondItem="8gI-Vg-MLJ" secondAttribute="bottom" constant="10" id="YUx-72-vtg"/>
+                                    <constraint firstAttribute="trailing" secondItem="1D3-JY-dRP" secondAttribute="trailing" id="Z3W-hi-pOO"/>
+                                    <constraint firstAttribute="trailing" secondItem="f2L-Gv-Oak" secondAttribute="trailing" id="mLe-UK-AV9"/>
+                                    <constraint firstItem="f2L-Gv-Oak" firstAttribute="leading" secondItem="vix-aI-W9d" secondAttribute="leading" id="mmf-V7-vPG"/>
+                                    <constraint firstAttribute="bottom" secondItem="1D3-JY-dRP" secondAttribute="bottom" id="pRP-A8-F0O"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XkB-zA-Nyu">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" name="DarkGraphiteBlue"/>
+                        <constraints>
+                            <constraint firstItem="XkB-zA-Nyu" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="ATz-bc-Yrj"/>
+                            <constraint firstAttribute="bottom" secondItem="XkB-zA-Nyu" secondAttribute="bottom" id="INJ-d3-t4T"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="XkB-zA-Nyu" secondAttribute="trailing" id="McX-SS-jnn"/>
+                            <constraint firstItem="vix-aI-W9d" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="T7e-4X-Xxq"/>
+                            <constraint firstItem="vix-aI-W9d" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="abK-Qc-uCV"/>
+                            <constraint firstItem="XkB-zA-Nyu" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="iVa-Zc-6Ac"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="emptyTitleLabel" destination="8gI-Vg-MLJ" id="Baa-04-SOh"/>
+                        <outlet property="emptyView" destination="vix-aI-W9d" id="fcn-Nf-XhH"/>
+                        <outlet property="retryButton" destination="1D3-JY-dRP" id="ur1-7w-Af0"/>
+                        <outlet property="tableView" destination="XkB-zA-Nyu" id="NID-88-Q67"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="20" y="70"/>
+            <point key="canvasLocation" x="20" y="69.715142428785612"/>
         </scene>
         <!--Recast Popup View Controller-->
         <scene sceneID="iRS-VI-9y5">
@@ -173,6 +231,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="trouble-feed" width="220" height="160.5"/>
         <namedColor name="DarkGraphiteBlue">
             <color red="0.078431372549019607" green="0.090196078431372548" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

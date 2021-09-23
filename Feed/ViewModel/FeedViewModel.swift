@@ -30,7 +30,6 @@ import Networking
 
 final class FeedViewModel {
    
-    //MARK: Private
     private var feedRepository: FeedRepository
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feedShelf: FeedShelf = FeedShelf()

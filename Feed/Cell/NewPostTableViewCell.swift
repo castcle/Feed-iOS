@@ -19,10 +19,10 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  NewPostCell.swift
+//  NewPostTableViewCell.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 12/7/2564 BE.
+//  Created by Tanakorn Phoochaliaw on 23/9/2564 BE.
 //
 
 import UIKit
@@ -31,7 +31,7 @@ import Profile
 import Post
 import Kingfisher
 
-class NewPostCell: UICollectionViewCell {
+class NewPostTableViewCell: UITableViewCell {
 
     @IBOutlet var searchView: UIView!
     @IBOutlet var profileImage: UIImageView!
@@ -39,18 +39,16 @@ class NewPostCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
         self.searchView.custom(color: UIColor.Asset.darkGray, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.darkGraphiteBlue)
         self.profileImage.circle(color: UIColor.Asset.darkGraphiteBlue)
         self.placeholderLabel.font = UIFont.asset(.light, fontSize: .overline)
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
-        
         let url = URL(string: UserState.shared.avatar)
         self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.5))])
     }
-    
-    static func cellSize(width: CGFloat) -> CGSize {
-        return CGSize(width: width, height: 60)
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
     }
     
     @IBAction func postAction(_ sender: Any) {

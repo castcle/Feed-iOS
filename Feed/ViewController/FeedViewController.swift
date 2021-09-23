@@ -33,60 +33,57 @@ import Post
 import Authen
 import Profile
 import Setting
-import IGListKit
 import PanModal
 import Defaults
 
 class FeedViewController: UIViewController {
     
-    let collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        view.backgroundColor = UIColor.Asset.darkGraphiteBlue
-        return view
-    }()
-    
-    lazy var adapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var emptyView: UIView!
+    @IBOutlet var emptyTitleLabel: UILabel!
+    @IBOutlet var retryButton: UIButton!
     
     var viewModel = FeedViewModel()
     
-    enum FeedType: Int {
-        case newPost = 0
+    enum FeedSection: Int, CaseIterable {
+        case header = 0
+        case content
+        case footer
+    }
+    
+    enum FeedCellType {
+        case header
+        case content
+        case footer
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
         self.setupNevBar()
-
-        self.collectionView.alwaysBounceVertical = true
-        self.collectionView.showsHorizontalScrollIndicator = false
-        self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.backgroundColor = UIColor.clear
-        self.view.addSubview(self.collectionView)
-        self.adapter.collectionView = self.collectionView
-        self.adapter.dataSource = self
+        self.configureTableView()
         
-        self.collectionView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+        self.emptyTitleLabel.font = UIFont.asset(.regular, fontSize: .body)
+        self.emptyTitleLabel.textColor = UIColor.Asset.white
+        self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
+        self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
+        self.emptyView.isHidden = true
+        
+        self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                self.collectionView.cr.endHeaderRefresh()
+                self.tableView.cr.endHeaderRefresh()
             })
         }
         
         self.viewModel.didLoadHashtagsFinish = {
-            self.adapter.performUpdates(animated: true)
+            // Load Hastag Finish
         }
         
         self.viewModel.didLoadFeedsFinish = {
-            self.adapter.performUpdates(animated: true)
+            self.emptyView.isHidden = false
+            self.tableView.isHidden = true
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.collectionView.frame = view.bounds
     }
     
     private func setupNevBar() {
@@ -110,7 +107,9 @@ class FeedViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNevBar()
-        self.adapter.performUpdates(animated: true)
+        UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+            self.tableView.reloadData()
+        })
         Defaults[.screenId] = ScreenId.feed.rawValue
     }
     
@@ -121,64 +120,128 @@ class FeedViewController: UIViewController {
             Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
         }
     }
+    
+    func configureTableView() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
+        self.tableView.register(UINib(nibName: FeedNibVars.TableViewCell.post, bundle: ConfigBundle.feed), forCellReuseIdentifier: FeedNibVars.TableViewCell.post)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.headerFeed, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.headerFeed)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.footerFeed, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.footerFeed)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.postText, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.postText)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.postTextLink, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.postTextLink)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX1, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX1)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX2, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX2)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX3, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX3)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageXMore, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageXMore)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blog, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blog)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blogNoImage, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blogNoImage)
+        
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 100
+    }
+    
+    @IBAction func retryAction(_ sender: Any) {
+        UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+            self.emptyView.isHidden = true
+            self.tableView.isHidden = false
+            self.tableView.reloadData()
+        })
+    }
 }
 
-// MARK: - ListAdapterDataSource
-extension FeedViewController: ListAdapterDataSource {
-    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        var items: [ListDiffable] = [] as [ListDiffable]
-        
+extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.viewModel.feedShelf.feeds.count + (UserState.shared.isLogin ? 1 : 0)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if UserState.shared.isLogin {
-            items.append(FeedType.newPost.rawValue as ListDiffable)
-        }
-        
-        if !self.viewModel.hashtagShelf.hashtags.isEmpty {
-            items.append(self.viewModel.hashtagShelf as ListDiffable)
-        }
-        
-        self.viewModel.feedShelf.feeds.forEach { feed in
-            items.append(feed as ListDiffable)
-        }
-        
-        return items
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if object is HashtagShelf {
-            return HashtagSectionController()
-        } else if object is Feed {
-            let section = FeedSectionController()
-            section.delegate = self
-            return section
+            if section == 0 {
+                return 1
+            } else {
+                return FeedSection.allCases.count
+            }
         } else {
-            return NewPostSectionController()
+            return FeedSection.allCases.count
         }
     }
     
-    func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if UserState.shared.isLogin {
+            if indexPath.section == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                return cell ?? NewPostTableViewCell()
+            } else {
+                let feed = self.viewModel.feedShelf.feeds[indexPath.section - 1]
+                switch indexPath.row {
+                case FeedSection.header.rawValue:
+                    return self.renderFeedCell(feed: feed, cellType: .header, tableView: tableView, indexPath: indexPath)
+                case FeedSection.footer.rawValue:
+                    return self.renderFeedCell(feed: feed, cellType: .footer, tableView: tableView, indexPath: indexPath)
+                default:
+                    return self.renderFeedCell(feed: feed, cellType: .content, tableView: tableView, indexPath: indexPath)
+                }
+            }
+        } else {
+            let feed = self.viewModel.feedShelf.feeds[indexPath.section]
+            switch indexPath.row {
+            case FeedSection.header.rawValue:
+                return self.renderFeedCell(feed: feed, cellType: .header, tableView: tableView, indexPath: indexPath)
+            case FeedSection.footer.rawValue:
+                return self.renderFeedCell(feed: feed, cellType: .footer, tableView: tableView, indexPath: indexPath)
+            default:
+                return self.renderFeedCell(feed: feed, cellType: .content, tableView: tableView, indexPath: indexPath)
+            }
+        }
+    }
+    
+    func renderFeedCell(feed: Feed, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        switch cellType {
+        case .header:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            cell?.feed = feed
+            return cell ?? HeaderTableViewCell()
+        case .footer:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            cell?.feed = feed
+            return cell ?? FooterTableViewCell()
+        default:
+            return FeedCellHelper().renderFeedCell(feed: feed, tableView: self.tableView, indexPath: indexPath)
+        }
     }
 }
 
-extension FeedViewController: FeedSectionControllerDelegate {
-    func didTabProfile() {
+extension FeedViewController: HeaderTableViewCellDelegate {
+    func didTabProfile(_ headerTableViewCell: HeaderTableViewCell) {
         Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail(UserDetailViewModel(isMe: false))), animated: true)
     }
     
-    func didTabComment(feed: Feed) {
+    func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+}
+
+extension FeedViewController: FooterTableViewCellDelegate {
+    func didTabComment(_ footerTableViewCell: FooterTableViewCell, feed: Feed) {
         let commentNavi: UINavigationController = UINavigationController(rootViewController: ComponentOpener.open(.comment(CommentViewModel(feed: feed))))
         commentNavi.modalPresentationStyle = .fullScreen
         commentNavi.modalTransitionStyle = .crossDissolve
         Utility.currentViewController().present(commentNavi, animated: true)
     }
     
-    func didTabQuoteCast(feed: Feed, page: Page) {
+    func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, feed: Feed, page: Page) {
         let vc = PostOpener.open(.post(PostViewModel(postType: .quoteCast, feed: feed, page: page)))
         vc.modalPresentationStyle = .fullScreen
         Utility.currentViewController().present(vc, animated: true, completion: nil)
     }
     
-    func didAuthen() {
+    func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
     }
 }
