@@ -67,7 +67,6 @@ class FeedViewController: UIViewController {
         self.emptyTitleLabel.textColor = UIColor.Asset.white
         self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
         self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
-        
         self.tableView.isHidden = true
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
