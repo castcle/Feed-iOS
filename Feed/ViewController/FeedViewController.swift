@@ -67,7 +67,8 @@ class FeedViewController: UIViewController {
         self.emptyTitleLabel.textColor = UIColor.Asset.white
         self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
         self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
-        self.emptyView.isHidden = true
+        
+        self.tableView.isHidden = true
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
@@ -82,7 +83,6 @@ class FeedViewController: UIViewController {
         
         self.viewModel.didLoadFeedsFinish = {
             self.emptyView.isHidden = false
-            self.tableView.isHidden = true
         }
     }
     
@@ -195,6 +195,16 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 return self.renderFeedCell(feed: feed, cellType: .content, tableView: tableView, indexPath: indexPath)
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 5))
+        footerView.backgroundColor = UIColor.clear
+        return footerView
     }
     
     func renderFeedCell(feed: Feed, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
