@@ -30,7 +30,7 @@ import Networking
 
 final class FeedViewModel {
    
-    private var feedRepository: FeedRepository
+    private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feedShelf: FeedShelf = FeedShelf()
 
@@ -58,8 +58,7 @@ final class FeedViewModel {
     var didLoadHashtagsFinish: (() -> ())?
     var didLoadFeedsFinish: (() -> ())?
     
-    public init(feedRepository: FeedRepository = FeedRepositoryImpl()) {
-        self.feedRepository = feedRepository
+    public init() {
         self.getHashtags()
     }
 }
