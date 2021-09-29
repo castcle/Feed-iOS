@@ -33,6 +33,8 @@ final class FeedViewModel {
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feedShelf: FeedShelf = FeedShelf()
+    private var featureSlug: String = "feed"
+    private var circleSlug: String = "forYou"
 
     //MARK: Input
     public func getHashtags() {
@@ -46,7 +48,7 @@ final class FeedViewModel {
     }
     
     public func getFeeds() {
-        self.feedRepository.getFeeds(featureSlug: "Test", circleSlug: "Test") { (success, feedShelf) in
+        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug) { (success, feedShelf) in
             if success {
                 self.feedShelf = feedShelf
             }
