@@ -27,12 +27,15 @@
 
 import Foundation
 import Networking
+import SwiftyJSON
 
 final class FeedViewModel {
    
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var hashtagShelf: HashtagShelf = HashtagShelf()
-    var feedShelf: FeedShelf = FeedShelf()
+    var feeds: [Feed] = []
+    var pagination: Pagination = Pagination()
+    let tokenHelper: TokenHelper = TokenHelper()
     private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
 
@@ -48,11 +51,23 @@ final class FeedViewModel {
     }
     
     public func getFeeds() {
-        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug) { (success, feedShelf) in
+        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug) { (success, response, isRefreshToken) in
             if success {
-                self.feedShelf = feedShelf
+                do {
+                    let rawJson = try response.mapJSON()
+                    let json = JSON(rawJson)
+                    let shelf = FeedShelf(json: json)
+                    self.feeds.append(contentsOf: shelf.feeds)
+                    self.pagination = shelf.pagination
+                    self.didLoadFeedsFinish?()
+                } catch {
+                    
+                }
+            } else {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
             }
-            self.didLoadFeedsFinish?()
         }
     }
     
@@ -62,5 +77,12 @@ final class FeedViewModel {
     
     public init() {
         self.getHashtags()
+        self.tokenHelper.delegate = self
+    }
+}
+
+extension FeedViewModel: TokenHelperDelegate {
+    public func didRefreshTokenFinish() {
+        self.getFeeds()
     }
 }

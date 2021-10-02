@@ -68,6 +68,7 @@ class FeedViewController: UIViewController {
         self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
         self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
         self.tableView.isHidden = true
+        self.emptyView.isHidden = true
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
@@ -81,7 +82,8 @@ class FeedViewController: UIViewController {
         }
         
         self.viewModel.didLoadFeedsFinish = {
-            self.emptyView.isHidden = false
+            self.tableView.isHidden = false
+            self.tableView.reloadData()
         }
     }
     
@@ -141,17 +143,14 @@ class FeedViewController: UIViewController {
     }
     
     @IBAction func retryAction(_ sender: Any) {
-        UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
-            self.emptyView.isHidden = true
-            self.tableView.isHidden = false
-            self.tableView.reloadData()
-        })
+        self.viewModel.feeds = []
+        self.viewModel.getFeeds()
     }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.feedShelf.feeds.count + (UserState.shared.isLogin ? 1 : 0)
+        return self.viewModel.feeds.count + (UserState.shared.isLogin ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -173,7 +172,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 return cell ?? NewPostTableViewCell()
             } else {
-                let content = self.viewModel.feedShelf.feeds[indexPath.section - 1].feedPayload
+                let content = self.viewModel.feeds[indexPath.section - 1].feedPayload
                 switch indexPath.row {
                 case FeedSection.header.rawValue:
                     return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
@@ -184,7 +183,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         } else {
-            let content = self.viewModel.feedShelf.feeds[indexPath.section].feedPayload
+            let content = self.viewModel.feeds[indexPath.section].feedPayload
             switch indexPath.row {
             case FeedSection.header.rawValue:
                 return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
