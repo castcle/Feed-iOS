@@ -76,7 +76,6 @@ final class FeedViewModel {
     var didLoadFeedsFinish: (() -> ())?
     
     public init() {
-        self.getHashtags()
         self.tokenHelper.delegate = self
     }
 }

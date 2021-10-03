@@ -82,8 +82,10 @@ class FeedViewController: UIViewController {
         }
         
         self.viewModel.didLoadFeedsFinish = {
-            self.tableView.isHidden = false
-            self.tableView.reloadData()
+            UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                self.tableView.isHidden = false
+                self.tableView.reloadData()
+            })
         }
     }
     
@@ -92,7 +94,7 @@ class FeedViewController: UIViewController {
         
         var rightButton: [UIBarButtonItem] = []
         
-        if UserState.shared.isLogin {
+        if UserManager.shared.isLogin {
             let rightIcon = NavBarButtonType.menu.barButton
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
@@ -108,14 +110,16 @@ class FeedViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNevBar()
-        UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
-            self.tableView.reloadData()
-        })
         Defaults[.screenId] = ScreenId.feed.rawValue
+        if Defaults[.startLoadFeed] {
+            Defaults[.startLoadFeed] = false
+            self.viewModel.feeds = []
+            self.viewModel.getFeeds()
+        }
     }
     
     @objc private func rightButtonAction() {
-        if UserState.shared.isLogin {
+        if UserManager.shared.isLogin {
             Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
         } else {
             Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
@@ -150,11 +154,11 @@ class FeedViewController: UIViewController {
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.feeds.count + (UserState.shared.isLogin ? 1 : 0)
+        return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if UserState.shared.isLogin {
+        if UserManager.shared.isLogin {
             if section == 0 {
                 return 1
             } else {
@@ -166,7 +170,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if UserState.shared.isLogin {
+        if UserManager.shared.isLogin {
             if indexPath.section == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
