@@ -77,12 +77,23 @@ class FeedViewController: UIViewController {
             })
         }
         
+        self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
+            guard let self = self else { return }
+            if self.viewModel.pagination.next != 0 {
+                self.viewModel.feedRequest.page = self.viewModel.pagination.next
+                self.viewModel.getFeeds()
+            } else {
+                self.tableView.cr.noticeNoMoreData()
+            }
+        }
+        
         self.viewModel.didLoadHashtagsFinish = {
             // Load Hastag Finish
         }
         
         self.viewModel.didLoadFeedsFinish = {
             UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                self.tableView.cr.endLoadingMore()
                 self.tableView.isHidden = false
                 self.tableView.reloadData()
             })

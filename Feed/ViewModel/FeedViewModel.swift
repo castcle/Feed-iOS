@@ -32,6 +32,7 @@ import SwiftyJSON
 final class FeedViewModel {
    
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
+    var feedRequest: FeedRequest = FeedRequest()
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feeds: [Feed] = []
     var pagination: Pagination = Pagination()
@@ -51,7 +52,7 @@ final class FeedViewModel {
     }
     
     public func getFeeds() {
-        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug) { (success, response, isRefreshToken) in
+        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
                     let rawJson = try response.mapJSON()
