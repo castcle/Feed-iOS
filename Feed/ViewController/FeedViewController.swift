@@ -115,6 +115,8 @@ class FeedViewController: UIViewController {
             Defaults[.startLoadFeed] = false
             self.viewModel.feeds = []
             self.viewModel.getFeeds()
+        } else {
+            self.tableView.reloadData()
         }
     }
     
@@ -174,6 +176,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.section == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.configCell()
                 return cell ?? NewPostTableViewCell()
             } else {
                 let content = self.viewModel.feeds[indexPath.section - 1].feedPayload

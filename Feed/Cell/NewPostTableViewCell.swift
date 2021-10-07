@@ -43,12 +43,15 @@ class NewPostTableViewCell: UITableViewCell {
         self.profileImage.circle(color: UIColor.Asset.darkGraphiteBlue)
         self.placeholderLabel.font = UIFont.asset(.light, fontSize: .overline)
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
-        let url = URL(string: UserManager.shared.avatar)
-        self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.5))])
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    func configCell() {
+        let url = URL(string: UserManager.shared.avatar)
+        self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.5))])
     }
     
     @IBAction func postAction(_ sender: Any) {
