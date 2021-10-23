@@ -22,7 +22,7 @@
 //  FeedNibVars.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 6/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
 //
 
 public struct FeedNibVars {
