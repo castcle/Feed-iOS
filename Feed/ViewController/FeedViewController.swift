@@ -178,7 +178,7 @@ class FeedViewController: UIViewController {
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if self.viewModel.state == .loading {
-            return 1
+            return 5
         } else {
             return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
         }
