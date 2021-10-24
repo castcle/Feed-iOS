@@ -28,6 +28,7 @@
 import Foundation
 import Networking
 import SwiftyJSON
+import SwiftUI
 
 final class FeedViewModel {
    
@@ -39,6 +40,13 @@ final class FeedViewModel {
     let tokenHelper: TokenHelper = TokenHelper()
     private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
+    var state: State = .loading
+    var isFirstLaunch: Bool = true
+    
+    enum State {
+        case loading
+        case loaded
+    }
 
     //MARK: Input
     public func getHashtags() {

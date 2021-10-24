@@ -67,7 +67,6 @@ class FeedViewController: UIViewController {
         self.emptyTitleLabel.textColor = UIColor.Asset.white
         self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
         self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
-        self.tableView.isHidden = true
         self.emptyView.isHidden = true
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
@@ -91,10 +90,11 @@ class FeedViewController: UIViewController {
         }
         
         self.viewModel.didLoadFeedsFinish = {
+            self.viewModel.state = .loaded
+            self.tableView.isScrollEnabled = true
             UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
                 self.tableView.cr.endHeaderRefresh()
                 self.tableView.cr.endLoadingMore()
-                self.tableView.isHidden = false
                 self.tableView.reloadData()
             })
         }
@@ -125,7 +125,14 @@ class FeedViewController: UIViewController {
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
             self.viewModel.feeds = []
-            self.viewModel.getFeeds()
+            if self.viewModel.isFirstLaunch {
+                self.viewModel.isFirstLaunch = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.viewModel.getFeeds()
+                }
+            } else {
+                self.viewModel.getFeeds()
+            }
         } else {
             self.tableView.reloadData()
         }
@@ -140,6 +147,7 @@ class FeedViewController: UIViewController {
     }
     
     func configureTableView() {
+        self.tableView.isScrollEnabled = false
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
@@ -155,6 +163,7 @@ class FeedViewController: UIViewController {
         self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageXMore, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageXMore)
         self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blog, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blog)
         self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blogNoImage, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blogNoImage)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.skeleton, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.skeleton)
         
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
@@ -168,30 +177,55 @@ class FeedViewController: UIViewController {
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
+        if self.viewModel.state == .loading {
+            return 1
+        } else {
+            return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if UserManager.shared.isLogin {
-            if section == 0 {
-                return 1
+        if self.viewModel.state == .loading {
+            return 1
+        } else {
+            if UserManager.shared.isLogin {
+                if section == 0 {
+                    return 1
+                } else {
+                    return FeedSection.allCases.count
+                }
             } else {
                 return FeedSection.allCases.count
             }
-        } else {
-            return FeedSection.allCases.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if UserManager.shared.isLogin {
-            if indexPath.section == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.configCell()
-                return cell ?? NewPostTableViewCell()
+        if self.viewModel.state == .loading {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeleton, for: indexPath as IndexPath) as? SkeletonFeedTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.configCell()
+            return cell ?? SkeletonFeedTableViewCell()
+        } else {
+            if UserManager.shared.isLogin {
+                if indexPath.section == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
+                    cell?.backgroundColor = UIColor.Asset.darkGray
+                    cell?.configCell()
+                    return cell ?? NewPostTableViewCell()
+                } else {
+                    let content = self.viewModel.feeds[indexPath.section - 1].feedPayload
+                    switch indexPath.row {
+                    case FeedSection.header.rawValue:
+                        return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
+                    case FeedSection.footer.rawValue:
+                        return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
+                    default:
+                        return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
+                    }
+                }
             } else {
-                let content = self.viewModel.feeds[indexPath.section - 1].feedPayload
+                let content = self.viewModel.feeds[indexPath.section].feedPayload
                 switch indexPath.row {
                 case FeedSection.header.rawValue:
                     return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
@@ -200,16 +234,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 default:
                     return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                 }
-            }
-        } else {
-            let content = self.viewModel.feeds[indexPath.section].feedPayload
-            switch indexPath.row {
-            case FeedSection.header.rawValue:
-                return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
-            case FeedSection.footer.rawValue:
-                return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
-            default:
-                return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
             }
         }
     }
