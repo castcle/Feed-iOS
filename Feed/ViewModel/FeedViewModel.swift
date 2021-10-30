@@ -69,9 +69,7 @@ final class FeedViewModel {
                     self.feeds.append(contentsOf: shelf.feeds)
                     self.pagination = shelf.pagination
                     self.didLoadFeedsFinish?()
-                } catch {
-                    
-                }
+                } catch {}
             } else {
                 if isRefreshToken {
                     self.tokenHelper.refreshToken()
