@@ -61,6 +61,6 @@ class NewPostTableViewCell: UITableViewCell {
     }
     
     @IBAction func profileAction(_ sender: Any) {
-        Utility.currentViewController().navigationController?.pushViewController(ProfileOpener.open(.userDetail(UserDetailViewModel(profileType: .me, page: nil))), animated: true)
+        ProfileOpener.openProfileDetail(.people, castcleId:UserManager.shared.rawCastcleId, displayName: "", page: nil)
     }
 }
