@@ -36,12 +36,14 @@ final class FeedViewModel {
     var feedRequest: FeedRequest = FeedRequest()
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feeds: [Feed] = []
+    var feedsTemp: [Feed] = []
     var pagination: Pagination = Pagination()
     let tokenHelper: TokenHelper = TokenHelper()
     private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
     var state: State = .loading
     var isFirstLaunch: Bool = true
+    private var isReset: Bool = true
     
     enum State {
         case loading
@@ -53,20 +55,30 @@ final class FeedViewModel {
         self.feedRepository.getHashtags() { (success, hashtagShelf) in
             if success {
                 self.hashtagShelf = hashtagShelf
-                self.getFeeds()
+                self.getFeeds(isReset: true)
             }
             self.didLoadHashtagsFinish?()
         }
     }
     
-    public func getFeeds() {
+    public func getFeeds(isReset: Bool) {
+        self.isReset = isReset
         self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
                     let shelf = FeedShelf(json: json)
-                    self.feeds.append(contentsOf: shelf.feeds)
+                    
+                    self.feedsTemp = []
+                    self.feedsTemp.append(contentsOf: shelf.feeds)
+                    
+                    if isReset {
+                        self.feeds = self.feedsTemp
+                    } else {
+                        self.feeds.append(contentsOf: self.feedsTemp)
+                    }
+                    
                     self.pagination = shelf.pagination
                     self.didLoadFeedsFinish?()
                 } catch {}
@@ -83,12 +95,13 @@ final class FeedViewModel {
     var didLoadFeedsFinish: (() -> ())?
     
     public init() {
+        self.pagination.limit = 100
         self.tokenHelper.delegate = self
     }
 }
 
 extension FeedViewModel: TokenHelperDelegate {
     public func didRefreshTokenFinish() {
-        self.getFeeds()
+        self.getFeeds(isReset: self.isReset)
     }
 }

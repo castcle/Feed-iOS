@@ -71,15 +71,14 @@ class FeedViewController: UIViewController {
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
-            self.viewModel.feeds = []
-            self.viewModel.getFeeds()
+            self.viewModel.getFeeds(isReset: true)
         }
         
         self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
             if self.viewModel.pagination.next != 0 {
                 self.viewModel.feedRequest.page = self.viewModel.pagination.next
-                self.viewModel.getFeeds()
+                self.viewModel.getFeeds(isReset: false)
             } else {
                 self.tableView.cr.noticeNoMoreData()
             }
@@ -128,10 +127,10 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.viewModel.getFeeds()
+                    self.viewModel.getFeeds(isReset: true)
                 }
             } else {
-                self.viewModel.getFeeds()
+                self.viewModel.getFeeds(isReset: true)
             }
         } else {
             self.tableView.reloadData()
@@ -170,8 +169,7 @@ class FeedViewController: UIViewController {
     }
     
     @IBAction func retryAction(_ sender: Any) {
-        self.viewModel.feeds = []
-        self.viewModel.getFeeds()
+        self.viewModel.getFeeds(isReset: true)
     }
 }
 
