@@ -44,6 +44,7 @@ class FeedViewController: UIViewController {
     @IBOutlet var retryButton: UIButton!
     
     var viewModel = FeedViewModel()
+    var isLoadData: Bool = false
     
     enum FeedSection: Int, CaseIterable {
         case header = 0
@@ -71,12 +72,14 @@ class FeedViewController: UIViewController {
         
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
+            self.isLoadData = true
             self.viewModel.getFeeds(isReset: true)
         }
         
         self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
             if self.viewModel.pagination.next != 0 {
+                self.isLoadData = true
                 self.viewModel.feedRequest.page = self.viewModel.pagination.next
                 self.viewModel.getFeeds(isReset: false)
             } else {
@@ -95,6 +98,7 @@ class FeedViewController: UIViewController {
                 self.tableView.cr.endHeaderRefresh()
                 self.tableView.cr.endLoadingMore()
                 self.tableView.reloadData()
+                self.isLoadData = false
             })
         }
     }
@@ -102,8 +106,11 @@ class FeedViewController: UIViewController {
     private func setupNevBar() {
         self.customNavigationBar(.primary, title: "For You", textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
         
-        var rightButton: [UIBarButtonItem] = []
+        let leftIcon = NavBarButtonType.logo.barButton
+        leftIcon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftIcon)
         
+        var rightButton: [UIBarButtonItem] = []
         if UserManager.shared.isLogin {
             let rightIcon = NavBarButtonType.menu.barButton
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
@@ -113,13 +120,13 @@ class FeedViewController: UIViewController {
             rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
         }
-        
         self.navigationItem.rightBarButtonItems = rightButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNevBar()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTableView(notfication:)), name: .feedScrollToTop, object: nil)
         Defaults[.screenId] = ScreenId.feed.rawValue
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
@@ -137,11 +144,34 @@ class FeedViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
+    }
+    
+    @objc func scrollTableView(notfication: NSNotification) {
+        self.scrollToTop()
+    }
+    
+    @objc private func leftButtonAction() {
+        self.scrollToTop()
+    }
+    
     @objc private func rightButtonAction() {
         if UserManager.shared.isLogin {
             Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
         } else {
             Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        }
+    }
+    
+    public func scrollToTop() {
+        if !self.isLoadData {
+            if self.tableView.contentOffset == .zero {
+                self.tableView.cr.beginHeaderRefresh()
+            } else {
+                self.tableView.setContentOffset(.zero, animated: true)
+            }
         }
     }
     
