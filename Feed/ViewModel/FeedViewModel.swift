@@ -25,6 +25,7 @@
 //  Created by Castcle Co., Ltd. on 13/7/2564 BE.
 //
 
+import Core
 import Foundation
 import Networking
 import SwiftyJSON
@@ -37,7 +38,7 @@ final class FeedViewModel {
     var hashtagShelf: HashtagShelf = HashtagShelf()
     var feeds: [Feed] = []
     var feedsTemp: [Feed] = []
-    var pagination: Pagination = Pagination()
+    var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
     private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
@@ -55,15 +56,19 @@ final class FeedViewModel {
         self.feedRepository.getHashtags() { (success, hashtagShelf) in
             if success {
                 self.hashtagShelf = hashtagShelf
-                self.getFeeds(isReset: true)
+                if UserManager.shared.isLogin {
+                    
+                } else {
+                    self.getFeedsGuests(isReset: true)
+                }
             }
             self.didLoadHashtagsFinish?()
         }
     }
     
-    public func getFeeds(isReset: Bool) {
+    public func getFeedsGuests(isReset: Bool) {
         self.isReset = isReset
-        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+        self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
                     let rawJson = try response.mapJSON()
@@ -79,7 +84,7 @@ final class FeedViewModel {
                         self.feeds.append(contentsOf: self.feedsTemp)
                     }
                     
-                    self.pagination = shelf.pagination
+                    self.meta = shelf.meta
                     self.didLoadFeedsFinish?()
                 } catch {}
             } else {
@@ -90,18 +95,51 @@ final class FeedViewModel {
         }
     }
     
+//    public func getFeeds(isReset: Bool) {
+//        self.isReset = isReset
+//        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+//            if success {
+//                do {
+//                    let rawJson = try response.mapJSON()
+//                    let json = JSON(rawJson)
+//                    let shelf = FeedShelf(json: json)
+//
+//                    self.feedsTemp = []
+//                    self.feedsTemp.append(contentsOf: shelf.feeds)
+//
+//                    if isReset {
+//                        self.feeds = self.feedsTemp
+//                    } else {
+//                        self.feeds.append(contentsOf: self.feedsTemp)
+//                    }
+//
+//                    self.pagination = shelf.pagination
+//                    self.didLoadFeedsFinish?()
+//                } catch {}
+//            } else {
+//                if isRefreshToken {
+//                    self.tokenHelper.refreshToken()
+//                }
+//            }
+//        }
+//    }
+    
     //MARK: Output
     var didLoadHashtagsFinish: (() -> ())?
     var didLoadFeedsFinish: (() -> ())?
     
     public init() {
-        self.pagination.limit = 100
+        self.meta.resultCount = 100
         self.tokenHelper.delegate = self
     }
 }
 
 extension FeedViewModel: TokenHelperDelegate {
     public func didRefreshTokenFinish() {
-        self.getFeeds(isReset: self.isReset)
+        if UserManager.shared.isLogin {
+            
+        } else {
+            self.getFeedsGuests(isReset: self.isReset)
+        }
     }
 }
