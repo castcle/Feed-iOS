@@ -57,7 +57,7 @@ final class FeedViewModel {
             if success {
                 self.hashtagShelf = hashtagShelf
                 if UserManager.shared.isLogin {
-                    
+                    self.getFeedsMembers(isReset: true)
                 } else {
                     self.getFeedsGuests(isReset: true)
                 }
@@ -95,34 +95,34 @@ final class FeedViewModel {
         }
     }
     
-//    public func getFeeds(isReset: Bool) {
-//        self.isReset = isReset
-//        self.feedRepository.getFeeds(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
-//            if success {
-//                do {
-//                    let rawJson = try response.mapJSON()
-//                    let json = JSON(rawJson)
-//                    let shelf = FeedShelf(json: json)
-//
-//                    self.feedsTemp = []
-//                    self.feedsTemp.append(contentsOf: shelf.feeds)
-//
-//                    if isReset {
-//                        self.feeds = self.feedsTemp
-//                    } else {
-//                        self.feeds.append(contentsOf: self.feedsTemp)
-//                    }
-//
-//                    self.pagination = shelf.pagination
-//                    self.didLoadFeedsFinish?()
-//                } catch {}
-//            } else {
-//                if isRefreshToken {
-//                    self.tokenHelper.refreshToken()
-//                }
-//            }
-//        }
-//    }
+    public func getFeedsMembers(isReset: Bool) {
+        self.isReset = isReset
+        self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+            if success {
+                do {
+                    let rawJson = try response.mapJSON()
+                    let json = JSON(rawJson)
+                    let shelf = FeedShelf(json: json)
+                    
+                    self.feedsTemp = []
+                    self.feedsTemp.append(contentsOf: shelf.feeds)
+                    
+                    if isReset {
+                        self.feeds = self.feedsTemp
+                    } else {
+                        self.feeds.append(contentsOf: self.feedsTemp)
+                    }
+                    
+                    self.meta = shelf.meta
+                    self.didLoadFeedsFinish?()
+                } catch {}
+            } else {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
+            }
+        }
+    }
     
     //MARK: Output
     var didLoadHashtagsFinish: (() -> ())?
@@ -137,7 +137,7 @@ final class FeedViewModel {
 extension FeedViewModel: TokenHelperDelegate {
     public func didRefreshTokenFinish() {
         if UserManager.shared.isLogin {
-            
+            self.getFeedsMembers(isReset: self.isReset)
         } else {
             self.getFeedsGuests(isReset: self.isReset)
         }

@@ -69,8 +69,9 @@ class FeedViewController: UIViewController {
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
             self.isLoadData = true
+            self.viewModel.feedRequest.untilId = ""
             if UserManager.shared.isLogin {
-                
+                self.viewModel.getFeedsMembers(isReset: true)
             } else {
                 self.viewModel.getFeedsGuests(isReset: true)
             }
@@ -82,7 +83,7 @@ class FeedViewController: UIViewController {
                 self.isLoadData = true
                 self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
                 if UserManager.shared.isLogin {
-                    
+                    self.viewModel.getFeedsMembers(isReset: false)
                 } else {
                     self.viewModel.getFeedsGuests(isReset: false)
                 }
@@ -138,15 +139,17 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.viewModel.feedRequest.untilId = ""
                     if UserManager.shared.isLogin {
-                        
+                        self.viewModel.getFeedsMembers(isReset: true)
                     } else {
                         self.viewModel.getFeedsGuests(isReset: true)
                     }
                 }
             } else {
+                self.viewModel.feedRequest.untilId = ""
                 if UserManager.shared.isLogin {
-                    
+                    self.viewModel.getFeedsMembers(isReset: true)
                 } else {
                     self.viewModel.getFeedsGuests(isReset: true)
                 }
@@ -188,8 +191,9 @@ class FeedViewController: UIViewController {
     }
     
     @IBAction func retryAction(_ sender: Any) {
+        self.viewModel.feedRequest.untilId = ""
         if UserManager.shared.isLogin {
-            
+            self.viewModel.getFeedsMembers(isReset: true)
         } else {
             self.viewModel.getFeedsGuests(isReset: true)
         }
