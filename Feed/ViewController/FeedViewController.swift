@@ -69,15 +69,24 @@ class FeedViewController: UIViewController {
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
             self.isLoadData = true
-            self.viewModel.getFeeds(isReset: true)
+            self.viewModel.feedRequest.untilId = ""
+            if UserManager.shared.isLogin {
+                self.viewModel.getFeedsMembers(isReset: true)
+            } else {
+                self.viewModel.getFeedsGuests(isReset: true)
+            }
         }
         
         self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
-            if self.viewModel.pagination.next != 0 {
+            if !self.viewModel.meta.oldestId.isEmpty {
                 self.isLoadData = true
-                self.viewModel.feedRequest.page = self.viewModel.pagination.next
-                self.viewModel.getFeeds(isReset: false)
+                self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
+                if UserManager.shared.isLogin {
+                    self.viewModel.getFeedsMembers(isReset: false)
+                } else {
+                    self.viewModel.getFeedsGuests(isReset: false)
+                }
             } else {
                 self.tableView.cr.noticeNoMoreData()
             }
@@ -130,10 +139,20 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.viewModel.getFeeds(isReset: true)
+                    self.viewModel.feedRequest.untilId = ""
+                    if UserManager.shared.isLogin {
+                        self.viewModel.getFeedsMembers(isReset: true)
+                    } else {
+                        self.viewModel.getFeedsGuests(isReset: true)
+                    }
                 }
             } else {
-                self.viewModel.getFeeds(isReset: true)
+                self.viewModel.feedRequest.untilId = ""
+                if UserManager.shared.isLogin {
+                    self.viewModel.getFeedsMembers(isReset: true)
+                } else {
+                    self.viewModel.getFeedsGuests(isReset: true)
+                }
             }
         } else {
             self.tableView.reloadData()
@@ -172,7 +191,12 @@ class FeedViewController: UIViewController {
     }
     
     @IBAction func retryAction(_ sender: Any) {
-        self.viewModel.getFeeds(isReset: true)
+        self.viewModel.feedRequest.untilId = ""
+        if UserManager.shared.isLogin {
+            self.viewModel.getFeedsMembers(isReset: true)
+        } else {
+            self.viewModel.getFeedsGuests(isReset: true)
+        }
     }
 }
 
@@ -193,16 +217,16 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 if section == 0 {
                     return 1
                 } else {
-                    let content = self.viewModel.feeds[section - 1].feedPayload
-                    if content.isRecast || content.isQuote {
+                    let content = self.viewModel.feeds[section - 1].payload
+                    if content.participate.recasted || content.participate.quoted {
                         return 4
                     } else {
                         return 3
                     }
                 }
             } else {
-                let content = self.viewModel.feeds[section].feedPayload
-                if content.isRecast || content.isQuote {
+                let content = self.viewModel.feeds[section].payload
+                if content.participate.recasted || content.participate.quoted {
                     return 4
                 } else {
                     return 3
@@ -225,8 +249,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     cell?.configCell()
                     return cell ?? NewPostTableViewCell()
                 } else {
-                    let content = self.viewModel.feeds[indexPath.section - 1].feedPayload
-                    if content.isRecast {
+                    let content = self.viewModel.feeds[indexPath.section - 1].payload
+                    if content.participate.recasted {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(content: content, cellType: .activity, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
@@ -236,7 +260,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         } else {
                             return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
                         }
-                    } else if content.isQuote {
+                    } else if content.participate.quoted {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
@@ -257,8 +281,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     }
                 }
             } else {
-                let content = self.viewModel.feeds[indexPath.section].feedPayload
-                if content.isRecast {
+                let content = self.viewModel.feeds[indexPath.section].payload
+                if content.participate.recasted {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(content: content, cellType: .activity, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 1 {
@@ -268,7 +292,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     } else {
                         return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
                     }
-                } else if content.isQuote {
+                } else if content.participate.quoted {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 1 {
@@ -303,8 +327,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func renderFeedCell(content: Content, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         var originalContent = Content()
-        if content.isRecast || content.isQuote {
-            originalContent = ContentHelper().originalPostToContent(originalPost: content.originalPost)
+        if content.participate.recasted || content.participate.quoted {
+            // Original Post
+//            originalContent = ContentHelper().originalPostToContent(originalPost: content.originalPost)
         }
         
         switch cellType {
@@ -317,7 +342,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            if content.isRecast {
+            if content.participate.recasted {
                 cell?.content = originalContent
             } else {
                 cell?.content = content
@@ -327,7 +352,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            if content.isRecast {
+            if content.participate.recasted {
                 cell?.content = originalContent
             } else {
                 cell?.content = content
@@ -336,7 +361,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         case .quote:
             return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
         default:
-            if content.isRecast {
+            if content.participate.recasted {
                 return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
             } else {
                 return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
@@ -347,15 +372,15 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension FeedViewController: HeaderTableViewCellDelegate {
     func didRemoveSuccess(_ headerTableViewCell: HeaderTableViewCell) {
-//        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-//            self.viewModel.contents.remove(at: indexPath.row)
-//            self.tableView.reloadData()
-//        }
+        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
+            self.viewModel.feeds.remove(at: indexPath.section)
+            self.tableView.reloadData()
+        }
     }
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
         if author.type == .page {
-            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(displayName: author.displayName, castcleId: author.castcleId))
+            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(id: author.id, displayName: author.displayName, castcleId: author.castcleId))
         } else {
             ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName, page: nil)
         }
@@ -363,6 +388,19 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+    
+    func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
+        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+                Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
+            }
+            
+            UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                self.viewModel.feeds.remove(at: indexPath.section)
+                self.tableView.reloadData()
+            })
+        }
     }
 }
 
