@@ -372,10 +372,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension FeedViewController: HeaderTableViewCellDelegate {
     func didRemoveSuccess(_ headerTableViewCell: HeaderTableViewCell) {
-//        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-//            self.viewModel.contents.remove(at: indexPath.row)
-//            self.tableView.reloadData()
-//        }
+        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
+            self.viewModel.feeds.remove(at: indexPath.section)
+            self.tableView.reloadData()
+        }
     }
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
@@ -388,6 +388,19 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+    
+    func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
+        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+                Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
+            }
+            
+            UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                self.viewModel.feeds.remove(at: indexPath.section)
+                self.tableView.reloadData()
+            })
+        }
     }
 }
 
