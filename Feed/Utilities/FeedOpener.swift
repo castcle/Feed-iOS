@@ -19,20 +19,27 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  Feed.h
+//  FeedOpener.swift
 //  Feed
 //
-//  Created by Castcle Co., Ltd. on 2/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
 //
 
-#import <Foundation/Foundation.h>
+import UIKit
+import Core
 
-//! Project version number for Feed.
-FOUNDATION_EXPORT double FeedVersionNumber;
+public enum FeedScene {
+    case feed
+}
 
-//! Project version string for Feed.
-FOUNDATION_EXPORT const unsigned char FeedVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <Feed/PublicHeader.h>
-
-
+public struct FeedOpener {
+    
+    public static func open(_ feedScene: FeedScene) -> UIViewController {
+        switch feedScene {
+        case .feed:
+            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
+            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
+            return vc
+        }
+    }
+}

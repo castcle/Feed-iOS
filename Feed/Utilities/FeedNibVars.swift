@@ -19,20 +19,31 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  Feed.h
+//  FeedNibVars.swift
 //  Feed
 //
-//  Created by Castcle Co., Ltd. on 2/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
 //
 
-#import <Foundation/Foundation.h>
-
-//! Project version number for Feed.
-FOUNDATION_EXPORT double FeedVersionNumber;
-
-//! Project version string for Feed.
-FOUNDATION_EXPORT const unsigned char FeedVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <Feed/PublicHeader.h>
-
-
+public struct FeedNibVars {
+    // MARK: - View Controller
+    public struct ViewController {
+        public static let feed = "FeedViewController"
+    }
+    
+    // MARK: - View
+    public struct Storyboard {
+        public static let feed = "Feed"
+    }
+    
+    // MARK: - TableViewCell
+    public struct TableViewCell {
+        public static let post = "NewPostTableViewCell"
+    }
+    
+    // MARK: - CollectionViewCell
+    public struct CollectionViewCell {
+        public static let hashtag = "HashtagCell"
+        public static let hashtagCapsule = "HashtagCapsuleCell"
+    }
+}
