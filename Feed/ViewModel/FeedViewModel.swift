@@ -22,36 +22,105 @@
 //  FeedViewModel.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 13/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 13/7/2564 BE.
 //
 
+import Core
 import Foundation
 import Networking
+import SwiftyJSON
+import SwiftUI
 
 final class FeedViewModel {
    
-    //MARK: Private
-    private var feedRepository: FeedRepository
+    private var feedRepository: FeedRepository = FeedRepositoryImpl()
+    var feedRequest: FeedRequest = FeedRequest()
     var hashtagShelf: HashtagShelf = HashtagShelf()
-    var feedShelf: FeedShelf = FeedShelf()
+    var feeds: [Feed] = []
+    var feedsTemp: [Feed] = []
+    var meta: Meta = Meta()
+    let tokenHelper: TokenHelper = TokenHelper()
+    private var featureSlug: String = "feed"
+    private var circleSlug: String = "forYou"
+    var state: State = .loading
+    var isFirstLaunch: Bool = true
+    private var isReset: Bool = true
+    
+    enum State {
+        case loading
+        case loaded
+    }
 
     //MARK: Input
     public func getHashtags() {
         self.feedRepository.getHashtags() { (success, hashtagShelf) in
             if success {
                 self.hashtagShelf = hashtagShelf
-                self.getFeeds()
+                if UserManager.shared.isLogin {
+                    self.getFeedsMembers(isReset: true)
+                } else {
+                    self.getFeedsGuests(isReset: true)
+                }
             }
             self.didLoadHashtagsFinish?()
         }
     }
     
-    public func getFeeds() {
-        self.feedRepository.getFeeds(featureSlug: "Test", circleSlug: "Test") { (success, feedShelf) in
+    public func getFeedsGuests(isReset: Bool) {
+        self.isReset = isReset
+        self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
-                self.feedShelf = feedShelf
+                do {
+                    let rawJson = try response.mapJSON()
+                    let json = JSON(rawJson)
+                    let shelf = FeedShelf(json: json)
+                    
+                    self.feedsTemp = []
+                    self.feedsTemp.append(contentsOf: shelf.feeds)
+                    
+                    if isReset {
+                        self.feeds = self.feedsTemp
+                    } else {
+                        self.feeds.append(contentsOf: self.feedsTemp)
+                    }
+                    
+                    self.meta = shelf.meta
+                    self.didLoadFeedsFinish?()
+                } catch {}
+            } else {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
             }
-            self.didLoadFeedsFinish?()
+        }
+    }
+    
+    public func getFeedsMembers(isReset: Bool) {
+        self.isReset = isReset
+        self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+            if success {
+                do {
+                    let rawJson = try response.mapJSON()
+                    let json = JSON(rawJson)
+                    let shelf = FeedShelf(json: json)
+                    
+                    self.feedsTemp = []
+                    self.feedsTemp.append(contentsOf: shelf.feeds)
+                    
+                    if isReset {
+                        self.feeds = self.feedsTemp
+                    } else {
+                        self.feeds.append(contentsOf: self.feedsTemp)
+                    }
+                    
+                    self.meta = shelf.meta
+                    self.didLoadFeedsFinish?()
+                } catch {}
+            } else {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
+            }
         }
     }
     
@@ -59,8 +128,18 @@ final class FeedViewModel {
     var didLoadHashtagsFinish: (() -> ())?
     var didLoadFeedsFinish: (() -> ())?
     
-    public init(feedRepository: FeedRepository = FeedRepositoryImpl()) {
-        self.feedRepository = feedRepository
-        self.getHashtags()
+    public init() {
+        self.meta.resultCount = 100
+        self.tokenHelper.delegate = self
+    }
+}
+
+extension FeedViewModel: TokenHelperDelegate {
+    public func didRefreshTokenFinish() {
+        if UserManager.shared.isLogin {
+            self.getFeedsMembers(isReset: self.isReset)
+        } else {
+            self.getFeedsGuests(isReset: self.isReset)
+        }
     }
 }

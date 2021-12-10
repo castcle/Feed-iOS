@@ -22,7 +22,7 @@
 //  HashtagCapsuleCell.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 14/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 14/7/2564 BE.
 //
 
 import UIKit
@@ -39,7 +39,7 @@ class HashtagCapsuleCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.titleLabel.font = UIFont.asset(.medium, fontSize: .overline)
+        self.titleLabel.font = UIFont.asset(.bold, fontSize: .overline)
         self.bgView.capsule(color: UIColor.Asset.darkGray, borderWidth: 1.0, borderColor: UIColor.Asset.black)
         self.titleLabel.textColor = UIColor.Asset.white
     }
@@ -60,7 +60,7 @@ class HashtagCapsuleCell: UICollectionViewCell {
     }
     
     static func cellSize(height: CGFloat, text: String) -> CGSize {
-        let rect = text.boundingRect(with: CGSize(width: 0, height: 0), options: NSStringDrawingOptions.usesFontLeading, attributes: [NSAttributedString.Key.font : UIFont.asset(.medium, fontSize: .overline)], context: nil)
+        let rect = text.boundingRect(with: CGSize(width: 0, height: 0), options: NSStringDrawingOptions.usesFontLeading, attributes: [NSAttributedString.Key.font : UIFont.asset(.bold, fontSize: .overline)], context: nil)
         return CGSize(width: (rect.width + 40.0), height: height)
     }
     

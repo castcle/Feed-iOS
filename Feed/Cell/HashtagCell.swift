@@ -22,7 +22,7 @@
 //  HashtagCell.swift
 //  Feed
 //
-//  Created by Tanakorn Phoochaliaw on 13/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 13/7/2564 BE.
 //
 
 import UIKit
