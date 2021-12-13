@@ -140,6 +140,7 @@ class FeedViewController: UIViewController {
                 self.viewModel.isFirstLaunch = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.viewModel.feedRequest.untilId = ""
+                    self.viewModel.state = .loading
                     if UserManager.shared.isLogin {
                         self.viewModel.getFeedsMembers(isReset: true)
                     } else {
@@ -148,6 +149,9 @@ class FeedViewController: UIViewController {
                 }
             } else {
                 self.viewModel.feedRequest.untilId = ""
+                self.viewModel.state = .loading
+                self.tableView.isScrollEnabled = false
+                self.tableView.reloadData()
                 if UserManager.shared.isLogin {
                     self.viewModel.getFeedsMembers(isReset: true)
                 } else {
