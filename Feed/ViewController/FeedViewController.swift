@@ -132,6 +132,7 @@ class FeedViewController: UIViewController {
         super.viewWillAppear(animated)
         self.setupNevBar()
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTableView(notification:)), name: .feedScrollToTop, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadFeedDisplay(notification:)), name: .feedReloadContent, object: nil)
         Defaults[.screenId] = ScreenId.feed.rawValue
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
@@ -166,10 +167,15 @@ class FeedViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .feedReloadContent, object: nil)
     }
     
     @objc func scrollTableView(notification: NSNotification) {
         self.scrollToTop()
+    }
+    
+    @objc func reloadFeedDisplay(notification: NSNotification) {
+        self.tableView.reloadData()
     }
     
     @objc private func leftButtonAction() {
