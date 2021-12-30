@@ -70,6 +70,7 @@ class FeedViewController: UIViewController {
             guard let self = self else { return }
             self.isLoadData = true
             self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.maxResults = 5
             if UserManager.shared.isLogin {
                 self.viewModel.getFeedsMembers(isReset: true)
             } else {
@@ -82,6 +83,7 @@ class FeedViewController: UIViewController {
             if !self.viewModel.meta.oldestId.isEmpty {
                 self.isLoadData = true
                 self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
+                self.viewModel.feedRequest.maxResults = 25
                 if UserManager.shared.isLogin {
                     self.viewModel.getFeedsMembers(isReset: false)
                 } else {
@@ -139,25 +141,16 @@ class FeedViewController: UIViewController {
             self.viewModel.feeds = []
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.viewModel.feedRequest.untilId = ""
-                    self.viewModel.state = .loading
-                    if UserManager.shared.isLogin {
-                        self.viewModel.getFeedsMembers(isReset: true)
-                    } else {
-                        self.viewModel.getFeedsGuests(isReset: true)
-                    }
-                }
+            }
+            self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.state = .loading
+            self.tableView.isScrollEnabled = false
+            self.tableView.reloadData()
+            if UserManager.shared.isLogin {
+                self.viewModel.getFeedsMembers(isReset: true)
             } else {
-                self.viewModel.feedRequest.untilId = ""
-                self.viewModel.state = .loading
-                self.tableView.isScrollEnabled = false
-                self.tableView.reloadData()
-                if UserManager.shared.isLogin {
-                    self.viewModel.getFeedsMembers(isReset: true)
-                } else {
-                    self.viewModel.getFeedsGuests(isReset: true)
-                }
+                self.viewModel.getFeedsGuests(isReset: true)
             }
         } else {
             self.tableView.reloadData()
@@ -202,6 +195,7 @@ class FeedViewController: UIViewController {
     
     @IBAction func retryAction(_ sender: Any) {
         self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.maxResults = 5
         if UserManager.shared.isLogin {
             self.viewModel.getFeedsMembers(isReset: true)
         } else {
