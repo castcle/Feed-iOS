@@ -129,7 +129,6 @@ final class FeedViewModel {
     var didLoadFeedsFinish: (() -> ())?
     
     public init() {
-        self.meta.resultCount = 100
         self.tokenHelper.delegate = self
     }
 }

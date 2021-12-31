@@ -50,7 +50,8 @@ class NewPostTableViewCell: UITableViewCell {
     }
     
     func configCell() {
-        self.profileImage.image = UserManager.shared.avatar
+        let url = URL(string: UserManager.shared.avatar)
+        self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
     }
     
     @IBAction func postAction(_ sender: Any) {
