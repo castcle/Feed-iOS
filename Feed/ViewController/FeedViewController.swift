@@ -70,6 +70,7 @@ class FeedViewController: UIViewController {
             guard let self = self else { return }
             self.isLoadData = true
             self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.maxResults = 5
             if UserManager.shared.isLogin {
                 self.viewModel.getFeedsMembers(isReset: true)
             } else {
@@ -82,6 +83,7 @@ class FeedViewController: UIViewController {
             if !self.viewModel.meta.oldestId.isEmpty {
                 self.isLoadData = true
                 self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
+                self.viewModel.feedRequest.maxResults = 25
                 if UserManager.shared.isLogin {
                     self.viewModel.getFeedsMembers(isReset: false)
                 } else {
@@ -132,27 +134,23 @@ class FeedViewController: UIViewController {
         super.viewWillAppear(animated)
         self.setupNevBar()
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTableView(notification:)), name: .feedScrollToTop, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadFeedDisplay(notification:)), name: .feedReloadContent, object: nil)
         Defaults[.screenId] = ScreenId.feed.rawValue
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
             self.viewModel.feeds = []
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.viewModel.feedRequest.untilId = ""
-                    if UserManager.shared.isLogin {
-                        self.viewModel.getFeedsMembers(isReset: true)
-                    } else {
-                        self.viewModel.getFeedsGuests(isReset: true)
-                    }
-                }
+            }
+            self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.state = .loading
+            self.tableView.isScrollEnabled = false
+            self.tableView.reloadData()
+            if UserManager.shared.isLogin {
+                self.viewModel.getFeedsMembers(isReset: true)
             } else {
-                self.viewModel.feedRequest.untilId = ""
-                if UserManager.shared.isLogin {
-                    self.viewModel.getFeedsMembers(isReset: true)
-                } else {
-                    self.viewModel.getFeedsGuests(isReset: true)
-                }
+                self.viewModel.getFeedsGuests(isReset: true)
             }
         } else {
             self.tableView.reloadData()
@@ -162,10 +160,15 @@ class FeedViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .feedReloadContent, object: nil)
     }
     
     @objc func scrollTableView(notification: NSNotification) {
         self.scrollToTop()
+    }
+    
+    @objc func reloadFeedDisplay(notification: NSNotification) {
+        self.tableView.reloadData()
     }
     
     @objc private func leftButtonAction() {
@@ -192,6 +195,7 @@ class FeedViewController: UIViewController {
     
     @IBAction func retryAction(_ sender: Any) {
         self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.maxResults = 5
         if UserManager.shared.isLogin {
             self.viewModel.getFeedsMembers(isReset: true)
         } else {
@@ -420,7 +424,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
         if author.type == .page {
-            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(id: author.id, displayName: author.displayName, castcleId: author.castcleId))
+            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(id: author.id, displayName: author.displayName, castcleId: author.castcleId, avatar: author.avatar.thumbnail, cover: ""))
         } else {
             ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName, page: nil)
         }
@@ -432,7 +436,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
             }
             
@@ -446,10 +450,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
 
 extension FeedViewController: FooterTableViewCellDelegate {
     func didTabComment(_ footerTableViewCell: FooterTableViewCell, content: Content) {
-        let commentNavi: UINavigationController = UINavigationController(rootViewController: ComponentOpener.open(.comment(CommentViewModel(content: content))))
-        commentNavi.modalPresentationStyle = .fullScreen
-        commentNavi.modalTransitionStyle = .crossDissolve
-        Utility.currentViewController().present(commentNavi, animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(content: content))), animated: true)
     }
     
     func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, content: Content, page: Page) {
@@ -472,28 +473,7 @@ extension FeedViewController {
         self.tableView.dataSource = self
         
         self.tableView.register(UINib(nibName: FeedNibVars.TableViewCell.post, bundle: ConfigBundle.feed), forCellReuseIdentifier: FeedNibVars.TableViewCell.post)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.headerFeed, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.headerFeed)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.footerFeed, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.footerFeed)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.postText, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.postText)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.postLink, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.postLink)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.postLinkPreview, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.postLinkPreview)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX1, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX1)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX2, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX2)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageX3, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageX3)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.imageXMore, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.imageXMore)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blog, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blog)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.blogNoImage, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.blogNoImage)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.skeleton, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.skeleton)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.activityHeader, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.activityHeader)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteText, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteText)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteLink, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteLink)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteLinkPreview, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteLinkPreview)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteImageX1, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteImageX1)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteImageX2, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteImageX2)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteImageX3, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteImageX3)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteImageXMore, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteImageXMore)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteBlog, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteBlog)
-        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.quoteBlogNoImage, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.quoteBlogNoImage)
+        self.tableView.registerFeedCell()
         
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
