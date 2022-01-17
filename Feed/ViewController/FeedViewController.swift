@@ -111,7 +111,7 @@ class FeedViewController: UIViewController {
     }
     
     private func setupNevBar() {
-        self.customNavigationBar(.primary, title: "For You", textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
+        self.customNavigationBar(.primary, title: Localization.feed.title.text, textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
         
         let leftIcon = NavBarButtonType.logo.barButton
         leftIcon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
