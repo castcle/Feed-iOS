@@ -68,6 +68,7 @@ final class FeedViewModel {
     
     public func getFeedsGuests(isReset: Bool) {
         self.isReset = isReset
+        self.feedRequest.userFields = .none
         self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
@@ -97,6 +98,7 @@ final class FeedViewModel {
     
     public func getFeedsMembers(isReset: Bool) {
         self.isReset = isReset
+        self.feedRequest.userFields = .relationships
         self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
