@@ -119,12 +119,17 @@ class FeedViewController: UIViewController {
         
         var rightButton: [UIBarButtonItem] = []
         if UserManager.shared.isLogin {
-            let rightIcon = NavBarButtonType.menu.barButton
-            rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
-            rightButton.append(UIBarButtonItem(customView: rightIcon))
+            let menuIcon = NavBarButtonType.menu.barButton
+            menuIcon.addTarget(self, action: #selector(self.settingAction), for: .touchUpInside)
+            rightButton.append(UIBarButtonItem(customView: menuIcon))
+            
+            let airdropIcon = NavBarButtonType.airdrop.barButton
+            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
+            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
+            rightButton.append(UIBarButtonItem(customView: airdropIcon))
         } else {
             let rightIcon = NavBarButtonType.righProfile.barButton
-            rightIcon.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
+            rightIcon.addTarget(self, action: #selector(self.authAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: rightIcon))
         }
         self.navigationItem.rightBarButtonItems = rightButton
@@ -175,12 +180,16 @@ class FeedViewController: UIViewController {
         self.scrollToTop()
     }
     
-    @objc private func rightButtonAction() {
-        if UserManager.shared.isLogin {
-            Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
-        } else {
-            Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
-        }
+    @objc private func authAction() {
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+    
+    @objc private func settingAction() {
+        Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
+    }
+    
+    @objc private func airdropAction() {
+        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)")!)), animated: true)
     }
     
     public func scrollToTop() {
