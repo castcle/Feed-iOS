@@ -269,6 +269,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         } else if indexPath.row == 1 {
                             return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 2 {
+                            self.viewModel.seenContent(contentId: content.id)
                             return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else {
                             return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -277,6 +278,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
+                            self.viewModel.seenContent(contentId: content.id)
                             return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 2 {
                             return self.renderFeedCell(content: content, cellType: .quote, tableView: tableView, indexPath: indexPath)
@@ -287,6 +289,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
+                            self.viewModel.seenContent(contentId: content.id)
                             return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else {
                             return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -301,6 +304,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     } else if indexPath.row == 1 {
                         return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 2 {
+                        self.viewModel.seenContent(contentId: content.id)
                         return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                     } else {
                         return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -309,6 +313,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 1 {
+                        self.viewModel.seenContent(contentId: content.id)
                         return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 2 {
                         return self.renderFeedCell(content: content, cellType: .quote, tableView: tableView, indexPath: indexPath)
@@ -319,6 +324,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
                     } else if indexPath.row == 1 {
+                        self.viewModel.seenContent(contentId: content.id)
                         return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
                     } else {
                         return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -346,11 +352,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     self.viewModel.feeds[indexPath.section - 1].payload.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
-            } else if content.referencedCasts.type == .quoted {
-                if content.type == .long && indexPath.row == 1 {
-                    self.viewModel.feeds[indexPath.section - 1].payload.isExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
             } else {
                 if content.type == .long && indexPath.row == 1 {
                     self.viewModel.feeds[indexPath.section - 1].payload.isExpand.toggle()
@@ -361,11 +362,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let content = self.viewModel.feeds[indexPath.section].payload
             if content.referencedCasts.type == .recasted {
                 if content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section].payload.isExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
-            } else if content.referencedCasts.type == .quoted {
-                if content.type == .long && indexPath.row == 1 {
                     self.viewModel.feeds[indexPath.section].payload.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }

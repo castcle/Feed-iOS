@@ -29,7 +29,7 @@ import Core
 import Foundation
 import Networking
 import SwiftyJSON
-import SwiftUI
+import RealmSwift
 
 final class FeedViewModel {
    
@@ -45,6 +45,7 @@ final class FeedViewModel {
     var state: State = .loading
     var isFirstLaunch: Bool = true
     private var isReset: Bool = true
+    private let realm = try! Realm()
     
     enum State {
         case loading
@@ -132,6 +133,27 @@ final class FeedViewModel {
     
     public init() {
         self.tokenHelper.delegate = self
+    }
+    
+    private func isSeenContent(contentId: String) -> Bool {
+        let contentsSeen = self.realm.objects(ContentsSeen.self).filter("id = '\(contentId)'").first
+        if contentsSeen != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func seenContent(contentId: String) {
+        if !self.isSeenContent(contentId: contentId) {
+            let engagement = EngagementHelper()
+            engagement.seenContent(contentId: contentId)
+            try! self.realm.write {
+                let contentsSeen = ContentsSeen()
+                contentsSeen.id = contentId
+                self.realm.add(contentsSeen, update: .modified)
+            }
+        }
     }
 }
 
