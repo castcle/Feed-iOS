@@ -346,6 +346,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if UserManager.shared.isLogin {
+            if indexPath.section < 1 {
+                return
+            }
             let content = self.viewModel.feeds[indexPath.section - 1].payload
             if content.referencedCasts.type == .recasted {
                 if content.type == .long && indexPath.row == 2 {
