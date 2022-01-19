@@ -377,6 +377,30 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if self.viewModel.state == .loaded {
+            var index: Int = 0
+            if UserManager.shared.isLogin {
+                if indexPath.section != 0 {
+                    index = indexPath.section - 1
+                }
+            } else {
+                index = indexPath.section
+            }
+            
+            let content = self.viewModel.feeds[index].payload
+            if content.referencedCasts.type == .recasted {
+                if indexPath.row == 2 {
+                    self.viewModel.castOffView(contentId: content.id)
+                }
+            } else {
+                if indexPath.row == 1 {
+                    self.viewModel.castOffView(contentId: content.id)
+                }
+            }
+        }
+    }
+    
     func renderFeedCell(content: Content, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         var originalContent = Content()
         if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {

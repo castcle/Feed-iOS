@@ -155,6 +155,11 @@ final class FeedViewModel {
             }
         }
     }
+    
+    func castOffView(contentId: String) {
+        let engagement = EngagementHelper()
+        engagement.castOffView(contentId: contentId)
+    }
 }
 
 extension FeedViewModel: TokenHelperDelegate {
