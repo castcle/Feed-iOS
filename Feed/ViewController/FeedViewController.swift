@@ -147,6 +147,9 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
             }
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
+            }
             self.viewModel.feedRequest.untilId = ""
             self.viewModel.feedRequest.maxResults = 5
             self.viewModel.state = .loading
@@ -197,7 +200,7 @@ class FeedViewController: UIViewController {
             if self.tableView.contentOffset == .zero {
                 self.tableView.cr.beginHeaderRefresh()
             } else {
-                self.tableView.setContentOffset(.zero, animated: true)
+                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
             }
         }
     }
