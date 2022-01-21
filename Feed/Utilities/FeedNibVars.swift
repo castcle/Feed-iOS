@@ -29,6 +29,7 @@ public struct FeedNibVars {
     // MARK: - View Controller
     public struct ViewController {
         public static let feed = "FeedViewController"
+        public static let userToFollow = "UserToFollowViewController"
     }
     
     // MARK: - View
@@ -39,6 +40,7 @@ public struct FeedNibVars {
     // MARK: - TableViewCell
     public struct TableViewCell {
         public static let post = "NewPostTableViewCell"
+        public static let userToFollow = "UserToFollowTableViewCell"
     }
     
     // MARK: - CollectionViewCell
