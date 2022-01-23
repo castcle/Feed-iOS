@@ -28,6 +28,8 @@
 import UIKit
 import Core
 import Networking
+import Profile
+import Authen
 import Kingfisher
 
 class UserToFollowTableViewCell: UITableViewCell {
@@ -41,10 +43,23 @@ class UserToFollowTableViewCell: UITableViewCell {
     @IBOutlet weak var userFollowButton: UIButton!
     @IBOutlet weak var userVerifyImage: UIImageView!
     
+    private var userRepository: UserRepository = UserRepositoryImpl()
     private var user: Author = Author()
+    private var isMock: Bool = true
+    private var isFollow: Bool = false
+    let tokenHelper: TokenHelper = TokenHelper()
+    private var stage: Stage = .none
+    private var userRequest: UserRequest = UserRequest()
+    
+    enum Stage {
+        case followUser
+        case unfollowUser
+        case none
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.tokenHelper.delegate = self
         self.userAvatarImage.circle(color: UIColor.Asset.white)
         self.userDisplayNameLabel.font = UIFont.asset(.bold, fontSize: .body)
         self.userDisplayNameLabel.textColor = UIColor.Asset.white
@@ -63,6 +78,7 @@ class UserToFollowTableViewCell: UITableViewCell {
     }
     
     public func configCell(user: Author, isMock: Bool) {
+        self.isMock = isMock
         if isMock {
             self.userFollowButton.setTitle("Follow", for: .normal)
             self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
@@ -79,10 +95,96 @@ class UserToFollowTableViewCell: UITableViewCell {
         }
     }
     
+    private func updateFirstUserFollow() {
+        if !self.isMock {
+            if user.followed {
+                self.userFollowButton.setTitle("Following", for: .normal)
+                self.userFollowButton.setTitleColor(UIColor.Asset.white, for: .normal)
+                self.userFollowButton.capsule(color: UIColor.Asset.lightBlue, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+            } else {
+                self.userFollowButton.setTitle("Follow", for: .normal)
+                self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
+                self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+            }
+        } else {
+            if self.isFollow {
+                self.userFollowButton.setTitle("Following", for: .normal)
+                self.userFollowButton.setTitleColor(UIColor.Asset.white, for: .normal)
+                self.userFollowButton.capsule(color: UIColor.Asset.lightBlue, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+            } else {
+                self.userFollowButton.setTitle("Follow", for: .normal)
+                self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
+                self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+            }
+        }
+    }
+    
+    private func followUser() {
+        self.stage = .followUser
+        let userId: String = UserManager.shared.rawCastcleId
+        self.userRepository.follow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
+            if !success {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
+            }
+        }
+    }
+    
+    private func unfollowUser() {
+        self.stage = .unfollowUser
+        let userId: String = UserManager.shared.rawCastcleId
+        self.userRepository.unfollow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
+            if !success {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
+            }
+        }
+    }
+    
     @IBAction func userFollowAction(_ sender: Any) {
+        if !self.isMock {
+            if UserManager.shared.isLogin {
+                self.userRequest.targetCastcleId = self.user.castcleId
+                if self.user.followed {
+                    self.unfollowUser()
+                } else {
+                    self.followUser()
+                }
+                self.user.followed.toggle()
+                self.updateFirstUserFollow()
+            } else {
+                Utility.currentViewController().navigationController?.popViewController(animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+                    Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+                }
+            }
+        } else {
+            self.isFollow.toggle()
+            self.updateFirstUserFollow()
+        }
     }
     
     @IBAction func userProfileAction(_ sender: Any) {
+        if !self.isMock {
+            if self.user.type == .page {
+                ProfileOpener.openProfileDetail(self.user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: self.user.id, displayName: self.user.displayName, castcleId: self.user.castcleId, avatar: self.user.avatar.thumbnail, cover: ""))
+            } else {
+                ProfileOpener.openProfileDetail(self.user.type, castcleId: self.user.castcleId, displayName: self.user.displayName, page: nil)
+            }
+        } else {
+            ProfileOpener.openProfileDetail(.people, castcleId: UserManager.shared.rawCastcleId, displayName: UserManager.shared.displayName, page: nil)
+        }
     }
-    
+}
+
+extension UserToFollowTableViewCell: TokenHelperDelegate {
+    public func didRefreshTokenFinish() {
+        if self.stage == .followUser {
+            self.followUser()
+        } else if self.stage == .unfollowUser {
+            self.unfollowUser()
+        }
+    }
 }

@@ -559,6 +559,22 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
             Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
         }
     }
+    
+    func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
+        if user.type == .page {
+            ProfileOpener.openProfileDetail(user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: user.id, displayName: user.displayName, castcleId: user.castcleId, avatar: user.avatar.thumbnail, cover: ""))
+        } else {
+            ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName, page: nil)
+        }
+    }
+    
+    func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+    
+    func didMockViewProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
+        ProfileOpener.openProfileDetail(.people, castcleId: UserManager.shared.rawCastcleId, displayName: UserManager.shared.displayName, page: nil)
+    }
 }
 
 extension FeedViewController {
