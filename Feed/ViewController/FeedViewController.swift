@@ -52,6 +52,7 @@ class FeedViewController: UIViewController {
         case content
         case quote
         case footer
+        case none
     }
     
     override func viewDidLoad() {
@@ -233,19 +234,27 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 if section == 0 {
                     return 2
                 } else {
-                    let content = self.viewModel.feeds[section - 1].content
-                    if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
+                    let feed = self.viewModel.feeds[section - 1]
+                    if feed.type == .suggestionFollow {
+                        return 1
+                    } else {
+                        if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
+                            return 4
+                        } else {
+                            return 3
+                        }
+                    }
+                }
+            } else {
+                let feed = self.viewModel.feeds[section]
+                if feed.type == .suggestionFollow {
+                    return 1
+                } else {
+                    if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
                         return 4
                     } else {
                         return 3
                     }
-                }
-            } else {
-                let content = self.viewModel.feeds[section].content
-                if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
-                    return 4
-                } else {
-                    return 3
                 }
             }
         }
@@ -270,6 +279,48 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     }
                 } else {
                     let feed = self.viewModel.feeds[indexPath.section - 1]
+                    if feed.type == .suggestionFollow {
+                        return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        if feed.content.referencedCasts.type == .recasted {
+                            if indexPath.row == 0 {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .activity, tableView: tableView, indexPath: indexPath)
+                            } else if indexPath.row == 1 {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
+                            } else if indexPath.row == 2 {
+                                self.viewModel.seenContent(contentId: feed.content.id)
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
+                            } else {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                            }
+                        } else if feed.content.referencedCasts.type == .quoted {
+                            if indexPath.row == 0 {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
+                            } else if indexPath.row == 1 {
+                                self.viewModel.seenContent(contentId: feed.content.id)
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
+                            } else if indexPath.row == 2 {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, tableView: tableView, indexPath: indexPath)
+                            } else {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                            }
+                        } else {
+                            if indexPath.row == 0 {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
+                            } else if indexPath.row == 1 {
+                                self.viewModel.seenContent(contentId: feed.content.id)
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
+                            } else {
+                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                            }
+                        }
+                    }
+                }
+            } else {
+                let feed = self.viewModel.feeds[indexPath.section]
+                if feed.type == .suggestionFollow {
+                    return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, tableView: tableView, indexPath: indexPath)
+                } else {
                     if feed.content.referencedCasts.type == .recasted {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .activity, tableView: tableView, indexPath: indexPath)
@@ -301,40 +352,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         } else {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
                         }
-                    }
-                }
-            } else {
-                let feed = self.viewModel.feeds[indexPath.section - 1]
-                if feed.content.referencedCasts.type == .recasted {
-                    if indexPath.row == 0 {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .activity, tableView: tableView, indexPath: indexPath)
-                    } else if indexPath.row == 1 {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
-                    } else if indexPath.row == 2 {
-                        self.viewModel.seenContent(contentId: feed.content.id)
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
-                    }
-                } else if feed.content.referencedCasts.type == .quoted {
-                    if indexPath.row == 0 {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
-                    } else if indexPath.row == 1 {
-                        self.viewModel.seenContent(contentId: feed.content.id)
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
-                    } else if indexPath.row == 2 {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
-                    }
-                } else {
-                    if indexPath.row == 0 {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
-                    } else if indexPath.row == 1 {
-                        self.viewModel.seenContent(contentId: feed.content.id)
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
                     }
                 }
             }
@@ -426,7 +443,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            cell?.configCell()
+            if user.isEmpty {
+                cell?.configCell(user: [], isMock: true)
+            } else {
+                cell?.configCell(user: user, isMock: false)
+            }
             return cell ?? SuggestionUserTableViewCell()
         } else if feedType == .content {
             var originalContent = Content()
@@ -530,7 +551,13 @@ extension FeedViewController: FooterTableViewCellDelegate {
 
 extension FeedViewController: SuggestionUserTableViewCellDelegate {
     func didSeeMore(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: [Author]) {
-        Utility.currentViewController().navigationController?.pushViewController(FeedOpener.open(.userToFollow), animated: true)
+        if user.isEmpty {
+            let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user, isMock: true)))
+            Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user, isMock: false)))
+            Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }
 

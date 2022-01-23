@@ -27,6 +27,7 @@
 
 import UIKit
 import Core
+import Networking
 import Kingfisher
 
 class UserToFollowTableViewCell: UITableViewCell {
@@ -39,6 +40,8 @@ class UserToFollowTableViewCell: UITableViewCell {
     @IBOutlet weak var userDescLabel: UILabel!
     @IBOutlet weak var userFollowButton: UIButton!
     @IBOutlet weak var userVerifyImage: UIImageView!
+    
+    private var user: Author = Author()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -59,17 +62,21 @@ class UserToFollowTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    public func configCell() {
-        self.userFollowButton.setTitle("Follow", for: .normal)
-        self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
-        self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-        
-        let url = URL(string: UserManager.shared.avatar)
-        self.userAvatarImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
-        
-        self.userNoticeLabel.text = "Chutima Kotxgapan and 21 others follow"
-        self.userDisplayNameLabel.text = UserManager.shared.displayName
-        self.userIdLabel.text = "@\(UserManager.shared.rawCastcleId)"
+    public func configCell(user: Author, isMock: Bool) {
+        if isMock {
+            self.userFollowButton.setTitle("Follow", for: .normal)
+            self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
+            self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+            
+            let url = URL(string: UserManager.shared.avatar)
+            self.userAvatarImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
+            
+            self.userNoticeLabel.text = "Chutima Kotxgapan and 21 others follow"
+            self.userDisplayNameLabel.text = UserManager.shared.displayName
+            self.userIdLabel.text = "@\(UserManager.shared.rawCastcleId)"
+        } else {
+            self.user = user
+        }
     }
     
     @IBAction func userFollowAction(_ sender: Any) {
