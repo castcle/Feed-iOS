@@ -30,6 +30,7 @@ import Foundation
 import Networking
 import SwiftyJSON
 import RealmSwift
+import Defaults
 
 final class FeedViewModel {
    
@@ -145,29 +146,39 @@ final class FeedViewModel {
     }
     
     private func isSeenContent(contentId: String) -> Bool {
-        let contentsSeen = self.realm.objects(ContentsSeen.self).filter("id = '\(contentId)'").first
-        if contentsSeen != nil {
-            return true
-        } else {
+        let seenId = Defaults[.seenId]
+        if seenId.isEmpty {
             return false
-        }
-    }
-    
-    func seenContent(contentId: String) {
-        if !self.isSeenContent(contentId: contentId) {
-            let engagement = EngagementHelper()
-            engagement.seenContent(contentId: contentId)
-            try! self.realm.write {
-                let contentsSeen = ContentsSeen()
-                contentsSeen.id = contentId
-                self.realm.add(contentsSeen, update: .modified)
+        } else {
+            let seenIdArr = seenId.components(separatedBy: "|")
+            if seenIdArr.contains(contentId) {
+                return true
+            } else {
+                return false
             }
         }
     }
     
+    func seenContent(contentId: String) {
+        DispatchQueue.background(background: {
+            if !self.isSeenContent(contentId: contentId) {
+                let engagement = EngagementHelper()
+                engagement.seenContent(contentId: contentId)
+                let seenId = Defaults[.seenId]
+                if seenId.isEmpty {
+                    Defaults[.seenId] = contentId
+                } else {
+                    Defaults[.seenId] = "\(seenId)|\(contentId)"
+                }
+            }
+        })
+    }
+    
     func castOffView(contentId: String) {
-        let engagement = EngagementHelper()
-        engagement.castOffView(contentId: contentId)
+        DispatchQueue.background(background: {
+            let engagement = EngagementHelper()
+            engagement.castOffView(contentId: contentId)
+        })
     }
 }
 
@@ -177,6 +188,19 @@ extension FeedViewModel: TokenHelperDelegate {
             self.getFeedsMembers(isReset: self.isReset)
         } else {
             self.getFeedsGuests(isReset: self.isReset)
+        }
+    }
+}
+
+extension DispatchQueue {
+    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
+        DispatchQueue.global(qos: .background).async {
+            background?()
+            if let completion = completion {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                    completion()
+                })
+            }
         }
     }
 }

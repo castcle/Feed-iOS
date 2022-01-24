@@ -32,7 +32,6 @@ import RealmSwift
 public final class UserToFollowViewModel {
    
     var user: [Author] = []
-    let tokenHelper: TokenHelper = TokenHelper()
     private let realm = try! Realm()
     
     var usersSuggestion: [Author] {
@@ -46,11 +45,5 @@ public final class UserToFollowViewModel {
     
     public init(user: [Author]) {
         self.user = user
-        self.tokenHelper.delegate = self
-    }
-}
-
-extension UserToFollowViewModel: TokenHelperDelegate {
-    public func didRefreshTokenFinish() {
     }
 }
