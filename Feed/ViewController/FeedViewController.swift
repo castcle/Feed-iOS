@@ -141,6 +141,7 @@ class FeedViewController: UIViewController {
         self.setupNevBar()
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTableView(notification:)), name: .feedScrollToTop, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadFeedDisplay(notification:)), name: .feedReloadContent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetFeedContent(notification:)), name: .resetFeedContent, object: nil)
         Defaults[.screenId] = ScreenId.feed.rawValue
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
@@ -170,6 +171,7 @@ class FeedViewController: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
         NotificationCenter.default.removeObserver(self, name: .feedReloadContent, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .resetFeedContent, object: nil)
     }
     
     @objc func scrollTableView(notification: NSNotification) {
@@ -178,6 +180,27 @@ class FeedViewController: UIViewController {
     
     @objc func reloadFeedDisplay(notification: NSNotification) {
         self.tableView.reloadData()
+    }
+    
+    @objc func resetFeedContent(notification: NSNotification) {
+        if Defaults[.startLoadFeed] {
+            Defaults[.startLoadFeed] = false
+            self.setupNevBar()
+            self.viewModel.feeds = []
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
+            }
+            self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.state = .loading
+            self.tableView.isScrollEnabled = false
+            self.tableView.reloadData()
+            if UserManager.shared.isLogin {
+                self.viewModel.getFeedsMembers(isReset: true)
+            } else {
+                self.viewModel.getFeedsGuests(isReset: true)
+            }
+        }
     }
     
     @objc private func leftButtonAction() {
