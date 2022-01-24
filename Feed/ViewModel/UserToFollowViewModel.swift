@@ -19,33 +19,31 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  FeedOpener.swift
+//  UserToFollowViewModel.swift
 //  Feed
 //
-//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 21/1/2565 BE.
 //
 
-import UIKit
 import Core
+import Networking
+import RealmSwift
 
-public enum FeedScene {
-    case feed
-    case userToFollow(UserToFollowViewModel)
-}
-
-public struct FeedOpener {
+public final class UserToFollowViewModel {
+   
+    var user: [Author] = []
+    private let realm = try! Realm()
     
-    public static func open(_ feedScene: FeedScene) -> UIViewController {
-        switch feedScene {
-        case .feed:
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
-            return vc
-        case .userToFollow(let viewModel):
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
-            vc?.viewModel = viewModel
-            return vc ?? UserToFollowViewController()
+    var usersSuggestion: [Author] {
+        let authorRef = self.realm.objects(AuthorRef.self)
+        var users: [Author] = []
+        authorRef.forEach { user in
+            users.append(ContentHelper.shared.authorRefToAuthor(authorRef: user))
         }
+        return users.filter { !ContentHelper.shared.isMyAccount(id: $0.id) }
+    }
+    
+    public init(user: [Author]) {
+        self.user = user
     }
 }

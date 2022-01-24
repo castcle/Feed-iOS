@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7211E78279AAE720018B3E5 /* UserToFollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */; };
+		B7211E7B279AB0AD0018B3E5 /* UserToFollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7211E79279AB0AD0018B3E5 /* UserToFollowTableViewCell.swift */; };
+		B7211E7C279AB0AD0018B3E5 /* UserToFollowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7211E7A279AB0AD0018B3E5 /* UserToFollowTableViewCell.xib */; };
+		B7211E7E279ABF680018B3E5 /* UserToFollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */; };
 		B74CEF0F26C50717006B1F2C /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B74CEF0E26C50717006B1F2C /* Networking.framework */; };
 		B755298C269D654F005D5EB5 /* HashtagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B755298A269D654F005D5EB5 /* HashtagCell.swift */; };
 		B755298D269D654F005D5EB5 /* HashtagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B755298B269D654F005D5EB5 /* HashtagCell.xib */; };
@@ -38,6 +42,10 @@
 		7AE884B44656FAD13A8A0F66 /* Pods-Feed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug.xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug.xcconfig"; sourceTree = "<group>"; };
 		873E0A601CA489F3F5DC455B /* Pods-Feed.debug (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (development).xcconfig"; sourceTree = "<group>"; };
 		A6EDCA42C0CE37F502CE39C3 /* Pods-Feed.debug (production).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (production).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (production).xcconfig"; sourceTree = "<group>"; };
+		B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToFollowViewController.swift; sourceTree = "<group>"; };
+		B7211E79279AB0AD0018B3E5 /* UserToFollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToFollowTableViewCell.swift; sourceTree = "<group>"; };
+		B7211E7A279AB0AD0018B3E5 /* UserToFollowTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserToFollowTableViewCell.xib; sourceTree = "<group>"; };
+		B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToFollowViewModel.swift; sourceTree = "<group>"; };
 		B74CEF0E26C50717006B1F2C /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B755298A269D654F005D5EB5 /* HashtagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCell.swift; sourceTree = "<group>"; };
 		B755298B269D654F005D5EB5 /* HashtagCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HashtagCell.xib; sourceTree = "<group>"; };
@@ -128,6 +136,8 @@
 				B75529A6269E0CF4005D5EB5 /* HashtagCapsuleCell.xib */,
 				B7A71CFC26FC400D0092F318 /* NewPostTableViewCell.swift */,
 				B7A71CFD26FC400D0092F318 /* NewPostTableViewCell.xib */,
+				B7211E79279AB0AD0018B3E5 /* UserToFollowTableViewCell.swift */,
+				B7211E7A279AB0AD0018B3E5 /* UserToFollowTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -144,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				B755299B269D735E005D5EB5 /* FeedViewModel.swift */,
+				B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -205,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				B79281AC2694546C000ED84A /* FeedViewController.swift */,
+				B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -292,6 +304,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7211E7C279AB0AD0018B3E5 /* UserToFollowTableViewCell.xib in Resources */,
 				B7A71CFF26FC400D0092F318 /* NewPostTableViewCell.xib in Resources */,
 				B7A15B1D2795C046001E34DE /* Localizable.strings in Resources */,
 				B75529A8269E0CF4005D5EB5 /* HashtagCapsuleCell.xib in Resources */,
@@ -336,11 +349,14 @@
 				B7A71CFE26FC400D0092F318 /* NewPostTableViewCell.swift in Sources */,
 				B755299E269D7624005D5EB5 /* HashtagSectionController.swift in Sources */,
 				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
+				B7211E7E279ABF680018B3E5 /* UserToFollowViewModel.swift in Sources */,
 				B75529A7269E0CF4005D5EB5 /* HashtagCapsuleCell.swift in Sources */,
 				B755299C269D735E005D5EB5 /* FeedViewModel.swift in Sources */,
 				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
 				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
 				B7A15B1A2795BFBA001E34DE /* Localizable.swift in Sources */,
+				B7211E78279AAE720018B3E5 /* UserToFollowViewController.swift in Sources */,
+				B7211E7B279AB0AD0018B3E5 /* UserToFollowTableViewCell.swift in Sources */,
 				B755298C269D654F005D5EB5 /* HashtagCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
