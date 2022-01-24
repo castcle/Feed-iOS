@@ -232,7 +232,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             if UserManager.shared.isLogin {
                 if section == 0 {
-                    return 2
+                    if self.viewModel.usersSuggestion.count > 1 {
+                        return 2
+                    } else {
+                        return 1
+                    }
                 } else {
                     let feed = self.viewModel.feeds[section - 1]
                     if feed.type == .suggestionFollow {
@@ -275,7 +279,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         cell?.configCell()
                         return cell ?? NewPostTableViewCell()
                     } else {
-                        return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: [], cellType: .activity, tableView: tableView, indexPath: indexPath)
+                        return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: self.viewModel.usersSuggestion, cellType: .activity, tableView: tableView, indexPath: indexPath)
                     }
                 } else {
                     let feed = self.viewModel.feeds[indexPath.section - 1]
@@ -443,11 +447,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            if user.isEmpty {
-                cell?.configCell(user: [], isMock: true)
-            } else {
-                cell?.configCell(user: user, isMock: false)
-            }
+            cell?.configCell(user: user)
             return cell ?? SuggestionUserTableViewCell()
         } else if feedType == .content {
             var originalContent = Content()
@@ -551,13 +551,8 @@ extension FeedViewController: FooterTableViewCellDelegate {
 
 extension FeedViewController: SuggestionUserTableViewCellDelegate {
     func didSeeMore(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: [Author]) {
-        if user.isEmpty {
-            let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user, isMock: true)))
-            Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
-        } else {
-            let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user, isMock: false)))
-            Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
-        }
+        let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user)))
+        Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
     }
     
     func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
@@ -570,10 +565,6 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
-    }
-    
-    func didMockViewProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
-        ProfileOpener.openProfileDetail(.people, castcleId: UserManager.shared.rawCastcleId, displayName: UserManager.shared.displayName, page: nil)
     }
 }
 

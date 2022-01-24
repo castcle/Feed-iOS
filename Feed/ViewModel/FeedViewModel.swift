@@ -51,6 +51,15 @@ final class FeedViewModel {
         case loading
         case loaded
     }
+    
+    var usersSuggestion: [Author] {
+        let authorRef = self.realm.objects(AuthorRef.self)
+        var users: [Author] = []
+        authorRef.forEach { user in
+            users.append(ContentHelper.shared.authorRefToAuthor(authorRef: user))
+        }
+        return users.filter { !ContentHelper.shared.isMyAccount(id: $0.id) }
+    }
 
     //MARK: Input
     public func getHashtags() {

@@ -25,17 +25,27 @@
 //  Created by Castcle Co., Ltd. on 21/1/2565 BE.
 //
 
+import Core
 import Networking
+import RealmSwift
 
 public final class UserToFollowViewModel {
    
     var user: [Author] = []
     let tokenHelper: TokenHelper = TokenHelper()
-    var isMock: Bool = false
+    private let realm = try! Realm()
     
-    public init(user: [Author], isMock: Bool) {
+    var usersSuggestion: [Author] {
+        let authorRef = self.realm.objects(AuthorRef.self)
+        var users: [Author] = []
+        authorRef.forEach { user in
+            users.append(ContentHelper.shared.authorRefToAuthor(authorRef: user))
+        }
+        return users.filter { !ContentHelper.shared.isMyAccount(id: $0.id) }
+    }
+    
+    public init(user: [Author]) {
         self.user = user
-        self.isMock = isMock
         self.tokenHelper.delegate = self
     }
 }

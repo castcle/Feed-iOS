@@ -31,6 +31,7 @@ import Networking
 import Profile
 import Authen
 import Kingfisher
+import RealmSwift
 
 class UserToFollowTableViewCell: UITableViewCell {
 
@@ -45,11 +46,10 @@ class UserToFollowTableViewCell: UITableViewCell {
     
     private var userRepository: UserRepository = UserRepositoryImpl()
     private var user: Author = Author()
-    private var isMock: Bool = true
-    private var isFollow: Bool = false
     let tokenHelper: TokenHelper = TokenHelper()
     private var stage: Stage = .none
     private var userRequest: UserRequest = UserRequest()
+    private let realm = try! Realm()
     
     enum Stage {
         case followUser
@@ -77,51 +77,44 @@ class UserToFollowTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    public func configCell(user: Author, isMock: Bool) {
-        self.isMock = isMock
-        if isMock {
+    public func configCell(user: Author) {
+        self.user = user
+        let userAvatar = URL(string: self.user.avatar.thumbnail)
+        self.userAvatarImage.kf.setImage(with: userAvatar, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
+        self.userNoticeLabel.text = self.user.aggregator.message
+        self.userDisplayNameLabel.text = self.user.displayName
+        self.userIdLabel.text = "@\(self.user.castcleId)"
+        self.userDescLabel.text = self.user.overview
+        if self.user.verified.official {
+            self.userVerifyImage.isHidden = false
+        } else {
+            self.userVerifyImage.isHidden = true
+        }
+        self.updateUserFollow()
+    }
+    
+    private func updateUserFollow() {
+        if self.user.followed {
+            self.userFollowButton.setTitle("Following", for: .normal)
+            self.userFollowButton.setTitleColor(UIColor.Asset.white, for: .normal)
+            self.userFollowButton.capsule(color: UIColor.Asset.lightBlue, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
+        } else {
             self.userFollowButton.setTitle("Follow", for: .normal)
             self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
             self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-            
-            let url = URL(string: UserManager.shared.avatar)
-            self.userAvatarImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
-            
-            self.userNoticeLabel.text = "Chutima Kotxgapan and 21 others follow"
-            self.userDisplayNameLabel.text = UserManager.shared.displayName
-            self.userIdLabel.text = "@\(UserManager.shared.rawCastcleId)"
-        } else {
-            self.user = user
-        }
-    }
-    
-    private func updateFirstUserFollow() {
-        if !self.isMock {
-            if user.followed {
-                self.userFollowButton.setTitle("Following", for: .normal)
-                self.userFollowButton.setTitleColor(UIColor.Asset.white, for: .normal)
-                self.userFollowButton.capsule(color: UIColor.Asset.lightBlue, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-            } else {
-                self.userFollowButton.setTitle("Follow", for: .normal)
-                self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
-                self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-            }
-        } else {
-            if self.isFollow {
-                self.userFollowButton.setTitle("Following", for: .normal)
-                self.userFollowButton.setTitleColor(UIColor.Asset.white, for: .normal)
-                self.userFollowButton.capsule(color: UIColor.Asset.lightBlue, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-            } else {
-                self.userFollowButton.setTitle("Follow", for: .normal)
-                self.userFollowButton.setTitleColor(UIColor.Asset.lightBlue, for: .normal)
-                self.userFollowButton.capsule(color: .clear, borderWidth: 1.0, borderColor: UIColor.Asset.lightBlue)
-            }
         }
     }
     
     private func followUser() {
         self.stage = .followUser
         let userId: String = UserManager.shared.rawCastcleId
+        if let authorRef = ContentHelper.shared.getAuthorRef(castcleId: self.userRequest.targetCastcleId) {
+            try! self.realm.write {
+                authorRef.followed = true
+                self.realm.add(authorRef, update: .modified)
+                NotificationCenter.default.post(name: .feedReloadContent, object: nil)
+            }
+        }
         self.userRepository.follow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
             if !success {
                 if isRefreshToken {
@@ -134,6 +127,13 @@ class UserToFollowTableViewCell: UITableViewCell {
     private func unfollowUser() {
         self.stage = .unfollowUser
         let userId: String = UserManager.shared.rawCastcleId
+        if let authorRef = ContentHelper.shared.getAuthorRef(castcleId: self.userRequest.targetCastcleId) {
+            try! self.realm.write {
+                authorRef.followed = false
+                self.realm.add(authorRef, update: .modified)
+                NotificationCenter.default.post(name: .feedReloadContent, object: nil)
+            }
+        }
         self.userRepository.unfollow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
             if !success {
                 if isRefreshToken {
@@ -144,37 +144,28 @@ class UserToFollowTableViewCell: UITableViewCell {
     }
     
     @IBAction func userFollowAction(_ sender: Any) {
-        if !self.isMock {
-            if UserManager.shared.isLogin {
-                self.userRequest.targetCastcleId = self.user.castcleId
-                if self.user.followed {
-                    self.unfollowUser()
-                } else {
-                    self.followUser()
-                }
-                self.user.followed.toggle()
-                self.updateFirstUserFollow()
+        if UserManager.shared.isLogin {
+            self.userRequest.targetCastcleId = self.user.castcleId
+            if self.user.followed {
+                self.unfollowUser()
             } else {
-                Utility.currentViewController().navigationController?.popViewController(animated: true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
-                    Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
-                }
+                self.followUser()
             }
+            self.user.followed.toggle()
+            self.updateUserFollow()
         } else {
-            self.isFollow.toggle()
-            self.updateFirstUserFollow()
+            Utility.currentViewController().navigationController?.popViewController(animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+                Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+            }
         }
     }
     
     @IBAction func userProfileAction(_ sender: Any) {
-        if !self.isMock {
-            if self.user.type == .page {
-                ProfileOpener.openProfileDetail(self.user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: self.user.id, displayName: self.user.displayName, castcleId: self.user.castcleId, avatar: self.user.avatar.thumbnail, cover: ""))
-            } else {
-                ProfileOpener.openProfileDetail(self.user.type, castcleId: self.user.castcleId, displayName: self.user.displayName, page: nil)
-            }
+        if self.user.type == .page {
+            ProfileOpener.openProfileDetail(self.user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: self.user.id, displayName: self.user.displayName, castcleId: self.user.castcleId, avatar: self.user.avatar.thumbnail, cover: ""))
         } else {
-            ProfileOpener.openProfileDetail(.people, castcleId: UserManager.shared.rawCastcleId, displayName: UserManager.shared.displayName, page: nil)
+            ProfileOpener.openProfileDetail(self.user.type, castcleId: self.user.castcleId, displayName: self.user.displayName, page: nil)
         }
     }
 }

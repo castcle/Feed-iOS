@@ -34,7 +34,7 @@ class UserToFollowViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
     
-    var viewModel = UserToFollowViewModel(user: [], isMock: true)
+    var viewModel = UserToFollowViewModel(user: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +63,7 @@ class UserToFollowViewController: UIViewController {
 
 extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 10
+        return self.viewModel.usersSuggestion.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,11 +72,7 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.userToFollow, for: indexPath as IndexPath) as? UserToFollowTableViewCell
-        if self.viewModel.isMock {
-            cell?.configCell(user: Author(), isMock: self.viewModel.isMock)
-        } else {
-            cell?.configCell(user: self.viewModel.user[indexPath.section], isMock: self.viewModel.isMock)
-        }
+        cell?.configCell(user: self.viewModel.user[indexPath.section])
         cell?.backgroundColor = UIColor.Asset.darkGray
         return cell ?? UserToFollowTableViewCell()
     }
