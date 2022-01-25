@@ -174,6 +174,11 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .resetFeedContent, object: nil)
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        EngagementHelper().sendCastcleAnalytic(event: .onScreenView, screen: .feed)
+    }
+    
     @objc func scrollTableView(notification: NSNotification) {
         self.scrollToTop()
     }
