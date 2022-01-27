@@ -154,7 +154,6 @@ class UserToFollowTableViewCell: UITableViewCell {
             self.user.followed.toggle()
             self.updateUserFollow()
         } else {
-            Utility.currentViewController().navigationController?.popViewController(animated: true)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
                 Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
             }
