@@ -29,6 +29,7 @@ import UIKit
 import Core
 import Defaults
 import Networking
+import Component
 
 class UserToFollowViewController: UIViewController {
 
@@ -40,6 +41,21 @@ class UserToFollowViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
         self.configureTableView()
+        
+        self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.tableView.cr.endHeaderRefresh()
+                self.tableView.cr.resetNoMore()
+            }
+        }
+        
+        self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.tableView.cr.noticeNoMoreData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
