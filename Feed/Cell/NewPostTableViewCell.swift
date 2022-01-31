@@ -52,6 +52,7 @@ class NewPostTableViewCell: UITableViewCell {
     func configCell() {
         let url = URL(string: UserManager.shared.avatar)
         self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
+        self.placeholderLabel.text = Localization.feed.post.text
     }
     
     @IBAction func postAction(_ sender: Any) {

@@ -29,7 +29,8 @@ import Core
 import Foundation
 import Networking
 import SwiftyJSON
-import SwiftUI
+import RealmSwift
+import Defaults
 
 final class FeedViewModel {
    
@@ -45,6 +46,7 @@ final class FeedViewModel {
     var state: State = .loading
     var isFirstLaunch: Bool = true
     private var isReset: Bool = true
+    private let realm = try! Realm()
     
     enum State {
         case loading
@@ -68,6 +70,7 @@ final class FeedViewModel {
     
     public func getFeedsGuests(isReset: Bool) {
         self.isReset = isReset
+        self.feedRequest.userFields = .none
         self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
@@ -97,6 +100,7 @@ final class FeedViewModel {
     
     public func getFeedsMembers(isReset: Bool) {
         self.isReset = isReset
+        self.feedRequest.userFields = .relationships
         self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
@@ -130,6 +134,42 @@ final class FeedViewModel {
     
     public init() {
         self.tokenHelper.delegate = self
+    }
+    
+    private func isSeenContent(feedId: String) -> Bool {
+        let seenId = Defaults[.seenId]
+        if seenId.isEmpty {
+            return false
+        } else {
+            let seenIdArr = seenId.components(separatedBy: "|")
+            if seenIdArr.contains(feedId) {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    func seenContent(feedId: String) {
+        DispatchQueue.background(background: {
+            if !self.isSeenContent(feedId: feedId) {
+                let engagement = EngagementHelper()
+                engagement.seenContent(feedId: feedId)
+                let seenId = Defaults[.seenId]
+                if seenId.isEmpty {
+                    Defaults[.seenId] = feedId
+                } else {
+                    Defaults[.seenId] = "\(seenId)|\(feedId)"
+                }
+            }
+        })
+    }
+    
+    func castOffView(feedId: String) {
+        DispatchQueue.background(background: {
+            let engagement = EngagementHelper()
+            engagement.castOffView(feedId: feedId)
+        })
     }
 }
 

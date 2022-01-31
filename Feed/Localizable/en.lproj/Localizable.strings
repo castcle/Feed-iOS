@@ -18,34 +18,14 @@
 //  Please contact Castcle, 22 Phet Kasem 47/2 Alley, Bang Khae, Bangkok,
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
-//
-//  FeedOpener.swift
-//  Feed
-//
-//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
-//
+/*
+  Localizable.strings
+  Feed
 
-import UIKit
-import Core
+  Created by Tanakorn Phoochaliaw on 17/1/2565 BE.
+  
+*/
 
-public enum FeedScene {
-    case feed
-    case userToFollow(UserToFollowViewModel)
-}
-
-public struct FeedOpener {
-    
-    public static func open(_ feedScene: FeedScene) -> UIViewController {
-        switch feedScene {
-        case .feed:
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
-            return vc
-        case .userToFollow(let viewModel):
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
-            vc?.viewModel = viewModel
-            return vc ?? UserToFollowViewController()
-        }
-    }
-}
+// MARK: - Feed
+"feed_title"                                = "For You";
+"feed_post"                                 = "What's in your mind?";

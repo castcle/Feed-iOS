@@ -19,33 +19,28 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  FeedOpener.swift
+//  Localizable.swift
 //  Feed
 //
-//  Created by Castcle Co., Ltd. on 6/7/2564 BE.
+//  Created by Castcle Co., Ltd. on 17/1/2565 BE.
 //
 
-import UIKit
 import Core
 
-public enum FeedScene {
-    case feed
-    case userToFollow(UserToFollowViewModel)
-}
-
-public struct FeedOpener {
+extension Localization {
     
-    public static func open(_ feedScene: FeedScene) -> UIViewController {
-        switch feedScene {
-        case .feed:
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
-            return vc
-        case .userToFollow(let viewModel):
-            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
-            vc?.viewModel = viewModel
-            return vc ?? UserToFollowViewController()
+    // MARK: - Feed
+    public enum feed {
+        case title
+        case post
+        
+        public var text: String {
+            switch self {
+            case .title:
+                return "feed_title".localized(bundle: ConfigBundle.feed)
+            case .post:
+                return "feed_post".localized(bundle: ConfigBundle.feed)
+            }
         }
     }
 }
