@@ -52,15 +52,6 @@ final class FeedViewModel {
         case loading
         case loaded
     }
-    
-    var usersSuggestion: [Author] {
-        let authorRef = self.realm.objects(AuthorRef.self)
-        var users: [Author] = []
-        authorRef.forEach { user in
-            users.append(ContentHelper.shared.authorRefToAuthor(authorRef: user))
-        }
-        return users.filter { !ContentHelper.shared.isMyAccount(id: $0.id) }
-    }
 
     //MARK: Input
     public func getHashtags() {
@@ -145,13 +136,13 @@ final class FeedViewModel {
         self.tokenHelper.delegate = self
     }
     
-    private func isSeenContent(contentId: String) -> Bool {
+    private func isSeenContent(feedId: String) -> Bool {
         let seenId = Defaults[.seenId]
         if seenId.isEmpty {
             return false
         } else {
             let seenIdArr = seenId.components(separatedBy: "|")
-            if seenIdArr.contains(contentId) {
+            if seenIdArr.contains(feedId) {
                 return true
             } else {
                 return false
@@ -159,25 +150,25 @@ final class FeedViewModel {
         }
     }
     
-    func seenContent(contentId: String) {
+    func seenContent(feedId: String) {
         DispatchQueue.background(background: {
-            if !self.isSeenContent(contentId: contentId) {
+            if !self.isSeenContent(feedId: feedId) {
                 let engagement = EngagementHelper()
-                engagement.seenContent(contentId: contentId)
+                engagement.seenContent(feedId: feedId)
                 let seenId = Defaults[.seenId]
                 if seenId.isEmpty {
-                    Defaults[.seenId] = contentId
+                    Defaults[.seenId] = feedId
                 } else {
-                    Defaults[.seenId] = "\(seenId)|\(contentId)"
+                    Defaults[.seenId] = "\(seenId)|\(feedId)"
                 }
             }
         })
     }
     
-    func castOffView(contentId: String) {
+    func castOffView(feedId: String) {
         DispatchQueue.background(background: {
             let engagement = EngagementHelper()
-            engagement.castOffView(contentId: contentId)
+            engagement.castOffView(feedId: feedId)
         })
     }
 }
@@ -188,19 +179,6 @@ extension FeedViewModel: TokenHelperDelegate {
             self.getFeedsMembers(isReset: self.isReset)
         } else {
             self.getFeedsGuests(isReset: self.isReset)
-        }
-    }
-}
-
-extension DispatchQueue {
-    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
-        DispatchQueue.global(qos: .background).async {
-            background?()
-            if let completion = completion {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                    completion()
-                })
-            }
         }
     }
 }

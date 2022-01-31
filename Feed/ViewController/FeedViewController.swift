@@ -124,10 +124,10 @@ class FeedViewController: UIViewController {
             menuIcon.addTarget(self, action: #selector(self.settingAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: menuIcon))
             
-            let airdropIcon = NavBarButtonType.airdrop.barButton
-            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
-            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
-            rightButton.append(UIBarButtonItem(customView: airdropIcon))
+//            let airdropIcon = NavBarButtonType.airdrop.barButton
+//            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
+//            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
+//            rightButton.append(UIBarButtonItem(customView: airdropIcon))
         } else {
             let rightIcon = NavBarButtonType.righProfile.barButton
             rightIcon.addTarget(self, action: #selector(self.authAction), for: .touchUpInside)
@@ -172,6 +172,11 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
         NotificationCenter.default.removeObserver(self, name: .feedReloadContent, object: nil)
         NotificationCenter.default.removeObserver(self, name: .resetFeedContent, object: nil)
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        EngagementHelper().sendCastcleAnalytic(event: .onScreenView, screen: .feed)
     }
     
     @objc func scrollTableView(notification: NSNotification) {
@@ -255,11 +260,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             if UserManager.shared.isLogin {
                 if section == 0 {
-                    if self.viewModel.usersSuggestion.count > 1 {
-                        return 2
-                    } else {
-                        return 1
-                    }
+                    return 1
                 } else {
                     let feed = self.viewModel.feeds[section - 1]
                     if feed.type == .suggestionFollow {
@@ -296,14 +297,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             if UserManager.shared.isLogin {
                 if indexPath.section == 0 {
-                    if indexPath.row == 0 {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
-                        cell?.backgroundColor = UIColor.Asset.darkGray
-                        cell?.configCell()
-                        return cell ?? NewPostTableViewCell()
-                    } else {
-                        return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: self.viewModel.usersSuggestion, cellType: .activity, tableView: tableView, indexPath: indexPath)
-                    }
+                    let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
+                    cell?.backgroundColor = UIColor.Asset.darkGray
+                    cell?.configCell()
+                    return cell ?? NewPostTableViewCell()
                 } else {
                     let feed = self.viewModel.feeds[indexPath.section - 1]
                     if feed.type == .suggestionFollow {
@@ -315,7 +312,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                             } else if indexPath.row == 1 {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                             } else if indexPath.row == 2 {
-                                self.viewModel.seenContent(contentId: feed.content.id)
+                                self.viewModel.seenContent(feedId: feed.id)
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                             } else {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -324,7 +321,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                             if indexPath.row == 0 {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                             } else if indexPath.row == 1 {
-                                self.viewModel.seenContent(contentId: feed.content.id)
+                                self.viewModel.seenContent(feedId: feed.id)
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                             } else if indexPath.row == 2 {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, tableView: tableView, indexPath: indexPath)
@@ -335,7 +332,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                             if indexPath.row == 0 {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                             } else if indexPath.row == 1 {
-                                self.viewModel.seenContent(contentId: feed.content.id)
+                                self.viewModel.seenContent(feedId: feed.id)
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                             } else {
                                 return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -354,7 +351,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         } else if indexPath.row == 1 {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 2 {
-                            self.viewModel.seenContent(contentId: feed.content.id)
+                            self.viewModel.seenContent(feedId: feed.id)
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -363,7 +360,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
-                            self.viewModel.seenContent(contentId: feed.content.id)
+                            self.viewModel.seenContent(feedId: feed.id)
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 2 {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, tableView: tableView, indexPath: indexPath)
@@ -374,7 +371,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         if indexPath.row == 0 {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
                         } else if indexPath.row == 1 {
-                            self.viewModel.seenContent(contentId: feed.content.id)
+                            self.viewModel.seenContent(feedId: feed.id)
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
                         } else {
                             return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
@@ -438,7 +435,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loaded {
             var index: Int = 0
             if UserManager.shared.isLogin {
-                if indexPath.section != 0 {
+                if indexPath.section > 0 {
                     index = indexPath.section - 1
                 } else {
                     return
@@ -454,11 +451,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if feed.type == .content {
                 if feed.content.referencedCasts.type == .recasted {
                     if indexPath.row == 2 {
-                        self.viewModel.castOffView(contentId: feed.content.id)
+                        self.viewModel.castOffView(feedId: feed.id)
                     }
                 } else {
                     if indexPath.row == 1 {
-                        self.viewModel.castOffView(contentId: feed.content.id)
+                        self.viewModel.castOffView(feedId: feed.id)
                     }
                 }
             }
