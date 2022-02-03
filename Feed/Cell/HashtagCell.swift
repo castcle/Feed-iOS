@@ -70,13 +70,11 @@ extension HashtagCell: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         if let hashtag = self.hashtagShelf?.hashtags[indexPath.row], let index = self.selectIndex {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedNibVars.CollectionViewCell.hashtagCapsule, for: indexPath as IndexPath) as? HashtagCapsuleCell
             cell?.titleLabel.text = hashtag.name
-            
             if index == indexPath.row {
                 cell?.configCell(isSelect: true)
             } else {
                 cell?.configCell(isSelect: false)
             }
-            
             return cell ?? UICollectionViewCell()
         } else {
             return UICollectionViewCell()
