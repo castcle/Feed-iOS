@@ -251,7 +251,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loading {
             return 5
         } else {
-            return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 2 : 1)
+            return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 3 : 2)
         }
     }
     
@@ -264,8 +264,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     return 1
                 } else if section == 1 {
                     return 2
+                } else if section == 2 {
+                    return 3
                 } else {
-                    let feed = self.viewModel.feeds[section - 2]
+                    let feed = self.viewModel.feeds[section - 3]
                     if feed.type == .suggestionFollow {
                         return 1
                     } else {
@@ -279,8 +281,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             } else {
                 if section == 0 {
                     return 2
+                } else if section == 1 {
+                    return 3
                 } else {
-                    let feed = self.viewModel.feeds[section - 1]
+                    let feed = self.viewModel.feeds[section - 2]
                     if feed.type == .suggestionFollow {
                         return 1
                     } else {
@@ -314,8 +318,19 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     } else {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .pageAds, tableView: tableView, indexPath: indexPath)
                     }
+                } else if indexPath.section == 2 {
+                    if indexPath.row == 0 {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
+                    } else if indexPath.row == 1 {
+                        let content = Content()
+                        content.type = .short
+                        content.message = "It’s mind blowing to me that none of the hundred crypto wallets out there have a function that shows your dollar-cost-average AND your %  gain/loss. Deposits could just be prices at the time of deposit. It’s a no brainer. "
+                        return self.renderFeedCell(feedType: .ads, content: content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                    }
                 } else {
-                    let feed = self.viewModel.feeds[indexPath.section - 2]
+                    let feed = self.viewModel.feeds[indexPath.section - 3]
                     if feed.type == .suggestionFollow {
                         return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, tableView: tableView, indexPath: indexPath)
                     } else {
@@ -360,8 +375,19 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     } else {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .pageAds, tableView: tableView, indexPath: indexPath)
                     }
+                } else if indexPath.section == 1 {
+                    if indexPath.row == 0 {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
+                    } else if indexPath.row == 1 {
+                        let content = Content()
+                        content.type = .short
+                        content.message = "It’s mind blowing to me that none of the hundred crypto wallets out there have a function that shows your dollar-cost-average AND your %  gain/loss. Deposits could just be prices at the time of deposit. It’s a no brainer. "
+                        return self.renderFeedCell(feedType: .ads, content: content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                    }
                 } else {
-                    let feed = self.viewModel.feeds[indexPath.section - 1]
+                    let feed = self.viewModel.feeds[indexPath.section - 2]
                     if feed.type == .suggestionFollow {
                         return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, tableView: tableView, indexPath: indexPath)
                     } else {
@@ -415,40 +441,40 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if UserManager.shared.isLogin {
-            if indexPath.section < 2 {
+            if indexPath.section < 3 {
                 return
             }
-            let feed = self.viewModel.feeds[indexPath.section - 2]
+            let feed = self.viewModel.feeds[indexPath.section - 3]
             if feed.type != .content {
                 return
             }
             if feed.content.referencedCasts.type == .recasted {
                 if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section - 1].content.isExpand.toggle()
+                    self.viewModel.feeds[indexPath.section - 3].content.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
                 if feed.content.type == .long && indexPath.row == 1 {
-                    self.viewModel.feeds[indexPath.section - 1].content.isExpand.toggle()
+                    self.viewModel.feeds[indexPath.section - 3].content.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }
         } else {
-            if indexPath.section < 1 {
+            if indexPath.section < 3 {
                 return
             }
-            let feed = self.viewModel.feeds[indexPath.section - 1]
+            let feed = self.viewModel.feeds[indexPath.section - 3]
             if feed.type != .content {
                 return
             }
             if feed.content.referencedCasts.type == .recasted {
                 if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section].content.isExpand.toggle()
+                    self.viewModel.feeds[indexPath.section - 2].content.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
                 if feed.content.type == .long && indexPath.row == 1 {
-                    self.viewModel.feeds[indexPath.section].content.isExpand.toggle()
+                    self.viewModel.feeds[indexPath.section - 2].content.isExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }
@@ -459,14 +485,14 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loaded {
             var index: Int = 0
             if UserManager.shared.isLogin {
-                if indexPath.section > 1 {
-                    index = indexPath.section - 2
+                if indexPath.section > 2 {
+                    index = indexPath.section - 3
                 } else {
                     return
                 }
             } else {
-                if indexPath.section > 0 {
-                    index = indexPath.section - 1
+                if indexPath.section > 1 {
+                    index = indexPath.section - 2
                 } else {
                     return
                 }
