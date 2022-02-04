@@ -35,7 +35,7 @@ class UserToFollowViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
     
-    var viewModel = UserToFollowViewModel(user: [])
+    var viewModel = UserToFollowViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +79,7 @@ class UserToFollowViewController: UIViewController {
 
 extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.usersSuggestion.count
+        return self.viewModel.user.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

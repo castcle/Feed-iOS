@@ -571,7 +571,7 @@ extension FeedViewController: FooterTableViewCellDelegate {
 
 extension FeedViewController: SuggestionUserTableViewCellDelegate {
     func didSeeMore(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: [Author]) {
-        let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user)))
+        let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel()))
         Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
     }
     
