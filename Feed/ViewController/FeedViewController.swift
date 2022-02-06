@@ -53,6 +53,7 @@ class FeedViewController: UIViewController {
         case quote
         case footer
         case pageAds
+        case reach
         case none
     }
     
@@ -263,9 +264,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 if section == 0 {
                     return 1
                 } else if section == 1 {
-                    return 2
-                } else if section == 2 {
                     return 3
+                } else if section == 2 {
+                    return 4
                 } else {
                     let feed = self.viewModel.feeds[section - 3]
                     if feed.type == .suggestionFollow {
@@ -280,9 +281,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             } else {
                 if section == 0 {
-                    return 2
-                } else if section == 1 {
                     return 3
+                } else if section == 1 {
+                    return 4
                 } else {
                     let feed = self.viewModel.feeds[section - 2]
                     if feed.type == .suggestionFollow {
@@ -315,8 +316,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 } else if indexPath.section == 1 {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
-                    } else {
+                    } else if indexPath.row == 1 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .pageAds, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .reach, tableView: tableView, indexPath: indexPath)
                     }
                 } else if indexPath.section == 2 {
                     if indexPath.row == 0 {
@@ -326,8 +329,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         content.type = .short
                         content.message = "It’s mind blowing to me that none of the hundred crypto wallets out there have a function that shows your dollar-cost-average AND your %  gain/loss. Deposits could just be prices at the time of deposit. It’s a no brainer. "
                         return self.renderFeedCell(feedType: .ads, content: content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
-                    } else {
+                    } else if indexPath.row == 2 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .reach, tableView: tableView, indexPath: indexPath)
                     }
                 } else {
                     let feed = self.viewModel.feeds[indexPath.section - 3]
@@ -372,8 +377,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 if indexPath.section == 0 {
                     if indexPath.row == 0 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .header, tableView: tableView, indexPath: indexPath)
-                    } else {
+                    } else if indexPath.row == 1 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .pageAds, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .reach, tableView: tableView, indexPath: indexPath)
                     }
                 } else if indexPath.section == 1 {
                     if indexPath.row == 0 {
@@ -383,8 +390,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                         content.type = .short
                         content.message = "It’s mind blowing to me that none of the hundred crypto wallets out there have a function that shows your dollar-cost-average AND your %  gain/loss. Deposits could just be prices at the time of deposit. It’s a no brainer. "
                         return self.renderFeedCell(feedType: .ads, content: content, user: [], cellType: .content, tableView: tableView, indexPath: indexPath)
-                    } else {
+                    } else if indexPath.row == 2 {
                         return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .footer, tableView: tableView, indexPath: indexPath)
+                    } else {
+                        return self.renderFeedCell(feedType: .ads, content: Content(), user: [], cellType: .reach, tableView: tableView, indexPath: indexPath)
                     }
                 } else {
                     let feed = self.viewModel.feeds[indexPath.section - 2]
@@ -562,6 +571,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 return cell ?? AdsPageTableViewCell()
+            case .reach:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                return cell ?? ReachedTableViewCell()
             default:
                 if content.referencedCasts.type == .recasted {
                     return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
