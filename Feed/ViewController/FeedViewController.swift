@@ -576,10 +576,18 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 return cell ?? ReachedTableViewCell()
             default:
-                if content.referencedCasts.type == .recasted {
-                    return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                if content.type == .long && !content.isExpand {
+                    if content.referencedCasts.type == .recasted {
+                        return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    } else {
+                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    }
                 } else {
-                    return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    if content.referencedCasts.type == .recasted {
+                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    } else {
+                        return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    }
                 }
             }
         } else {
