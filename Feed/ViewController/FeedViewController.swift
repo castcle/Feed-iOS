@@ -453,13 +453,20 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.section < 3 {
                 return
             }
+            var originalContent = Content()
             let feed = self.viewModel.feeds[indexPath.section - 3]
+            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
+                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+                    originalContent = tempContent
+                }
+            }
+            
             if feed.type != .content {
                 return
             }
             if feed.content.referencedCasts.type == .recasted {
-                if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section - 3].content.isExpand.toggle()
+                if originalContent.type == .long && indexPath.row == 2 {
+                    self.viewModel.feeds[indexPath.section - 3].content.isOriginalExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
@@ -469,16 +476,24 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         } else {
-            if indexPath.section < 3 {
+            if indexPath.section < 2 {
                 return
             }
-            let feed = self.viewModel.feeds[indexPath.section - 3]
+            var originalContent = Content()
+            let feed = self.viewModel.feeds[indexPath.section - 2]
+            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
+                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+                    originalContent = tempContent
+                }
+            }
+            
             if feed.type != .content {
                 return
             }
+            
             if feed.content.referencedCasts.type == .recasted {
-                if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section - 2].content.isExpand.toggle()
+                if originalContent.type == .long && indexPath.row == 2 {
+                    self.viewModel.feeds[indexPath.section - 2].content.isOriginalExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
@@ -576,15 +591,15 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 return cell ?? ReachedTableViewCell()
             default:
-                if content.type == .long && !content.isExpand {
-                    if content.referencedCasts.type == .recasted {
+                if content.referencedCasts.type == .recasted {
+                    if originalContent.type == .long && !content.isOriginalExpand {
                         return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
                     } else {
-                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
                     }
                 } else {
-                    if content.referencedCasts.type == .recasted {
-                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    if content.type == .long && !content.isExpand {
+                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
                     } else {
                         return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
                     }
