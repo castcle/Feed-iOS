@@ -36,6 +36,12 @@ public final class UserToFollowViewModel {
     var users: [User] = []
     var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
+    var state: State = .loading
+    
+    enum State {
+        case loading
+        case loaded
+    }
     
     public init() {
         self.tokenHelper.delegate = self

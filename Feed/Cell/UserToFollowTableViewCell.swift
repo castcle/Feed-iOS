@@ -88,6 +88,11 @@ class UserToFollowTableViewCell: UITableViewCell {
         } else {
             self.userVerifyImage.isHidden = true
         }
+        if self.user.castcleId == UserManager.shared.rawCastcleId {
+            self.userFollowButton.isHidden = true
+        } else {
+            self.userFollowButton.isHidden = false
+        }
         self.updateUserFollow()
     }
     
