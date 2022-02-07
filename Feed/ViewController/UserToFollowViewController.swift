@@ -42,18 +42,25 @@ class UserToFollowViewController: UIViewController {
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
         self.configureTableView()
         
+        self.viewModel.didLoadSuggestionUserFinish = {
+            self.tableView.cr.endHeaderRefresh()
+            self.tableView.cr.endLoadingMore()
+            self.tableView.reloadData()
+        }
+        
         self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.tableView.cr.endHeaderRefresh()
-                self.tableView.cr.resetNoMore()
-            }
+            self.tableView.cr.resetNoMore()
+            self.viewModel.reloadData()
         }
         
         self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            if self.viewModel.meta.resultCount < self.viewModel.feedRequest.maxResults {
                 self.tableView.cr.noticeNoMoreData()
+            } else {
+                self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
+                self.viewModel.getUserSuggestion()
             }
         }
     }
@@ -79,7 +86,7 @@ class UserToFollowViewController: UIViewController {
 
 extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.viewModel.user.count
+        return self.viewModel.users.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,7 +95,7 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.userToFollow, for: indexPath as IndexPath) as? UserToFollowTableViewCell
-        cell?.configCell(user: self.viewModel.user[indexPath.section])
+        cell?.configCell(user: self.viewModel.users[indexPath.section])
         cell?.backgroundColor = UIColor.Asset.darkGray
         return cell ?? UserToFollowTableViewCell()
     }
