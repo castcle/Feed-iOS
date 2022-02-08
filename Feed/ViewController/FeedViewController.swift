@@ -52,6 +52,8 @@ class FeedViewController: UIViewController {
         case content
         case quote
         case footer
+        case pageAds
+        case reach
         case none
     }
     
@@ -71,7 +73,7 @@ class FeedViewController: UIViewController {
             guard let self = self else { return }
             self.isLoadData = true
             self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.feedRequest.maxResults = 6
             if UserManager.shared.isLogin {
                 self.viewModel.getFeedsMembers(isReset: true)
             } else {
@@ -153,7 +155,7 @@ class FeedViewController: UIViewController {
                 self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
             }
             self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.feedRequest.maxResults = 6
             self.viewModel.state = .loading
             self.tableView.isScrollEnabled = false
             self.tableView.reloadData()
@@ -196,7 +198,7 @@ class FeedViewController: UIViewController {
                 self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
             }
             self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 5
+            self.viewModel.feedRequest.maxResults = 6
             self.viewModel.state = .loading
             self.tableView.isScrollEnabled = false
             self.tableView.reloadData()
@@ -236,7 +238,7 @@ class FeedViewController: UIViewController {
     
     @IBAction func retryAction(_ sender: Any) {
         self.viewModel.feedRequest.untilId = ""
-        self.viewModel.feedRequest.maxResults = 5
+        self.viewModel.feedRequest.maxResults = 6
         if UserManager.shared.isLogin {
             self.viewModel.getFeedsMembers(isReset: true)
         } else {
@@ -397,13 +399,20 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.section < 1 {
                 return
             }
+            var originalContent = Content()
             let feed = self.viewModel.feeds[indexPath.section - 1]
+            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
+                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+                    originalContent = tempContent
+                }
+            }
+            
             if feed.type != .content {
                 return
             }
             if feed.content.referencedCasts.type == .recasted {
-                if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section - 1].content.isExpand.toggle()
+                if originalContent.type == .long && indexPath.row == 2 {
+                    self.viewModel.feeds[indexPath.section - 1].content.isOriginalExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
@@ -413,13 +422,21 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         } else {
+            var originalContent = Content()
             let feed = self.viewModel.feeds[indexPath.section]
+            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
+                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+                    originalContent = tempContent
+                }
+            }
+            
             if feed.type != .content {
                 return
             }
+            
             if feed.content.referencedCasts.type == .recasted {
-                if feed.content.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section].content.isExpand.toggle()
+                if originalContent.type == .long && indexPath.row == 2 {
+                    self.viewModel.feeds[indexPath.section].content.isOriginalExpand.toggle()
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             } else {
@@ -469,7 +486,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.delegate = self
             cell?.configCell(user: user)
             return cell ?? SuggestionUserTableViewCell()
-        } else if feedType == .content {
+        } else if feedType == .content || feedType == .ads {
             var originalContent = Content()
             if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
                 if let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
@@ -487,9 +504,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 cell?.backgroundColor = UIColor.Asset.darkGray
                 cell?.delegate = self
                 if content.referencedCasts.type == .recasted {
-                    cell?.content = originalContent
+                    cell?.configCell(feedType: feedType, content: originalContent)
                 } else {
-                    cell?.content = content
+                    cell?.configCell(feedType: feedType, content: content)
                 }
                 return cell ?? HeaderTableViewCell()
             case .footer:
@@ -504,11 +521,27 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 return cell ?? FooterTableViewCell()
             case .quote:
                 return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
+            case .pageAds:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                return cell ?? AdsPageTableViewCell()
+            case .reach:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                return cell ?? ReachedTableViewCell()
             default:
                 if content.referencedCasts.type == .recasted {
-                    return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    if originalContent.type == .long && !content.isOriginalExpand {
+                        return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    } else {
+                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
+                    }
                 } else {
-                    return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    if content.type == .long && !content.isExpand {
+                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    } else {
+                        return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
+                    }
                 }
             }
         } else {
@@ -571,7 +604,7 @@ extension FeedViewController: FooterTableViewCellDelegate {
 
 extension FeedViewController: SuggestionUserTableViewCellDelegate {
     func didSeeMore(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: [Author]) {
-        let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel(user: user)))
+        let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel()))
         Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
     }
     
