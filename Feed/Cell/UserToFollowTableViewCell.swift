@@ -31,7 +31,6 @@ import Networking
 import Profile
 import Authen
 import Kingfisher
-import RealmSwift
 
 class UserToFollowTableViewCell: UITableViewCell {
 
@@ -45,11 +44,10 @@ class UserToFollowTableViewCell: UITableViewCell {
     @IBOutlet weak var userVerifyImage: UIImageView!
     
     private var userRepository: UserRepository = UserRepositoryImpl()
-    private var user: Author = Author()
+    private var user: User = User()
     let tokenHelper: TokenHelper = TokenHelper()
     private var stage: Stage = .none
     private var userRequest: UserRequest = UserRequest()
-    private let realm = try! Realm()
     
     enum Stage {
         case followUser
@@ -77,9 +75,9 @@ class UserToFollowTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    public func configCell(user: Author) {
+    public func configCell(user: User) {
         self.user = user
-        let userAvatar = URL(string: self.user.avatar.thumbnail)
+        let userAvatar = URL(string: self.user.images.avatar.thumbnail)
         self.userAvatarImage.kf.setImage(with: userAvatar, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
         self.userNoticeLabel.text = self.user.aggregator.message
         self.userDisplayNameLabel.text = self.user.displayName
@@ -89,6 +87,11 @@ class UserToFollowTableViewCell: UITableViewCell {
             self.userVerifyImage.isHidden = false
         } else {
             self.userVerifyImage.isHidden = true
+        }
+        if self.user.castcleId == UserManager.shared.rawCastcleId {
+            self.userFollowButton.isHidden = true
+        } else {
+            self.userFollowButton.isHidden = false
         }
         self.updateUserFollow()
     }
@@ -108,13 +111,6 @@ class UserToFollowTableViewCell: UITableViewCell {
     private func followUser() {
         self.stage = .followUser
         let userId: String = UserManager.shared.rawCastcleId
-        if let authorRef = ContentHelper.shared.getAuthorRef(castcleId: self.userRequest.targetCastcleId) {
-            try! self.realm.write {
-                authorRef.followed = true
-                self.realm.add(authorRef, update: .modified)
-                NotificationCenter.default.post(name: .feedReloadContent, object: nil)
-            }
-        }
         self.userRepository.follow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
             if !success {
                 if isRefreshToken {
@@ -127,13 +123,6 @@ class UserToFollowTableViewCell: UITableViewCell {
     private func unfollowUser() {
         self.stage = .unfollowUser
         let userId: String = UserManager.shared.rawCastcleId
-        if let authorRef = ContentHelper.shared.getAuthorRef(castcleId: self.userRequest.targetCastcleId) {
-            try! self.realm.write {
-                authorRef.followed = false
-                self.realm.add(authorRef, update: .modified)
-                NotificationCenter.default.post(name: .feedReloadContent, object: nil)
-            }
-        }
         self.userRepository.unfollow(userId: userId, userRequest: self.userRequest) { (success, response, isRefreshToken) in
             if !success {
                 if isRefreshToken {
@@ -162,7 +151,7 @@ class UserToFollowTableViewCell: UITableViewCell {
     
     @IBAction func userProfileAction(_ sender: Any) {
         if self.user.type == .page {
-            ProfileOpener.openProfileDetail(self.user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: self.user.id, displayName: self.user.displayName, castcleId: self.user.castcleId, avatar: self.user.avatar.thumbnail, cover: ""))
+            ProfileOpener.openProfileDetail(self.user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: self.user.id, displayName: self.user.displayName, castcleId: self.user.castcleId, avatar: self.user.images.avatar.thumbnail, cover: ""))
         } else {
             ProfileOpener.openProfileDetail(self.user.type, castcleId: self.user.castcleId, displayName: self.user.displayName, page: nil)
         }

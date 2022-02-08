@@ -27,12 +27,59 @@
 
 import Core
 import Networking
-import RealmSwift
+import SwiftyJSON
 
 public final class UserToFollowViewModel {
    
-    var user: [Author] = []
+    private var feedRepository: FeedRepository = FeedRepositoryImpl()
+    var feedRequest: FeedRequest = FeedRequest()
+    var users: [User] = []
+    var meta: Meta = Meta()
+    let tokenHelper: TokenHelper = TokenHelper()
+    var state: State = .loading
+    
+    enum State {
+        case loading
+        case loaded
+    }
     
     public init() {
+        self.tokenHelper.delegate = self
+        self.feedRequest.maxResults = 25
+        self.getUserSuggestion()
+    }
+    
+    public func reloadData() {
+        self.users = []
+        self.meta = Meta()
+        self.getUserSuggestion()
+    }
+    
+    public func getUserSuggestion() {
+        self.feedRequest.userFields = .relationships
+        self.feedRepository.getSuggestionFollow(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+            if success {
+                do {
+                    let rawJson = try response.mapJSON()
+                    let json = JSON(rawJson)
+                    let userData = (json[FeedShelfKey.payload.rawValue].arrayValue).map { User(json: $0) }
+                    self.meta = Meta(json: JSON(json[FeedShelfKey.meta.rawValue].dictionaryValue))
+                    self.users.append(contentsOf: userData)
+                    self.didLoadSuggestionUserFinish?()
+                } catch {}
+            } else {
+                if isRefreshToken {
+                    self.tokenHelper.refreshToken()
+                }
+            }
+        }
+    }
+    
+    var didLoadSuggestionUserFinish: (() -> ())?
+}
+
+extension UserToFollowViewModel: TokenHelperDelegate {
+    public func didRefreshTokenFinish() {
+        self.getUserSuggestion()
     }
 }
