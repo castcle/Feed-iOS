@@ -585,6 +585,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             case .pageAds:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
                 cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.delegate = self
                 return cell ?? AdsPageTableViewCell()
             case .reach:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
@@ -678,6 +679,12 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     }
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
+        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+}
+
+extension FeedViewController: AdsPageTableViewCellDelegate {
+    func didAuthen(_ adsPageTableViewCell: AdsPageTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
     }
 }
