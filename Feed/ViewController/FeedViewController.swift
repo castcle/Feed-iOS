@@ -126,10 +126,10 @@ class FeedViewController: UIViewController {
             menuIcon.addTarget(self, action: #selector(self.settingAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: menuIcon))
             
-//            let airdropIcon = NavBarButtonType.airdrop.barButton
-//            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
-//            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
-//            rightButton.append(UIBarButtonItem(customView: airdropIcon))
+            let airdropIcon = NavBarButtonType.airdrop.barButton
+            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
+            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
+            rightButton.append(UIBarButtonItem(customView: airdropIcon))
         } else {
             let rightIcon = NavBarButtonType.righProfile.barButton
             rightIcon.addTarget(self, action: #selector(self.authAction), for: .touchUpInside)
