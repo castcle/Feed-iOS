@@ -223,7 +223,7 @@ class FeedViewController: UIViewController {
     }
     
     @objc private func airdropAction() {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)")!)), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
     }
     
     public func scrollToTop() {
