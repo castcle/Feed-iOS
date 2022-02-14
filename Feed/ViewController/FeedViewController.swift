@@ -395,6 +395,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if self.viewModel.state == .loading {
+            return
+        }
         if UserManager.shared.isLogin {
             if indexPath.section < 1 {
                 return
