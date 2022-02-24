@@ -33,7 +33,7 @@ public final class UserToFollowViewModel {
    
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var feedRequest: FeedRequest = FeedRequest()
-    var users: [User] = []
+    var users: [UserInfo] = []
     var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
     var state: State = .loading
@@ -62,7 +62,7 @@ public final class UserToFollowViewModel {
                 do {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
-                    let userData = (json[FeedShelfKey.payload.rawValue].arrayValue).map { User(json: $0) }
+                    let userData = (json[FeedShelfKey.payload.rawValue].arrayValue).map { UserInfo(json: $0) }
                     self.meta = Meta(json: JSON(json[FeedShelfKey.meta.rawValue].dictionaryValue))
                     self.users.append(contentsOf: userData)
                     self.didLoadSuggestionUserFinish?()

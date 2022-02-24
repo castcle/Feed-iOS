@@ -563,11 +563,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     }
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
-        if author.type == .page {
-            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(id: author.id, displayName: author.displayName, castcleId: author.castcleId, avatar: author.avatar.thumbnail, cover: ""))
-        } else {
-            ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName, page: nil)
-        }
+        ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName)
     }
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
@@ -613,11 +609,7 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     }
     
     func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
-        if user.type == .page {
-            ProfileOpener.openProfileDetail(user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: user.id, displayName: user.displayName, castcleId: user.castcleId, avatar: user.avatar.thumbnail, cover: ""))
-        } else {
-            ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName, page: nil)
-        }
+        ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName)
     }
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
