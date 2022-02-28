@@ -30,6 +30,8 @@ import Core
 import Defaults
 import Networking
 import Component
+import Authen
+import Profile
 
 class UserToFollowViewController: UIViewController {
 
@@ -83,7 +85,7 @@ class UserToFollowViewController: UIViewController {
         self.tableView.isScrollEnabled = false
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.register(UINib(nibName: FeedNibVars.TableViewCell.userToFollow, bundle: ConfigBundle.feed), forCellReuseIdentifier: FeedNibVars.TableViewCell.userToFollow)
+        self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.userToFollow, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.userToFollow)
         self.tableView.register(UINib(nibName: ComponentNibVars.TableViewCell.skeletonUser, bundle: ConfigBundle.component), forCellReuseIdentifier: ComponentNibVars.TableViewCell.skeletonUser)
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
@@ -110,9 +112,10 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
             cell?.backgroundColor = UIColor.Asset.darkGray
             return cell ?? SkeletonUserTableViewCell()
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.userToFollow, for: indexPath as IndexPath) as? UserToFollowTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.userToFollow, for: indexPath as IndexPath) as? UserToFollowTableViewCell
             cell?.configCell(user: self.viewModel.users[indexPath.section])
             cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
             return cell ?? UserToFollowTableViewCell()
         }
     }
@@ -125,5 +128,17 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
         let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 2))
         footerView.backgroundColor = UIColor.clear
         return footerView
+    }
+}
+
+extension UserToFollowViewController: UserToFollowTableViewCellDelegate {
+    func didTabProfile(_ userToFollowTableViewCell: UserToFollowTableViewCell, author: Author) {
+        ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName:author.displayName)
+    }
+    
+    func didAuthen(_ userToFollowTableViewCell: UserToFollowTableViewCell) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+            Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        }
     }
 }
