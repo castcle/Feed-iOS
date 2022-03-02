@@ -40,7 +40,6 @@ public struct FeedNibVars {
     // MARK: - TableViewCell
     public struct TableViewCell {
         public static let post = "NewPostTableViewCell"
-        public static let userToFollow = "UserToFollowTableViewCell"
     }
     
     // MARK: - CollectionViewCell

@@ -126,10 +126,10 @@ class FeedViewController: UIViewController {
             menuIcon.addTarget(self, action: #selector(self.settingAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: menuIcon))
             
-//            let airdropIcon = NavBarButtonType.airdrop.barButton
-//            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
-//            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
-//            rightButton.append(UIBarButtonItem(customView: airdropIcon))
+            let airdropIcon = NavBarButtonType.wallet.barButton
+            airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
+            airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
+            rightButton.append(UIBarButtonItem(customView: airdropIcon))
         } else {
             let rightIcon = NavBarButtonType.righProfile.barButton
             rightIcon.addTarget(self, action: #selector(self.authAction), for: .touchUpInside)
@@ -223,7 +223,7 @@ class FeedViewController: UIViewController {
     }
     
     @objc private func airdropAction() {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)")!)), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
     }
     
     public func scrollToTop() {
@@ -395,6 +395,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if self.viewModel.state == .loading {
+            return
+        }
         if UserManager.shared.isLogin {
             if indexPath.section < 1 {
                 return
@@ -560,11 +563,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     }
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
-        if author.type == .page {
-            ProfileOpener.openProfileDetail(author.type, castcleId: nil, displayName: "", page: Page().initCustom(id: author.id, displayName: author.displayName, castcleId: author.castcleId, avatar: author.avatar.thumbnail, cover: "", overview: "", official: false))
-        } else {
-            ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName, page: nil)
-        }
+        ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName)
     }
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
@@ -610,11 +609,7 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     }
     
     func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
-        if user.type == .page {
-            ProfileOpener.openProfileDetail(user.type, castcleId: nil, displayName: "", page: Page().initCustom(id: user.id, displayName: user.displayName, castcleId: user.castcleId, avatar: user.avatar.thumbnail, cover: "", overview: "", official: false))
-        } else {
-            ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName, page: nil)
-        }
+        ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName)
     }
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
