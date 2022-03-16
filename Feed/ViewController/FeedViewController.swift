@@ -565,7 +565,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     }
     
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
-        ProfileOpener.openProfileDetail(author.type, castcleId: author.castcleId, displayName: author.displayName)
+        ProfileOpener.openProfileDetail(author.castcleId, displayName: author.displayName)
     }
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
@@ -611,7 +611,7 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     }
     
     func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
-        ProfileOpener.openProfileDetail(user.type, castcleId: user.castcleId, displayName: user.displayName)
+        ProfileOpener.openProfileDetail(user.castcleId, displayName: user.displayName)
     }
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
