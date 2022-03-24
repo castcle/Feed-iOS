@@ -35,6 +35,7 @@ import Profile
 import Setting
 import PanModal
 import Defaults
+import PopupDialog
 
 class FeedViewController: UIViewController {
     
@@ -179,6 +180,38 @@ class FeedViewController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         EngagementHelper().sendCastcleAnalytic(event: .onScreenView, screen: .feed)
+        if Defaults[.isForceUpdate] {
+            self.showAppUpdateAlert(force: true)
+        } else if Defaults[.isSoftUpdate] {
+            self.showAppUpdateAlert(force: false)
+        }
+    }
+    
+    private func showAppUpdateAlert(force: Bool) {
+        var buttonList: [PopupDialogButton] = []
+        let updatePopup = PopupDialog(title: Defaults[.updateTitle],
+                                      message: Defaults[.updateMessage],
+                                      buttonAlignment: .horizontal,
+                                      transitionStyle: .zoomIn,
+                                      tapGestureDismissal: false,
+                                      panGestureDismissal: false,
+                                      hideStatusBar: true)
+        if !force {
+            let cancelButton = CancelButton(title: "Cancel") {
+                print("Cancel")
+            }
+            buttonList.append(cancelButton)
+        }
+        let updateButton = DefaultButton(title: Defaults[.updateButton], dismissOnTap: (force ? false : true)) {
+            Defaults[.isSoftUpdate] = false
+            guard let url = URL(string: Defaults[.updateUrl]) else {
+                return
+            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+        buttonList.append(updateButton)
+        updatePopup.addButtons(buttonList)
+        Utility.currentViewController().present(updatePopup, animated: true, completion: nil)
     }
     
     @objc func scrollTableView(notification: NSNotification) {
