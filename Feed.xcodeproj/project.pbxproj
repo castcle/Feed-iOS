@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B71B204F27F477AD0030721A /* Farming.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71B204E27F477AD0030721A /* Farming.framework */; };
 		B7211E78279AAE720018B3E5 /* UserToFollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */; };
 		B7211E7E279ABF680018B3E5 /* UserToFollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */; };
 		B74CEF0F26C50717006B1F2C /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B74CEF0E26C50717006B1F2C /* Networking.framework */; };
@@ -40,6 +41,7 @@
 		7AE884B44656FAD13A8A0F66 /* Pods-Feed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug.xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug.xcconfig"; sourceTree = "<group>"; };
 		873E0A601CA489F3F5DC455B /* Pods-Feed.debug (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (development).xcconfig"; sourceTree = "<group>"; };
 		A6EDCA42C0CE37F502CE39C3 /* Pods-Feed.debug (production).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.debug (production).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.debug (production).xcconfig"; sourceTree = "<group>"; };
+		B71B204E27F477AD0030721A /* Farming.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Farming.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToFollowViewController.swift; sourceTree = "<group>"; };
 		B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToFollowViewModel.swift; sourceTree = "<group>"; };
 		B74CEF0E26C50717006B1F2C /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B75E62B1269713C5003E1ADA /* Component.framework in Frameworks */,
+				B71B204F27F477AD0030721A /* Farming.framework in Frameworks */,
 				B7910DE926AFCD770097C94E /* Authen.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
 				B74CEF0F26C50717006B1F2C /* Networking.framework in Frameworks */,
@@ -111,6 +114,7 @@
 		9A7B74152E6B2CC57DEC5DED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B71B204E27F477AD0030721A /* Farming.framework */,
 				B7C252D526D3963F00ACBB84 /* Setting.framework */,
 				B7C2525226C84D5600ACBB84 /* Post.framework */,
 				B787962E26C662B800FECC21 /* Share.framework */,
