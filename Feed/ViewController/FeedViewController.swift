@@ -263,7 +263,7 @@ class FeedViewController: UIViewController {
     }
     
     @objc private func authAction() {
-        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
     
     @objc private func settingAction() {
@@ -617,7 +617,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     }
     
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
-        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
     
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
@@ -648,7 +648,7 @@ extension FeedViewController: FooterTableViewCellDelegate {
     }
     
     func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
-        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
     
     func didViewFarmmingHistory(_ footerTableViewCell: FooterTableViewCell) {
@@ -669,13 +669,13 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
     }
     
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
-        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
 }
 
 extension FeedViewController: AdsPageTableViewCellDelegate {
     func didAuthen(_ adsPageTableViewCell: AdsPageTableViewCell) {
-        Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
 }
 
