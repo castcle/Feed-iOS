@@ -49,17 +49,6 @@ class FeedViewController: UIViewController {
     var viewModel = FeedViewModel()
     var isLoadData: Bool = false
     
-    enum FeedCellType {
-        case activity
-        case header
-        case content
-        case quote
-        case footer
-        case pageAds
-        case reach
-        case none
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue

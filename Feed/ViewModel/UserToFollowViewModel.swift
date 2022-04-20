@@ -36,12 +36,7 @@ public final class UserToFollowViewModel {
     var users: [UserInfo] = []
     var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
-    var state: State = .loading
-    
-    enum State {
-        case loading
-        case loaded
-    }
+    var state: LoadState = .loading
     
     public init() {
         self.tokenHelper.delegate = self
@@ -62,8 +57,8 @@ public final class UserToFollowViewModel {
                 do {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
-                    let userData = (json[FeedShelfKey.payload.rawValue].arrayValue).map { UserInfo(json: $0) }
-                    self.meta = Meta(json: JSON(json[FeedShelfKey.meta.rawValue].dictionaryValue))
+                    let userData = (json[JsonKey.payload.rawValue].arrayValue).map { UserInfo(json: $0) }
+                    self.meta = Meta(json: JSON(json[JsonKey.meta.rawValue].dictionaryValue))
                     self.users.append(contentsOf: userData)
                     self.didLoadSuggestionUserFinish?()
                 } catch {}
