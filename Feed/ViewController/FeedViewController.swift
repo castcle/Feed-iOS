@@ -33,9 +33,11 @@ import Post
 import Authen
 import Profile
 import Setting
+import Farming
 import PanModal
 import Defaults
 import PopupDialog
+import SwiftyJSON
 
 class FeedViewController: UIViewController {
     
@@ -46,17 +48,6 @@ class FeedViewController: UIViewController {
     
     var viewModel = FeedViewModel()
     var isLoadData: Bool = false
-    
-    enum FeedCellType {
-        case activity
-        case header
-        case content
-        case quote
-        case footer
-        case pageAds
-        case reach
-        case none
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,6 +136,7 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTableView(notification:)), name: .feedScrollToTop, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadFeedDisplay(notification:)), name: .feedReloadContent, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.resetFeedContent(notification:)), name: .resetFeedContent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.syncTwittwerAutoPost(notification:)), name: .syncTwittwerAutoPost, object: nil)
         Defaults[.screenId] = ScreenId.feed.rawValue
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
@@ -175,6 +167,7 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
         NotificationCenter.default.removeObserver(self, name: .feedReloadContent, object: nil)
         NotificationCenter.default.removeObserver(self, name: .resetFeedContent, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .syncTwittwerAutoPost, object: nil)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -239,6 +232,17 @@ class FeedViewController: UIViewController {
                 self.viewModel.getFeedsMembers(isReset: true)
             } else {
                 self.viewModel.getFeedsGuests(isReset: true)
+            }
+        }
+    }
+    
+    @objc func syncTwittwerAutoPost(notification: NSNotification) {
+        if !Defaults[.startLoadFeed] {
+            Defaults[.startLoadFeed] = true
+            if let dict = notification.userInfo as NSDictionary? {
+                let jsonData = JSON(dict)
+                let pageSocial: PageSocial = PageSocial(json: jsonData)
+                Utility.currentViewController().present(ComponentOpener.open(.syncAutoPostTwitter(SyncTwitterAutoPostViewModel(pageSocial: pageSocial))), animated: true)
             }
         }
     }
@@ -634,6 +638,12 @@ extension FeedViewController: FooterTableViewCellDelegate {
     
     func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
         Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+    }
+    
+    func didViewFarmmingHistory(_ footerTableViewCell: FooterTableViewCell) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+            Utility.currentViewController().navigationController?.pushViewController(FarmingOpener.open(.contentFarming), animated: true)
+        }
     }
 }
 
