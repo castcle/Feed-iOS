@@ -43,15 +43,10 @@ final class FeedViewModel {
     let tokenHelper: TokenHelper = TokenHelper()
     private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
-    var state: State = .loading
+    var state: LoadState = .loading
     var isFirstLaunch: Bool = true
     private var isReset: Bool = true
     private let realm = try! Realm()
-    
-    enum State {
-        case loading
-        case loaded
-    }
 
     //MARK: Input
     public func getHashtags() {

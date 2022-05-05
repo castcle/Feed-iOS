@@ -49,17 +49,6 @@ class FeedViewController: UIViewController {
     var viewModel = FeedViewModel()
     var isLoadData: Bool = false
     
-    enum FeedCellType {
-        case activity
-        case header
-        case content
-        case quote
-        case footer
-        case pageAds
-        case reach
-        case none
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
@@ -636,7 +625,7 @@ extension FeedViewController: HeaderTableViewCellDelegate {
 
 extension FeedViewController: FooterTableViewCellDelegate {
     func didTabComment(_ footerTableViewCell: FooterTableViewCell, content: Content) {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(content: content))), animated: true)
+        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(contentId: content.id))), animated: true)
     }
     
     func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, content: Content, page: Page) {
