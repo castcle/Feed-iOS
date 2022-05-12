@@ -31,17 +31,17 @@ public struct FeedNibVars {
         public static let feed = "FeedViewController"
         public static let userToFollow = "UserToFollowViewController"
     }
-    
+
     // MARK: - View
     public struct Storyboard {
         public static let feed = "Feed"
     }
-    
+
     // MARK: - TableViewCell
     public struct TableViewCell {
         public static let post = "NewPostTableViewCell"
     }
-    
+
     // MARK: - CollectionViewCell
     public struct CollectionViewCell {
         public static let hashtag = "HashtagCell"

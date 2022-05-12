@@ -34,18 +34,18 @@ public enum FeedScene {
 }
 
 public struct FeedOpener {
-    
+
     public static func open(_ feedScene: FeedScene) -> UIViewController {
         switch feedScene {
         case .feed:
             let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
-            return vc
+            let viewController = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.feed)
+            return viewController
         case .userToFollow(let viewModel):
             let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
-            let vc = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
-            vc?.viewModel = viewModel
-            return vc ?? UserToFollowViewController()
+            let viewController = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
+            viewController?.viewModel = viewModel
+            return viewController ?? UserToFollowViewController()
         }
     }
 }

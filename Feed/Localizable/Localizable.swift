@@ -28,12 +28,12 @@
 import Core
 
 extension Localization {
-    
+
     // MARK: - Feed
-    public enum feed {
+    public enum Feed {
         case title
         case post
-        
+
         public var text: String {
             switch self {
             case .title:

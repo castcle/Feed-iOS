@@ -40,28 +40,27 @@ import PopupDialog
 import SwiftyJSON
 
 class FeedViewController: UIViewController {
-    
+
     @IBOutlet var tableView: UITableView!
     @IBOutlet var emptyView: UIView!
     @IBOutlet var emptyTitleLabel: UILabel!
     @IBOutlet var retryButton: UIButton!
-    
+
     var viewModel = FeedViewModel()
     var isLoadData: Bool = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
         self.setupNevBar()
         self.configureTableView()
-        
         self.emptyTitleLabel.font = UIFont.asset(.regular, fontSize: .body)
         self.emptyTitleLabel.textColor = UIColor.Asset.white
         self.retryButton.titleLabel?.font = UIFont.asset(.regular, fontSize: .body)
         self.retryButton.setTitleColor(UIColor.Asset.lightGray, for: .normal)
         self.emptyView.isHidden = true
-        
-        self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+
+        self.tableView.coreRefresh.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
             self.isLoadData = true
             self.viewModel.feedRequest.untilId = ""
@@ -72,8 +71,8 @@ class FeedViewController: UIViewController {
                 self.viewModel.getFeedsGuests(isReset: true)
             }
         }
-        
-        self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
+
+        self.tableView.coreRefresh.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
             if !self.viewModel.meta.oldestId.isEmpty {
                 self.isLoadData = true
@@ -85,39 +84,39 @@ class FeedViewController: UIViewController {
                     self.viewModel.getFeedsGuests(isReset: false)
                 }
             } else {
-                self.tableView.cr.noticeNoMoreData()
+                self.tableView.coreRefresh.noticeNoMoreData()
             }
         }
-        
+
         self.viewModel.didLoadHashtagsFinish = {
             // Load Hastag Finish
         }
-        
+
         self.viewModel.didLoadFeedsFinish = {
             self.viewModel.state = .loaded
             self.tableView.isScrollEnabled = true
             UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                self.tableView.cr.endHeaderRefresh()
-                self.tableView.cr.endLoadingMore()
+                self.tableView.coreRefresh.endHeaderRefresh()
+                self.tableView.coreRefresh.endLoadingMore()
                 self.tableView.reloadData()
                 self.isLoadData = false
             })
         }
     }
-    
+
     private func setupNevBar() {
-        self.customNavigationBar(.primary, title: Localization.feed.title.text, textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
-        
+        self.customNavigationBar(.primary, title: Localization.Feed.title.text, textColor: UIColor.Asset.lightBlue, leftBarButton: .logo)
+
         let leftIcon = NavBarButtonType.logo.barButton
         leftIcon.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftIcon)
-        
+
         var rightButton: [UIBarButtonItem] = []
         if UserManager.shared.isLogin {
             let menuIcon = NavBarButtonType.menu.barButton
             menuIcon.addTarget(self, action: #selector(self.settingAction), for: .touchUpInside)
             rightButton.append(UIBarButtonItem(customView: menuIcon))
-            
+
             let airdropIcon = NavBarButtonType.wallet.barButton
             airdropIcon.addTarget(self, action: #selector(self.airdropAction), for: .touchUpInside)
             airdropIcon.contentEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 5)
@@ -129,7 +128,7 @@ class FeedViewController: UIViewController {
         }
         self.navigationItem.rightBarButtonItems = rightButton
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNevBar()
@@ -161,7 +160,7 @@ class FeedViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .feedScrollToTop, object: nil)
@@ -169,7 +168,7 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .resetFeedContent, object: nil)
         NotificationCenter.default.removeObserver(self, name: .syncTwittwerAutoPost, object: nil)
     }
-    
+
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         EngagementHelper().sendCastcleAnalytic(event: .onScreenView, screen: .feed)
@@ -179,7 +178,7 @@ class FeedViewController: UIViewController {
             self.showAppUpdateAlert(force: false)
         }
     }
-    
+
     private func showAppUpdateAlert(force: Bool) {
         var buttonList: [PopupDialogButton] = []
         let updatePopup = PopupDialog(title: Defaults[.updateTitle],
@@ -206,15 +205,15 @@ class FeedViewController: UIViewController {
         updatePopup.addButtons(buttonList)
         Utility.currentViewController().present(updatePopup, animated: true, completion: nil)
     }
-    
+
     @objc func scrollTableView(notification: NSNotification) {
         self.scrollToTop()
     }
-    
+
     @objc func reloadFeedDisplay(notification: NSNotification) {
         self.tableView.reloadData()
     }
-    
+
     @objc func resetFeedContent(notification: NSNotification) {
         if Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = false
@@ -235,7 +234,7 @@ class FeedViewController: UIViewController {
             }
         }
     }
-    
+
     @objc func syncTwittwerAutoPost(notification: NSNotification) {
         if !Defaults[.startLoadFeed] {
             Defaults[.startLoadFeed] = true
@@ -246,33 +245,33 @@ class FeedViewController: UIViewController {
             }
         }
     }
-    
+
     @objc private func leftButtonAction() {
         self.scrollToTop()
     }
-    
+
     @objc private func authAction() {
         NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
-    
+
     @objc private func settingAction() {
         Utility.currentViewController().navigationController?.pushViewController(SettingOpener.open(.setting), animated: true)
     }
-    
+
     @objc private func airdropAction() {
         Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
     }
-    
+
     public func scrollToTop() {
         if !self.isLoadData {
             if self.tableView.contentOffset == .zero {
-                self.tableView.cr.beginHeaderRefresh()
+                self.tableView.coreRefresh.beginHeaderRefresh()
             } else {
                 self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
             }
         }
     }
-    
+
     @IBAction func retryAction(_ sender: Any) {
         self.viewModel.feedRequest.untilId = ""
         self.viewModel.feedRequest.maxResults = 6
@@ -292,7 +291,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.viewModel.state == .loading {
             return 1
@@ -326,7 +325,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.viewModel.state == .loading {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeleton, for: indexPath as IndexPath) as? SkeletonFeedTableViewCell
@@ -422,17 +421,17 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 5
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 5))
         footerView.backgroundColor = UIColor.clear
         return footerView
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.viewModel.state == .loading {
             return
@@ -448,7 +447,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     originalContent = tempContent
                 }
             }
-            
+
             if feed.type != .content {
                 return
             }
@@ -471,11 +470,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                     originalContent = tempContent
                 }
             }
-            
+
             if feed.type != .content {
                 return
             }
-            
+
             if feed.content.referencedCasts.type == .recasted {
                 if originalContent.type == .long && indexPath.row == 2 {
                     self.viewModel.feeds[indexPath.section].content.isOriginalExpand.toggle()
@@ -489,7 +488,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if self.viewModel.state == .loaded {
             var index: Int = 0
@@ -505,7 +504,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if index >= self.viewModel.feeds.count {
                 return
             }
-            
+
             let feed = self.viewModel.feeds[index]
             if feed.type == .content {
                 if feed.content.referencedCasts.type == .recasted {
@@ -520,7 +519,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
+
     func renderFeedCell(feedType: FeedType, content: Content, user: [Author], cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         if feedType == .suggestionFollow {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
@@ -600,21 +599,21 @@ extension FeedViewController: HeaderTableViewCellDelegate {
             self.tableView.reloadData()
         }
     }
-    
+
     func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
         ProfileOpener.openProfileDetail(author.castcleId, displayName: author.displayName)
     }
-    
+
     func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
         NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
-    
+
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
             }
-            
+
             UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
                 self.viewModel.feeds.remove(at: indexPath.section)
                 self.tableView.reloadData()
@@ -627,21 +626,21 @@ extension FeedViewController: FooterTableViewCellDelegate {
     func didTabComment(_ footerTableViewCell: FooterTableViewCell, content: Content) {
         Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(contentId: content.id))), animated: true)
     }
-    
+
     func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, content: Content, page: Page) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
-            let vc = PostOpener.open(.post(PostViewModel(postType: .quoteCast, content: content, page: page)))
-            vc.modalPresentationStyle = .fullScreen
-            Utility.currentViewController().present(vc, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            let viewController = PostOpener.open(.post(PostViewModel(postType: .quoteCast, content: content, page: page)))
+            viewController.modalPresentationStyle = .fullScreen
+            Utility.currentViewController().present(viewController, animated: true, completion: nil)
         }
     }
-    
+
     func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
         NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
-    
+
     func didViewFarmmingHistory(_ footerTableViewCell: FooterTableViewCell) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             Utility.currentViewController().navigationController?.pushViewController(FarmingOpener.open(.contentFarming), animated: true)
         }
     }
@@ -652,11 +651,11 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
         let viewController = FeedOpener.open(.userToFollow(UserToFollowViewModel()))
         Utility.currentViewController().navigationController?.pushViewController(viewController, animated: true)
     }
-    
+
     func didTabProfile(_ suggestionUserTableViewCell: SuggestionUserTableViewCell, user: Author) {
         ProfileOpener.openProfileDetail(user.castcleId, displayName: user.displayName)
     }
-    
+
     func didAuthen(_ suggestionUserTableViewCell: SuggestionUserTableViewCell) {
         NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
@@ -673,10 +672,8 @@ extension FeedViewController {
         self.tableView.isScrollEnabled = false
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        
         self.tableView.register(UINib(nibName: FeedNibVars.TableViewCell.post, bundle: ConfigBundle.feed), forCellReuseIdentifier: FeedNibVars.TableViewCell.post)
         self.tableView.registerFeedCell()
-        
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 100
     }

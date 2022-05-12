@@ -30,26 +30,26 @@ import Networking
 import SwiftyJSON
 
 public final class UserToFollowViewModel {
-   
+
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var feedRequest: FeedRequest = FeedRequest()
     var users: [UserInfo] = []
     var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
     var state: LoadState = .loading
-    
+
     public init() {
         self.tokenHelper.delegate = self
         self.feedRequest.maxResults = 25
         self.getUserSuggestion()
     }
-    
+
     public func reloadData() {
         self.users = []
         self.meta = Meta()
         self.getUserSuggestion()
     }
-    
+
     public func getUserSuggestion() {
         self.feedRequest.userFields = .relationships
         self.feedRepository.getSuggestionFollow(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
@@ -69,8 +69,8 @@ public final class UserToFollowViewModel {
             }
         }
     }
-    
-    var didLoadSuggestionUserFinish: (() -> ())?
+
+    var didLoadSuggestionUserFinish: (() -> Void)?
 }
 
 extension UserToFollowViewModel: TokenHelperDelegate {
