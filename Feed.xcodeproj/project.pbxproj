@@ -30,6 +30,8 @@
 		B7A71CFE26FC400D0092F318 /* NewPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A71CFC26FC400D0092F318 /* NewPostTableViewCell.swift */; };
 		B7A71CFF26FC400D0092F318 /* NewPostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7A71CFD26FC400D0092F318 /* NewPostTableViewCell.xib */; };
 		B7B3F7BC26F9BA42009C7E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7B3F7BB26F9BA42009C7E4D /* Assets.xcassets */; };
+		B7BC09682833743900BA36E8 /* QuoteCastListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BC09672833743900BA36E8 /* QuoteCastListViewController.swift */; };
+		B7BC096A2833745F00BA36E8 /* QuoteCastListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BC09692833745E00BA36E8 /* QuoteCastListViewModel.swift */; };
 		B7C2525326C84D5600ACBB84 /* Post.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C2525226C84D5600ACBB84 /* Post.framework */; };
 		B7C252D626D3964000ACBB84 /* Setting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C252D526D3963F00ACBB84 /* Setting.framework */; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
@@ -68,6 +70,8 @@
 		B7A71CFC26FC400D0092F318 /* NewPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostTableViewCell.swift; sourceTree = "<group>"; };
 		B7A71CFD26FC400D0092F318 /* NewPostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewPostTableViewCell.xib; sourceTree = "<group>"; };
 		B7B3F7BB26F9BA42009C7E4D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B7BC09672833743900BA36E8 /* QuoteCastListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteCastListViewController.swift; sourceTree = "<group>"; };
+		B7BC09692833745E00BA36E8 /* QuoteCastListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteCastListViewModel.swift; sourceTree = "<group>"; };
 		B7C2525226C84D5600ACBB84 /* Post.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Post.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7C252D526D3963F00ACBB84 /* Setting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Setting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C22DC872E5C9933F81C4C9B8 /* Pods-Feed.release (development).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feed.release (development).xcconfig"; path = "Target Support Files/Pods-Feed/Pods-Feed.release (development).xcconfig"; sourceTree = "<group>"; };
@@ -153,6 +157,7 @@
 			children = (
 				B755299B269D735E005D5EB5 /* FeedViewModel.swift */,
 				B7211E7D279ABF670018B3E5 /* UserToFollowViewModel.swift */,
+				B7BC09692833745E00BA36E8 /* QuoteCastListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 			children = (
 				B79281AC2694546C000ED84A /* FeedViewController.swift */,
 				B7211E77279AAE720018B3E5 /* UserToFollowViewController.swift */,
+				B7BC09672833743900BA36E8 /* QuoteCastListViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -347,9 +353,11 @@
 				B755299E269D7624005D5EB5 /* HashtagSectionController.swift in Sources */,
 				B79281C326945707000ED84A /* FeedOpener.swift in Sources */,
 				B7211E7E279ABF680018B3E5 /* UserToFollowViewModel.swift in Sources */,
+				B7BC09682833743900BA36E8 /* QuoteCastListViewController.swift in Sources */,
 				B75529A7269E0CF4005D5EB5 /* HashtagCapsuleCell.swift in Sources */,
 				B755299C269D735E005D5EB5 /* FeedViewModel.swift in Sources */,
 				B79281AD2694546C000ED84A /* FeedViewController.swift in Sources */,
+				B7BC096A2833745F00BA36E8 /* QuoteCastListViewModel.swift in Sources */,
 				B79281BF269456D7000ED84A /* FeedNibVars.swift in Sources */,
 				B7A15B1A2795BFBA001E34DE /* Localizable.swift in Sources */,
 				B7211E78279AAE720018B3E5 /* UserToFollowViewController.swift in Sources */,

@@ -31,6 +31,7 @@ import Core
 public enum FeedScene {
     case feed
     case userToFollow(UserToFollowViewModel)
+    case quoteCastList(QuoteCastListViewModel)
 }
 
 public struct FeedOpener {
@@ -46,6 +47,11 @@ public struct FeedOpener {
             let viewController = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.userToFollow) as? UserToFollowViewController
             viewController?.viewModel = viewModel
             return viewController ?? UserToFollowViewController()
+        case .quoteCastList(let viewModel):
+            let storyboard: UIStoryboard = UIStoryboard(name: FeedNibVars.Storyboard.feed, bundle: ConfigBundle.feed)
+            let viewController = storyboard.instantiateViewController(withIdentifier: FeedNibVars.ViewController.quoteCastList) as? QuoteCastListViewController
+            viewController?.viewModel = viewModel
+            return viewController ?? QuoteCastListViewController()
         }
     }
 }

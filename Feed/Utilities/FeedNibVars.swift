@@ -30,6 +30,7 @@ public struct FeedNibVars {
     public struct ViewController {
         public static let feed = "FeedViewController"
         public static let userToFollow = "UserToFollowViewController"
+        public static let quoteCastList = "QuoteCastListViewController"
     }
 
     // MARK: - View
