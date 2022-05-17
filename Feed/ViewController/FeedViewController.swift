@@ -34,10 +34,12 @@ import Authen
 import Profile
 import Setting
 import Farming
+import Wallet
 import PanModal
 import Defaults
 import PopupDialog
 import SwiftyJSON
+import FirebaseRemoteConfig
 
 class FeedViewController: UIViewController {
 
@@ -259,7 +261,12 @@ class FeedViewController: UIViewController {
     }
 
     @objc private func airdropAction() {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
+        let menuWallet = RemoteConfig.remoteConfig().configValue(forKey: "menu_wallet").numberValue
+        if menuWallet == 2 {
+            Utility.currentViewController().navigationController?.pushViewController(WalletOpener.open(.wallet), animated: true)
+        } else {
+            Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
+        }
     }
 
     public func scrollToTop() {
