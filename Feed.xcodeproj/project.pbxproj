@@ -33,7 +33,6 @@
 		B7B3F7BC26F9BA42009C7E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7B3F7BB26F9BA42009C7E4D /* Assets.xcassets */; };
 		B7BC09682833743900BA36E8 /* QuoteCastListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BC09672833743900BA36E8 /* QuoteCastListViewController.swift */; };
 		B7BC096A2833745F00BA36E8 /* QuoteCastListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BC09692833745E00BA36E8 /* QuoteCastListViewModel.swift */; };
-		B7C2525326C84D5600ACBB84 /* Post.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C2525226C84D5600ACBB84 /* Post.framework */; };
 		B7C252D626D3964000ACBB84 /* Setting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C252D526D3963F00ACBB84 /* Setting.framework */; };
 		F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0324BE92B3C526E47DA142D5 /* Pods_Feed.framework */; };
 /* End PBXBuildFile section */
@@ -93,7 +92,6 @@
 				B72FDEC128339A2400748D13 /* Wallet.framework in Frameworks */,
 				F8C92321C368BAFE3892C501 /* Pods_Feed.framework in Frameworks */,
 				B74CEF0F26C50717006B1F2C /* Networking.framework in Frameworks */,
-				B7C2525326C84D5600ACBB84 /* Post.framework in Frameworks */,
 				B7C252D626D3964000ACBB84 /* Setting.framework in Frameworks */,
 				B79281CA26959A6F000ED84A /* Core.framework in Frameworks */,
 			);
