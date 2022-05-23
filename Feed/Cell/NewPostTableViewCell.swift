@@ -27,8 +27,8 @@
 
 import UIKit
 import Core
+import Component
 import Profile
-import Post
 import Kingfisher
 
 class NewPostTableViewCell: UITableViewCell {

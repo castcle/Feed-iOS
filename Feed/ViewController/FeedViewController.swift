@@ -29,7 +29,6 @@ import UIKit
 import Core
 import Networking
 import Component
-import Post
 import Authen
 import Profile
 import Setting

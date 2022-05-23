@@ -28,7 +28,6 @@
 import UIKit
 import Core
 import Component
-import Post
 import Profile
 import Farming
 import Networking
