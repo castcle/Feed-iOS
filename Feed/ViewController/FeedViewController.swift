@@ -190,7 +190,7 @@ class FeedViewController: UIViewController {
                                       panGestureDismissal: false,
                                       hideStatusBar: true)
         if !force {
-            let cancelButton = CancelButton(title: "Cancel") {
+            let cancelButton = CancelButton(title: Defaults[.updateButtonCancel]) {
                 print("Cancel")
             }
             buttonList.append(cancelButton)
