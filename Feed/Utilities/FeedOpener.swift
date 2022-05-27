@@ -35,7 +35,6 @@ public enum FeedScene {
 }
 
 public struct FeedOpener {
-
     public static func open(_ feedScene: FeedScene) -> UIViewController {
         switch feedScene {
         case .feed:
