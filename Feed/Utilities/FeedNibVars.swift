@@ -30,18 +30,19 @@ public struct FeedNibVars {
     public struct ViewController {
         public static let feed = "FeedViewController"
         public static let userToFollow = "UserToFollowViewController"
+        public static let quoteCastList = "QuoteCastListViewController"
     }
-    
+
     // MARK: - View
     public struct Storyboard {
         public static let feed = "Feed"
     }
-    
+
     // MARK: - TableViewCell
     public struct TableViewCell {
         public static let post = "NewPostTableViewCell"
     }
-    
+
     // MARK: - CollectionViewCell
     public struct CollectionViewCell {
         public static let hashtag = "HashtagCell"

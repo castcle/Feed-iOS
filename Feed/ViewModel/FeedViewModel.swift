@@ -33,7 +33,7 @@ import RealmSwift
 import Defaults
 
 final class FeedViewModel {
-   
+
     private var feedRepository: FeedRepository = FeedRepositoryImpl()
     var feedRequest: FeedRequest = FeedRequest()
     var hashtagShelf: HashtagShelf = HashtagShelf()
@@ -46,11 +46,10 @@ final class FeedViewModel {
     var state: LoadState = .loading
     var isFirstLaunch: Bool = true
     private var isReset: Bool = true
-    private let realm = try! Realm()
 
-    //MARK: Input
+    // MARK: - Input
     public func getHashtags() {
-        self.feedRepository.getHashtags() { (success, hashtagShelf) in
+        self.feedRepository.getHashtags { (success, hashtagShelf) in
             if success {
                 self.hashtagShelf = hashtagShelf
                 if UserManager.shared.isLogin {
@@ -62,7 +61,7 @@ final class FeedViewModel {
             self.didLoadHashtagsFinish?()
         }
     }
-    
+
     public func getFeedsGuests(isReset: Bool) {
         self.isReset = isReset
         self.feedRequest.userFields = .none
@@ -72,16 +71,13 @@ final class FeedViewModel {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
                     let shelf = FeedShelf(json: json)
-                    
                     self.feedsTemp = []
                     self.feedsTemp.append(contentsOf: shelf.feeds)
-                    
                     if isReset {
                         self.feeds = self.feedsTemp
                     } else {
                         self.feeds.append(contentsOf: self.feedsTemp)
                     }
-                    
                     self.meta = shelf.meta
                     self.didLoadFeedsFinish?()
                 } catch {}
@@ -92,7 +88,7 @@ final class FeedViewModel {
             }
         }
     }
-    
+
     public func getFeedsMembers(isReset: Bool) {
         self.isReset = isReset
         self.feedRequest.userFields = .relationships
@@ -102,16 +98,13 @@ final class FeedViewModel {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
                     let shelf = FeedShelf(json: json)
-                    
                     self.feedsTemp = []
                     self.feedsTemp.append(contentsOf: shelf.feeds)
-                    
                     if isReset {
                         self.feeds = self.feedsTemp
                     } else {
                         self.feeds.append(contentsOf: self.feedsTemp)
                     }
-                    
                     self.meta = shelf.meta
                     self.didLoadFeedsFinish?()
                 } catch {}
@@ -122,15 +115,15 @@ final class FeedViewModel {
             }
         }
     }
-    
-    //MARK: Output
-    var didLoadHashtagsFinish: (() -> ())?
-    var didLoadFeedsFinish: (() -> ())?
-    
+
+    // MARK: - Output
+    var didLoadHashtagsFinish: (() -> Void)?
+    var didLoadFeedsFinish: (() -> Void)?
+
     public init() {
         self.tokenHelper.delegate = self
     }
-    
+
     private func isSeenContent(feedId: String) -> Bool {
         let seenId = Defaults[.seenId]
         if seenId.isEmpty {
@@ -144,7 +137,7 @@ final class FeedViewModel {
             }
         }
     }
-    
+
     func seenContent(feedId: String) {
         DispatchQueue.background(background: {
             if !self.isSeenContent(feedId: feedId) {
@@ -159,7 +152,7 @@ final class FeedViewModel {
             }
         })
     }
-    
+
     func castOffView(feedId: String) {
         DispatchQueue.background(background: {
             let engagement = EngagementHelper()

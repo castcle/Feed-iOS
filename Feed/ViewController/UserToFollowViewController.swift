@@ -36,51 +36,51 @@ import Profile
 class UserToFollowViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
-    
+
     var viewModel = UserToFollowViewModel()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.Asset.darkGraphiteBlue
         self.configureTableView()
-        
+
         self.viewModel.didLoadSuggestionUserFinish = {
             self.tableView.isScrollEnabled = true
             self.viewModel.state = .loaded
-            self.tableView.cr.endHeaderRefresh()
-            self.tableView.cr.endLoadingMore()
+            self.tableView.coreRefresh.endHeaderRefresh()
+            self.tableView.coreRefresh.endLoadingMore()
             UIView.transition(with: self.view, duration: 0.35, options: .transitionCrossDissolve, animations: {
                 self.tableView.reloadData()
             })
         }
-        
-        self.tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+
+        self.tableView.coreRefresh.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
-            self.tableView.cr.resetNoMore()
+            self.tableView.coreRefresh.resetNoMore()
             self.viewModel.reloadData()
         }
-        
-        self.tableView.cr.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
+
+        self.tableView.coreRefresh.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
             if self.viewModel.meta.resultCount < self.viewModel.feedRequest.maxResults {
-                self.tableView.cr.noticeNoMoreData()
+                self.tableView.coreRefresh.noticeNoMoreData()
             } else {
                 self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
                 self.viewModel.getUserSuggestion()
             }
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavBar()
         Defaults[.screenId] = ""
     }
-    
+
     func setupNavBar() {
         self.customNavigationBar(.secondary, title: "Who to follow")
     }
-    
+
     func configureTableView() {
         self.tableView.isScrollEnabled = false
         self.tableView.delegate = self
@@ -100,11 +100,11 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
             return self.viewModel.users.count
         }
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.viewModel.state == .loading {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeletonUser, for: indexPath as IndexPath) as? SkeletonUserTableViewCell
@@ -119,11 +119,11 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
             return cell ?? UserToFollowTableViewCell()
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 2
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 2))
         footerView.backgroundColor = UIColor.clear
@@ -133,12 +133,12 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
 
 extension UserToFollowViewController: UserToFollowTableViewCellDelegate {
     func didTabProfile(_ userToFollowTableViewCell: UserToFollowTableViewCell, author: Author) {
-        ProfileOpener.openProfileDetail(author.castcleId, displayName:author.displayName)
+        ProfileOpener.openProfileDetail(author.castcleId, displayName: author.displayName)
     }
-    
+
     func didAuthen(_ userToFollowTableViewCell: UserToFollowTableViewCell) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
-            Utility.currentViewController().presentPanModal(AuthenOpener.open(.signUpMethod) as! SignUpMethodViewController)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
         }
     }
 }

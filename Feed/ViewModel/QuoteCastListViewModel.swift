@@ -19,48 +19,46 @@
 //  Thailand 10160, or visit www.castcle.com if you need additional information
 //  or have any questions.
 //
-//  UserToFollowViewModel.swift
+//  QuoteCastListViewModel.swift
 //  Feed
 //
-//  Created by Castcle Co., Ltd. on 21/1/2565 BE.
+//  Created by Castcle Co., Ltd. on 13/5/2565 BE.
 //
 
 import Core
 import Networking
 import SwiftyJSON
 
-public final class UserToFollowViewModel {
+final public class QuoteCastListViewModel {
 
-    private var feedRepository: FeedRepository = FeedRepositoryImpl()
-    var feedRequest: FeedRequest = FeedRequest()
-    var users: [UserInfo] = []
-    var meta: Meta = Meta()
+    private var contentRepository: ContentRepository = ContentRepositoryImpl()
+    var contentRequest: ContentRequest = ContentRequest()
     let tokenHelper: TokenHelper = TokenHelper()
-    var state: LoadState = .loading
+    var contents: [Content] = []
+    var meta: Meta = Meta()
+    var loadState: LoadState = .loading
+    var state: State = .none
+    private var contentId: String = ""
 
-    public init() {
+    public init(contentId: String = "") {
+        self.contentId = contentId
+        if !self.contentId.isEmpty {
+            self.getQuoteCast()
+        }
         self.tokenHelper.delegate = self
-        self.feedRequest.maxResults = 25
-        self.getUserSuggestion()
     }
 
-    public func reloadData() {
-        self.users = []
-        self.meta = Meta()
-        self.getUserSuggestion()
-    }
-
-    public func getUserSuggestion() {
-        self.feedRequest.userFields = .relationships
-        self.feedRepository.getSuggestionFollow(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+    func getQuoteCast() {
+        self.contentRepository.getQuoteCast(contentId: self.contentId, contentRequest: self.contentRequest) { (success, response, isRefreshToken) in
             if success {
                 do {
                     let rawJson = try response.mapJSON()
                     let json = JSON(rawJson)
-                    let userData = (json[JsonKey.payload.rawValue].arrayValue).map { UserInfo(json: $0) }
-                    self.meta = Meta(json: JSON(json[JsonKey.meta.rawValue].dictionaryValue))
-                    self.users.append(contentsOf: userData)
-                    self.didLoadSuggestionUserFinish?()
+                    let shelf = ContentShelf(json: json)
+                    self.contents.append(contentsOf: shelf.contents)
+                    self.meta = shelf.meta
+                    self.loadState = .loaded
+                    self.didLoadQuoteCastFinish?()
                 } catch {}
             } else {
                 if isRefreshToken {
@@ -70,11 +68,11 @@ public final class UserToFollowViewModel {
         }
     }
 
-    var didLoadSuggestionUserFinish: (() -> Void)?
+    public var didLoadQuoteCastFinish: (() -> Void)?
 }
 
-extension UserToFollowViewModel: TokenHelperDelegate {
+extension QuoteCastListViewModel: TokenHelperDelegate {
     public func didRefreshTokenFinish() {
-        self.getUserSuggestion()
+        self.getQuoteCast()
     }
 }

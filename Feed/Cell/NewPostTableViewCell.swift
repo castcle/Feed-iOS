@@ -27,8 +27,8 @@
 
 import UIKit
 import Core
+import Component
 import Profile
-import Post
 import Kingfisher
 
 class NewPostTableViewCell: UITableViewCell {
@@ -36,7 +36,7 @@ class NewPostTableViewCell: UITableViewCell {
     @IBOutlet var searchView: UIView!
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var placeholderLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.searchView.custom(color: UIColor.Asset.darkGray, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.darkGraphiteBlue)
@@ -48,19 +48,19 @@ class NewPostTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
+
     func configCell() {
         let url = URL(string: UserManager.shared.avatar)
         self.profileImage.kf.setImage(with: url, placeholder: UIImage.Asset.userPlaceholder, options: [.transition(.fade(0.35))])
-        self.placeholderLabel.text = Localization.feed.post.text
+        self.placeholderLabel.text = Localization.Feed.post.text
     }
-    
+
     @IBAction func postAction(_ sender: Any) {
-        let vc = PostOpener.open(.post(PostViewModel(postType: .newCast)))
-        vc.modalPresentationStyle = .fullScreen
-        Utility.currentViewController().present(vc, animated: true, completion: nil)
+        let viewController = PostOpener.open(.post(PostViewModel(postType: .newCast)))
+        viewController.modalPresentationStyle = .fullScreen
+        Utility.currentViewController().present(viewController, animated: true, completion: nil)
     }
-    
+
     @IBAction func profileAction(_ sender: Any) {
         ProfileOpener.openProfileDetail(UserManager.shared.rawCastcleId, displayName: "")
     }
