@@ -127,10 +127,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
                 return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
             }
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeleton, for: indexPath as IndexPath) as? SkeletonFeedTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
-            cell?.configCell()
-            return cell ?? SkeletonFeedTableViewCell()
+            return FeedCellHelper().renderSkeletonCell(tableView: self.tableView, indexPath: indexPath)
         }
     }
 
@@ -189,14 +186,6 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
 extension QuoteCastListViewController: HeaderTableViewCellDelegate {
     func didRemoveSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         // Remove success
-    }
-
-    func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
-        ProfileOpener.openProfileDetail(author.castcleId, displayName: author.displayName)
-    }
-
-    func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
-        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
 
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
