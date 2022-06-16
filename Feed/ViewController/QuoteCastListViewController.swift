@@ -127,7 +127,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
                 return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
             }
         } else {
-            return FeedCellHelper().renderSkeletonCell(tableView: self.tableView, indexPath: indexPath)
+            return FeedCellHelper().renderSkeletonCell(tableView: tableView, indexPath: indexPath)
         }
     }
 
