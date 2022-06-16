@@ -153,10 +153,8 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
 
     func renderFeedCell(content: Content, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         var originalContent = Content()
-        if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
-            if let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
-                originalContent = tempContent
-            }
+        if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
+            originalContent = tempContent
         }
         switch cellType {
         case .header:
