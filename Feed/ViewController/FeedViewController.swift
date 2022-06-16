@@ -367,28 +367,30 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if self.viewModel.state == .loaded {
-            var index: Int = 0
-            if indexPath.section > 0 {
-                index = indexPath.section - 1
-            } else {
-                return
-            }
-            if index >= self.viewModel.feeds.count {
-                return
-            }
+        if self.viewModel.state == .loading {
+            return
+        }
+        var index: Int = 0
+        if indexPath.section > 0 {
+            index = indexPath.section - 1
+        } else {
+            return
+        }
+        if index >= self.viewModel.feeds.count {
+            return
+        }
 
-            let feed = self.viewModel.feeds[index]
-            if feed.type == .content {
-                if feed.content.referencedCasts.type == .recasted {
-                    if indexPath.row == 2 {
-                        self.viewModel.castOffView(feedId: feed.id)
-                    }
-                } else {
-                    if indexPath.row == 1 {
-                        self.viewModel.castOffView(feedId: feed.id)
-                    }
-                }
+        let feed = self.viewModel.feeds[index]
+        if feed.type != .content {
+            return
+        }
+        if feed.content.referencedCasts.type == .recasted {
+            if indexPath.row == 2 {
+                self.viewModel.castOffView(feedId: feed.id)
+            }
+        } else {
+            if indexPath.row == 1 {
+                self.viewModel.castOffView(feedId: feed.id)
             }
         }
     }
@@ -446,10 +448,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     private func renderFeedCell(type: FeedType, content: Content, user: [Author], cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         if type == .content || type == .ads {
             var originalContent = Content()
-            if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
-                if let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
-                    originalContent = tempContent
-                }
+            if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
+                originalContent = tempContent
             }
             switch cellType {
             case .activity:
