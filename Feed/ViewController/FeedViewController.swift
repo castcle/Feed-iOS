@@ -144,19 +144,7 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
             }
-            DispatchQueue.main.async {
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
-            }
-            self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 6
-            self.viewModel.state = .loading
-            self.tableView.isScrollEnabled = false
-            self.tableView.reloadData()
-            if UserManager.shared.isLogin {
-                self.viewModel.getFeedsMembers(isReset: true)
-            } else {
-                self.viewModel.getFeedsGuests(isReset: true)
-            }
+            self.updateUI()
         } else {
             self.tableView.reloadData()
         }
@@ -177,6 +165,22 @@ class FeedViewController: UIViewController {
             self.showAppUpdateAlert(force: true)
         } else if Defaults[.isSoftUpdate] {
             self.showAppUpdateAlert(force: false)
+        }
+    }
+
+    private func updateUI() {
+        DispatchQueue.main.async {
+            self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
+        }
+        self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.maxResults = 6
+        self.viewModel.state = .loading
+        self.tableView.isScrollEnabled = false
+        self.tableView.reloadData()
+        if UserManager.shared.isLogin {
+            self.viewModel.getFeedsMembers(isReset: true)
+        } else {
+            self.viewModel.getFeedsGuests(isReset: true)
         }
     }
 
@@ -220,19 +224,7 @@ class FeedViewController: UIViewController {
             Defaults[.startLoadFeed] = false
             self.setupNevBar()
             self.viewModel.feeds = []
-            DispatchQueue.main.async {
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
-            }
-            self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 6
-            self.viewModel.state = .loading
-            self.tableView.isScrollEnabled = false
-            self.tableView.reloadData()
-            if UserManager.shared.isLogin {
-                self.viewModel.getFeedsMembers(isReset: true)
-            } else {
-                self.viewModel.getFeedsGuests(isReset: true)
-            }
+            self.updateUI()
         }
     }
 
@@ -354,10 +346,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         }
         var originalContent = Content()
         let feed = self.viewModel.feeds[indexPath.section - 1]
-        if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
-            if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
-                originalContent = tempContent
-            }
+        if (feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+            originalContent = tempContent
         }
 
         if feed.type != .content {
@@ -404,14 +394,13 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     private func renderFeed(feed: Feed, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        switch feed.type {
-        case .suggestionFollow:
+        if feed.type == .suggestionFollow {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
             cell?.configCell(user: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
-        default:
+        } else {
             self.trackingSeenContent(feed: feed, indexPath: indexPath)
             return self.getFeedCellWithFeed(feed: feed, tableView: tableView, indexPath: indexPath)[indexPath.row]
         }
