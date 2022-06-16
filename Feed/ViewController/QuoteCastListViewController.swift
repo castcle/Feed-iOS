@@ -167,7 +167,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            cell?.content = content
+            cell?.configCell(content: content, isCommentView: false)
             return cell ?? FooterTableViewCell()
         case .quote:
             return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
@@ -201,25 +201,11 @@ extension QuoteCastListViewController: HeaderTableViewCellDelegate {
 }
 
 extension QuoteCastListViewController: FooterTableViewCellDelegate {
-    func didTabComment(_ footerTableViewCell: FooterTableViewCell, content: Content) {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(contentId: content.id))), animated: true)
-    }
-
     func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, content: Content, page: Page) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             let viewController = PostOpener.open(.post(PostViewModel(postType: .quoteCast, content: content, page: page)))
             viewController.modalPresentationStyle = .fullScreen
             Utility.currentViewController().present(viewController, animated: true, completion: nil)
-        }
-    }
-
-    func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
-        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
-    }
-
-    func didViewFarmmingHistory(_ footerTableViewCell: FooterTableViewCell) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            Utility.currentViewController().navigationController?.pushViewController(FarmingOpener.open(.contentFarming), animated: true)
         }
     }
 }
