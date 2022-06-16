@@ -402,9 +402,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.delegate = self
             cell?.configCell(user: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
-        } else {
+        } else if feed.type == .content || feed.type == .ads {
             self.trackingSeenContent(feed: feed, indexPath: indexPath)
             return self.getFeedCellWithFeed(feed: feed, tableView: tableView, indexPath: indexPath)[indexPath.row]
+        } else {
+            return UITableViewCell()
         }
     }
 
@@ -446,65 +448,65 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     private func renderFeedCell(type: FeedType, content: Content, user: [Author], cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        if type == .content || type == .ads {
-            var originalContent = Content()
-            if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
-                originalContent = tempContent
+        var originalContent = Content()
+        if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
+            originalContent = tempContent
+        }
+        switch cellType {
+        case .activity:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.activityHeader, for: indexPath as IndexPath) as? ActivityHeaderTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.cellConfig(content: content)
+            return cell ?? ActivityHeaderTableViewCell()
+        case .header:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            if content.referencedCasts.type == .recasted {
+                cell?.configCell(type: type, content: originalContent, isDefaultContent: isDefaultContent)
+            } else {
+                cell?.configCell(type: type, content: content, isDefaultContent: isDefaultContent)
             }
-            switch cellType {
-            case .activity:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.activityHeader, for: indexPath as IndexPath) as? ActivityHeaderTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.cellConfig(content: content)
-                return cell ?? ActivityHeaderTableViewCell()
-            case .header:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                if content.referencedCasts.type == .recasted {
-                    cell?.configCell(type: type, content: originalContent, isDefaultContent: isDefaultContent)
-                } else {
-                    cell?.configCell(type: type, content: content, isDefaultContent: isDefaultContent)
-                }
-                return cell ?? HeaderTableViewCell()
-            case .footer:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                if content.referencedCasts.type == .recasted {
-                    cell?.configCell(content: originalContent, isCommentView: false)
-                } else {
-                    cell?.configCell(content: content, isCommentView: false)
-                }
-                return cell ?? FooterTableViewCell()
-            case .quote:
-                return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
-            case .pageAds:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                return cell ?? AdsPageTableViewCell()
-            case .reach:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                return cell ?? ReachedTableViewCell()
-            default:
-                if content.referencedCasts.type == .recasted {
-                    if originalContent.type == .long && !content.isOriginalExpand {
-                        return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
-                    } else {
-                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
-                    }
-                } else {
-                    if content.type == .long && !content.isExpand {
-                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
-                    } else {
-                        return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
-                    }
-                }
+            return cell ?? HeaderTableViewCell()
+        case .footer:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            if content.referencedCasts.type == .recasted {
+                cell?.configCell(content: originalContent, isCommentView: false)
+            } else {
+                cell?.configCell(content: content, isCommentView: false)
+            }
+            return cell ?? FooterTableViewCell()
+        case .quote:
+            return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: tableView, indexPath: indexPath, isRenderForFeed: true)
+        case .pageAds:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            return cell ?? AdsPageTableViewCell()
+        case .reach:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            return cell ?? ReachedTableViewCell()
+        default:
+            return renderContentCell(content: content, originalContent: originalContent, tableView: tableView, indexPath: indexPath)
+        }
+    }
+
+    private func renderContentCell(content: Content, originalContent: Content, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        if content.referencedCasts.type == .recasted {
+            if originalContent.type == .long && !content.isOriginalExpand {
+                return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: tableView, indexPath: indexPath)
+            } else {
+                return FeedCellHelper().renderFeedCell(content: originalContent, tableView: tableView, indexPath: indexPath)
             }
         } else {
-            return UITableViewCell()
+            if content.type == .long && !content.isExpand {
+                return FeedCellHelper().renderLongCastCell(content: content, tableView: tableView, indexPath: indexPath)
+            } else {
+                return FeedCellHelper().renderFeedCell(content: content, tableView: tableView, indexPath: indexPath)
+            }
         }
     }
 }
