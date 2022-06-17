@@ -414,23 +414,23 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         let isDefaultContent: Bool = feed.id == "default"
         if feed.content.referencedCasts.type == .recasted {
             return [
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
             ]
         } else if feed.content.referencedCasts.type == .quoted {
             return [
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .quote, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .quote, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
             ]
         } else {
             return [
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
-                self.renderFeedCell(type: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
             ]
         }
     }
@@ -447,7 +447,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    private func renderFeedCell(type: FeedType, content: Content, user: [Author], cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+    private func renderFeedCell(type: FeedType, content: Content, cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         var originalContent = Content()
         if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
             originalContent = tempContent
