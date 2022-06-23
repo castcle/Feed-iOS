@@ -400,7 +400,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            cell?.configCell(user: feed.userToFollow)
+            cell?.configCell(users: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
         } else if feed.type == .content || feed.type == .ads {
             self.trackingSeenContent(feed: feed, indexPath: indexPath)
