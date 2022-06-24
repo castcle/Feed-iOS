@@ -163,11 +163,20 @@ class FeedViewController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         EngagementHelper().sendCastcleAnalytic(event: .onScreenView, screen: .feed)
+        self.sendAnalytics()
         if Defaults[.isForceUpdate] {
             self.showAppUpdateAlert(force: true)
         } else if Defaults[.isSoftUpdate] {
             self.showAppUpdateAlert(force: false)
         }
+    }
+
+    private func sendAnalytics() {
+        let item = Analytic()
+        item.accountId = UserManager.shared.accountId
+        item.userId = UserManager.shared.id
+        item.role = UserManager.shared.role
+        TrackingAnalyticHelper.shared.sendTrackingAnalytic(eventType: .viewFeed, item: item)
     }
 
     private func updateUI() {
