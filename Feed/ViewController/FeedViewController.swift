@@ -39,6 +39,7 @@ import Defaults
 import PopupDialog
 import SwiftyJSON
 import FirebaseRemoteConfig
+import Adjust
 
 class FeedViewController: UIViewController {
 
@@ -103,6 +104,7 @@ class FeedViewController: UIViewController {
                 self.isLoadData = false
             })
         }
+        Adjust.requestTrackingAuthorization()
     }
 
     private func setupNevBar() {
