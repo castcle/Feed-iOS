@@ -168,6 +168,8 @@ class FeedViewController: UIViewController {
             self.showAppUpdateAlert(force: true)
         } else if Defaults[.isSoftUpdate] {
             self.showAppUpdateAlert(force: false)
+        } else {
+            self.openPdpa()
         }
     }
 
@@ -206,7 +208,7 @@ class FeedViewController: UIViewController {
                                       hideStatusBar: true)
         if !force {
             let cancelButton = CancelButton(title: Defaults[.updateButtonCancel]) {
-                print("Cancel")
+                self.openPdpa()
             }
             buttonList.append(cancelButton)
         }
@@ -220,6 +222,12 @@ class FeedViewController: UIViewController {
         buttonList.append(updateButton)
         updatePopup.addButtons(buttonList)
         Utility.currentViewController().present(updatePopup, animated: true, completion: nil)
+    }
+
+    private func openPdpa() {
+        if UserManager.shared.isLogin && !UserManager.shared.pdpa {
+            Utility.currentViewController().present(ComponentOpener.open(.pdpaPopup), animated: true)
+        }
     }
 
     @objc func scrollTableView(notification: NSNotification) {
