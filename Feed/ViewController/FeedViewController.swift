@@ -103,6 +103,7 @@ class FeedViewController: UIViewController {
                 self.tableView.reloadData()
                 self.isLoadData = false
             })
+            Adjust.requestTrackingAuthorization()
         }
         Adjust.requestTrackingAuthorization()
     }
