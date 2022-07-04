@@ -105,6 +105,7 @@ class FeedViewController: UIViewController {
             })
             Adjust.requestTrackingAuthorization()
         }
+        Adjust.requestTrackingAuthorization()
     }
 
     private func setupNevBar() {
@@ -146,19 +147,7 @@ class FeedViewController: UIViewController {
             if self.viewModel.isFirstLaunch {
                 self.viewModel.isFirstLaunch = false
             }
-            DispatchQueue.main.async {
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
-            }
-            self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 6
-            self.viewModel.state = .loading
-            self.tableView.isScrollEnabled = false
-            self.tableView.reloadData()
-            if UserManager.shared.isLogin {
-                self.viewModel.getFeedsMembers(isReset: true)
-            } else {
-                self.viewModel.getFeedsGuests(isReset: true)
-            }
+            self.updateUI()
         } else {
             self.tableView.reloadData()
         }
@@ -180,6 +169,32 @@ class FeedViewController: UIViewController {
             self.showAppUpdateAlert(force: true)
         } else if Defaults[.isSoftUpdate] {
             self.showAppUpdateAlert(force: false)
+        } else {
+            self.openPdpa()
+        }
+    }
+
+    private func sendAnalytics() {
+        let item = Analytic()
+        item.accountId = UserManager.shared.accountId
+        item.userId = UserManager.shared.id
+        item.role = UserManager.shared.role
+        TrackingAnalyticHelper.shared.sendTrackingAnalytic(eventType: .viewFeed, item: item)
+    }
+
+    private func updateUI() {
+        DispatchQueue.main.async {
+            self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
+        }
+        self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.maxResults = 6
+        self.viewModel.state = .loading
+        self.tableView.isScrollEnabled = false
+        self.tableView.reloadData()
+        if UserManager.shared.isLogin {
+            self.viewModel.getFeedsMembers(isReset: true)
+        } else {
+            self.viewModel.getFeedsGuests(isReset: true)
         }
     }
 
@@ -202,11 +217,11 @@ class FeedViewController: UIViewController {
                                       hideStatusBar: true)
         if !force {
             let cancelButton = CancelButton(title: Defaults[.updateButtonCancel]) {
-                print("Cancel")
+                self.openPdpa()
             }
             buttonList.append(cancelButton)
         }
-        let updateButton = DefaultButton(title: Defaults[.updateButton], dismissOnTap: (force ? false : true)) {
+        let updateButton = DefaultButton(title: Defaults[.updateButton], dismissOnTap: !force) {
             Defaults[.isSoftUpdate] = false
             guard let url = URL(string: Defaults[.updateUrl]) else {
                 return
@@ -216,6 +231,12 @@ class FeedViewController: UIViewController {
         buttonList.append(updateButton)
         updatePopup.addButtons(buttonList)
         Utility.currentViewController().present(updatePopup, animated: true, completion: nil)
+    }
+
+    private func openPdpa() {
+        if UserManager.shared.isLogin && !UserManager.shared.pdpa {
+            Utility.currentViewController().present(ComponentOpener.open(.pdpaPopup), animated: true)
+        }
     }
 
     @objc func scrollTableView(notification: NSNotification) {
@@ -231,19 +252,7 @@ class FeedViewController: UIViewController {
             Defaults[.startLoadFeed] = false
             self.setupNevBar()
             self.viewModel.feeds = []
-            DispatchQueue.main.async {
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
-            }
-            self.viewModel.feedRequest.untilId = ""
-            self.viewModel.feedRequest.maxResults = 6
-            self.viewModel.state = .loading
-            self.tableView.isScrollEnabled = false
-            self.tableView.reloadData()
-            if UserManager.shared.isLogin {
-                self.viewModel.getFeedsMembers(isReset: true)
-            } else {
-                self.viewModel.getFeedsGuests(isReset: true)
-            }
+            self.updateUI()
         }
     }
 
@@ -273,7 +282,11 @@ class FeedViewController: UIViewController {
     @objc private func airdropAction() {
         let menuWallet = RemoteConfig.remoteConfig().configValue(forKey: "menu_wallet").numberValue
         if menuWallet == 2 {
-            Utility.currentViewController().navigationController?.pushViewController(WalletOpener.open(.wallet), animated: true)
+            if UserManager.shared.isVerifiedEmail && UserManager.shared.isVerifiedMobile {
+                Utility.currentViewController().navigationController?.pushViewController(WalletOpener.open(.wallet), animated: true)
+            } else {
+                Utility.currentViewController().navigationController?.pushViewController(WalletOpener.open(.verifyAccount), animated: true)
+            }
         } else {
             Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.internalWebView(URL(string: "\(Environment.airdropUrl)?token=\(UserManager.shared.accessToken)&src=mobile")!)), animated: true)
         }
@@ -305,7 +318,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loading {
             return 5
         } else {
-            return self.viewModel.feeds.count + (UserManager.shared.isLogin ? 1 : 0)
+            return self.viewModel.feeds.count + 1
         }
     }
 
@@ -313,23 +326,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loading {
             return 1
         } else {
-            if UserManager.shared.isLogin {
-                if section == 0 {
-                    return 1
-                } else {
-                    let feed = self.viewModel.feeds[section - 1]
-                    if feed.type == .suggestionFollow {
-                        return 1
-                    } else {
-                        if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
-                            return 4
-                        } else {
-                            return 3
-                        }
-                    }
-                }
+            if section == 0 {
+                return (UserManager.shared.isLogin ? 1 : 0)
             } else {
-                let feed = self.viewModel.feeds[section]
+                let feed = self.viewModel.feeds[section - 1]
                 if feed.type == .suggestionFollow {
                     return 1
                 } else {
@@ -345,96 +345,16 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.viewModel.state == .loading {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeleton, for: indexPath as IndexPath) as? SkeletonFeedTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
-            cell?.configCell()
-            return cell ?? SkeletonFeedTableViewCell()
+            return FeedCellHelper().renderSkeletonCell(tableView: tableView, indexPath: indexPath)
         } else {
-            if UserManager.shared.isLogin {
-                if indexPath.section == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
-                    cell?.backgroundColor = UIColor.Asset.darkGray
-                    cell?.configCell()
-                    return cell ?? NewPostTableViewCell()
-                } else {
-                    let feed = self.viewModel.feeds[indexPath.section - 1]
-                    let isDefaultContent: Bool = feed.id == "default"
-                    if feed.type == .suggestionFollow {
-                        return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                    } else {
-                        if feed.content.referencedCasts.type == .recasted {
-                            if indexPath.row == 0 {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else if indexPath.row == 1 {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else if indexPath.row == 2 {
-                                self.viewModel.seenContent(feedId: feed.id)
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            }
-                        } else if feed.content.referencedCasts.type == .quoted {
-                            if indexPath.row == 0 {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else if indexPath.row == 1 {
-                                self.viewModel.seenContent(feedId: feed.id)
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else if indexPath.row == 2 {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            }
-                        } else {
-                            if indexPath.row == 0 {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else if indexPath.row == 1 {
-                                self.viewModel.seenContent(feedId: feed.id)
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            } else {
-                                return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                            }
-                        }
-                    }
-                }
+            if indexPath.section == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
+                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.configCell()
+                return cell ?? NewPostTableViewCell()
             } else {
-                let feed = self.viewModel.feeds[indexPath.section]
-                let isDefaultContent: Bool = feed.id == "default"
-                if feed.type == .suggestionFollow {
-                    return self.renderFeedCell(feedType: .suggestionFollow, content: Content(), user: feed.userToFollow, cellType: .none, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                } else {
-                    if feed.content.referencedCasts.type == .recasted {
-                        if indexPath.row == 0 {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else if indexPath.row == 1 {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else if indexPath.row == 2 {
-                            self.viewModel.seenContent(feedId: feed.id)
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        }
-                    } else if feed.content.referencedCasts.type == .quoted {
-                        if indexPath.row == 0 {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else if indexPath.row == 1 {
-                            self.viewModel.seenContent(feedId: feed.id)
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else if indexPath.row == 2 {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .quote, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        }
-                    } else {
-                        if indexPath.row == 0 {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else if indexPath.row == 1 {
-                            self.viewModel.seenContent(feedId: feed.id)
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        } else {
-                            return self.renderFeedCell(feedType: feed.type, content: feed.content, user: [], cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
-                        }
-                    }
-                }
+                let feed = self.viewModel.feeds[indexPath.section - 1]
+                return self.renderFeed(feed: feed, tableView: tableView, indexPath: indexPath)
             }
         }
     }
@@ -453,158 +373,172 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if self.viewModel.state == .loading {
             return
         }
-        if UserManager.shared.isLogin {
-            if indexPath.section < 1 {
-                return
-            }
-            var originalContent = Content()
-            let feed = self.viewModel.feeds[indexPath.section - 1]
-            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
-                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
-                    originalContent = tempContent
-                }
-            }
+        if indexPath.section < 1 {
+            return
+        }
+        var originalContent = Content()
+        let feed = self.viewModel.feeds[indexPath.section - 1]
+        if (feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
+            originalContent = tempContent
+        }
 
-            if feed.type != .content {
-                return
-            }
-            if feed.content.referencedCasts.type == .recasted {
-                if originalContent.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section - 1].content.isOriginalExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
-            } else {
-                if feed.content.type == .long && indexPath.row == 1 {
-                    self.viewModel.feeds[indexPath.section - 1].content.isExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
+        if feed.type != .content {
+            return
+        }
+        if feed.content.referencedCasts.type == .recasted {
+            if originalContent.type == .long && indexPath.row == 2 {
+                self.viewModel.feeds[indexPath.section - 1].content.isOriginalExpand.toggle()
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         } else {
-            var originalContent = Content()
-            let feed = self.viewModel.feeds[indexPath.section]
-            if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
-                if let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
-                    originalContent = tempContent
-                }
-            }
-
-            if feed.type != .content {
-                return
-            }
-
-            if feed.content.referencedCasts.type == .recasted {
-                if originalContent.type == .long && indexPath.row == 2 {
-                    self.viewModel.feeds[indexPath.section].content.isOriginalExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
-            } else {
-                if feed.content.type == .long && indexPath.row == 1 {
-                    self.viewModel.feeds[indexPath.section].content.isExpand.toggle()
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
+            if feed.content.type == .long && indexPath.row == 1 {
+                self.viewModel.feeds[indexPath.section - 1].content.isExpand.toggle()
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if self.viewModel.state == .loaded {
-            var index: Int = 0
-            if UserManager.shared.isLogin {
-                if indexPath.section > 0 {
-                    index = indexPath.section - 1
-                } else {
-                    return
-                }
-            } else {
-                index = indexPath.section
-            }
-            if index >= self.viewModel.feeds.count {
-                return
-            }
+        if self.viewModel.state == .loading {
+            return
+        }
+        var index: Int = 0
+        if indexPath.section > 0 {
+            index = indexPath.section - 1
+        } else {
+            return
+        }
+        if index >= self.viewModel.feeds.count {
+            return
+        }
 
-            let feed = self.viewModel.feeds[index]
-            if feed.type == .content {
-                if feed.content.referencedCasts.type == .recasted {
-                    if indexPath.row == 2 {
-                        self.viewModel.castOffView(feedId: feed.id)
-                    }
-                } else {
-                    if indexPath.row == 1 {
-                        self.viewModel.castOffView(feedId: feed.id)
-                    }
-                }
+        let feed = self.viewModel.feeds[index]
+        if feed.type != .content {
+            return
+        }
+        if feed.content.referencedCasts.type == .recasted {
+            if indexPath.row == 2 {
+                self.viewModel.castOffView(feedId: feed.id)
+            }
+        } else {
+            if indexPath.row == 1 {
+                self.viewModel.castOffView(feedId: feed.id)
             }
         }
     }
 
-    func renderFeedCell(feedType: FeedType, content: Content, user: [Author], cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        if feedType == .suggestionFollow {
+    private func renderFeed(feed: Feed, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        if feed.type == .suggestionFollow {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
             cell?.backgroundColor = UIColor.Asset.darkGray
             cell?.delegate = self
-            cell?.configCell(user: user)
+            cell?.configCell(users: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
-        } else if feedType == .content || feedType == .ads {
-            var originalContent = Content()
-            if content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted {
-                if let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
-                    originalContent = tempContent
-                }
-            }
-            switch cellType {
-            case .activity:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.activityHeader, for: indexPath as IndexPath) as? ActivityHeaderTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.cellConfig(content: content)
-                return cell ?? ActivityHeaderTableViewCell()
-            case .header:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                if content.referencedCasts.type == .recasted {
-                    cell?.configCell(feedType: feedType, content: originalContent, isDefaultContent: isDefaultContent)
-                } else {
-                    cell?.configCell(feedType: feedType, content: content, isDefaultContent: isDefaultContent)
-                }
-                return cell ?? HeaderTableViewCell()
-            case .footer:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                if content.referencedCasts.type == .recasted {
-                    cell?.content = originalContent
-                } else {
-                    cell?.content = content
-                }
-                return cell ?? FooterTableViewCell()
-            case .quote:
-                return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
-            case .pageAds:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                cell?.delegate = self
-                return cell ?? AdsPageTableViewCell()
-            case .reach:
-                let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
-                return cell ?? ReachedTableViewCell()
-            default:
-                if content.referencedCasts.type == .recasted {
-                    if originalContent.type == .long && !content.isOriginalExpand {
-                        return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
-                    } else {
-                        return FeedCellHelper().renderFeedCell(content: originalContent, tableView: self.tableView, indexPath: indexPath)
-                    }
-                } else {
-                    if content.type == .long && !content.isExpand {
-                        return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
-                    } else {
-                        return FeedCellHelper().renderFeedCell(content: content, tableView: self.tableView, indexPath: indexPath)
-                    }
-                }
-            }
+        } else if feed.type == .content || feed.type == .ads {
+            self.trackingSeenContent(feed: feed, indexPath: indexPath)
+            return self.getFeedCellWithFeed(feed: feed, tableView: tableView, indexPath: indexPath)[indexPath.row]
         } else {
             return UITableViewCell()
+        }
+    }
+
+    private func getFeedCellWithFeed(feed: Feed, tableView: UITableView, indexPath: IndexPath) -> [UITableViewCell] {
+        let isDefaultContent: Bool = feed.id == "default"
+        if feed.content.referencedCasts.type == .recasted {
+            return [
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+            ]
+        } else if feed.content.referencedCasts.type == .quoted {
+            return [
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .quote, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+            ]
+        } else {
+            return [
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+            ]
+        }
+    }
+
+    private func trackingSeenContent(feed: Feed, indexPath: IndexPath) {
+        if feed.content.referencedCasts.type == .recasted {
+            if indexPath.row == 2 {
+                self.viewModel.seenContent(feedId: feed.id)
+            }
+        } else {
+            if indexPath.row == 1 {
+                self.viewModel.seenContent(feedId: feed.id)
+            }
+        }
+    }
+
+    private func renderFeedCell(type: FeedType, content: Content, cellType: FeedCellType, isDefaultContent: Bool, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        var originalContent = Content()
+        if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
+            originalContent = tempContent
+        }
+        switch cellType {
+        case .activity:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.activityHeader, for: indexPath as IndexPath) as? ActivityHeaderTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.cellConfig(content: content)
+            return cell ?? ActivityHeaderTableViewCell()
+        case .header:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            if content.referencedCasts.type == .recasted {
+                cell?.configCell(type: type, content: originalContent, isDefaultContent: isDefaultContent)
+            } else {
+                cell?.configCell(type: type, content: content, isDefaultContent: isDefaultContent)
+            }
+            return cell ?? HeaderTableViewCell()
+        case .footer:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            if content.referencedCasts.type == .recasted {
+                cell?.configCell(content: originalContent, isCommentView: false)
+            } else {
+                cell?.configCell(content: content, isCommentView: false)
+            }
+            return cell ?? FooterTableViewCell()
+        case .quote:
+            return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: tableView, indexPath: indexPath, isRenderForFeed: true)
+        case .pageAds:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.delegate = self
+            return cell ?? AdsPageTableViewCell()
+        case .reach:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
+            cell?.backgroundColor = UIColor.Asset.darkGray
+            return cell ?? ReachedTableViewCell()
+        default:
+            return renderContentCell(content: content, originalContent: originalContent, tableView: tableView, indexPath: indexPath)
+        }
+    }
+
+    private func renderContentCell(content: Content, originalContent: Content, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        if content.referencedCasts.type == .recasted {
+            if originalContent.type == .long && !content.isOriginalExpand {
+                return FeedCellHelper().renderLongCastCell(content: originalContent, tableView: tableView, indexPath: indexPath)
+            } else {
+                return FeedCellHelper().renderFeedCell(content: originalContent, tableView: tableView, indexPath: indexPath)
+            }
+        } else {
+            if content.type == .long && !content.isExpand {
+                return FeedCellHelper().renderLongCastCell(content: content, tableView: tableView, indexPath: indexPath)
+            } else {
+                return FeedCellHelper().renderFeedCell(content: content, tableView: tableView, indexPath: indexPath)
+            }
         }
     }
 }
@@ -615,14 +549,6 @@ extension FeedViewController: HeaderTableViewCellDelegate {
             self.viewModel.feeds.remove(at: indexPath.section)
             self.tableView.reloadData()
         }
-    }
-
-    func didTabProfile(_ headerTableViewCell: HeaderTableViewCell, author: Author) {
-        ProfileOpener.openProfileDetail(author.castcleId, displayName: author.displayName)
-    }
-
-    func didAuthen(_ headerTableViewCell: HeaderTableViewCell) {
-        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
     }
 
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
@@ -640,25 +566,11 @@ extension FeedViewController: HeaderTableViewCellDelegate {
 }
 
 extension FeedViewController: FooterTableViewCellDelegate {
-    func didTabComment(_ footerTableViewCell: FooterTableViewCell, content: Content) {
-        Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.comment(CommentViewModel(contentId: content.id))), animated: true)
-    }
-
     func didTabQuoteCast(_ footerTableViewCell: FooterTableViewCell, content: Content, page: Page) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             let viewController = PostOpener.open(.post(PostViewModel(postType: .quoteCast, content: content, page: page)))
             viewController.modalPresentationStyle = .fullScreen
             Utility.currentViewController().present(viewController, animated: true, completion: nil)
-        }
-    }
-
-    func didAuthen(_ footerTableViewCell: FooterTableViewCell) {
-        NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
-    }
-
-    func didViewFarmmingHistory(_ footerTableViewCell: FooterTableViewCell) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            Utility.currentViewController().navigationController?.pushViewController(FarmingOpener.open(.contentFarming), animated: true)
         }
     }
 }

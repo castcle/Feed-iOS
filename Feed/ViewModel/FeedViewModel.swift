@@ -31,6 +31,7 @@ import Networking
 import SwiftyJSON
 import RealmSwift
 import Defaults
+import Moya
 
 final class FeedViewModel {
 
@@ -66,26 +67,7 @@ final class FeedViewModel {
         self.isReset = isReset
         self.feedRequest.userFields = .none
         self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
-            if success {
-                do {
-                    let rawJson = try response.mapJSON()
-                    let json = JSON(rawJson)
-                    let shelf = FeedShelf(json: json)
-                    self.feedsTemp = []
-                    self.feedsTemp.append(contentsOf: shelf.feeds)
-                    if isReset {
-                        self.feeds = self.feedsTemp
-                    } else {
-                        self.feeds.append(contentsOf: self.feedsTemp)
-                    }
-                    self.meta = shelf.meta
-                    self.didLoadFeedsFinish?()
-                } catch {}
-            } else {
-                if isRefreshToken {
-                    self.tokenHelper.refreshToken()
-                }
-            }
+            self.handleFeedRespond(success: success, response: response, isRefreshToken: isRefreshToken)
         }
     }
 
@@ -93,25 +75,29 @@ final class FeedViewModel {
         self.isReset = isReset
         self.feedRequest.userFields = .relationships
         self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
-            if success {
-                do {
-                    let rawJson = try response.mapJSON()
-                    let json = JSON(rawJson)
-                    let shelf = FeedShelf(json: json)
-                    self.feedsTemp = []
-                    self.feedsTemp.append(contentsOf: shelf.feeds)
-                    if isReset {
-                        self.feeds = self.feedsTemp
-                    } else {
-                        self.feeds.append(contentsOf: self.feedsTemp)
-                    }
-                    self.meta = shelf.meta
-                    self.didLoadFeedsFinish?()
-                } catch {}
-            } else {
-                if isRefreshToken {
-                    self.tokenHelper.refreshToken()
+            self.handleFeedRespond(success: success, response: response, isRefreshToken: isRefreshToken)
+        }
+    }
+
+    private func handleFeedRespond(success: Bool, response: Response, isRefreshToken: Bool) {
+        if success {
+            do {
+                let rawJson = try response.mapJSON()
+                let json = JSON(rawJson)
+                let shelf = FeedShelf(json: json)
+                self.feedsTemp = []
+                self.feedsTemp.append(contentsOf: shelf.feeds)
+                if isReset {
+                    self.feeds = self.feedsTemp
+                } else {
+                    self.feeds.append(contentsOf: self.feedsTemp)
                 }
+                self.meta = shelf.meta
+                self.didLoadFeedsFinish?()
+            } catch {}
+        } else {
+            if isRefreshToken {
+                self.tokenHelper.refreshToken()
             }
         }
     }
