@@ -198,14 +198,6 @@ class FeedViewController: UIViewController {
         }
     }
 
-    private func sendAnalytics() {
-        let item = Analytic()
-        item.accountId = UserManager.shared.accountId
-        item.userId = UserManager.shared.id
-        item.role = UserManager.shared.role
-        TrackingAnalyticHelper.shared.sendTrackingAnalytic(eventType: .viewFeed, item: item)
-    }
-
     private func showAppUpdateAlert(force: Bool) {
         var buttonList: [PopupDialogButton] = []
         let updatePopup = PopupDialog(title: Defaults[.updateTitle],
