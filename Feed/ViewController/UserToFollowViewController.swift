@@ -109,12 +109,12 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
         if self.viewModel.state == .loading {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.skeletonUser, for: indexPath as IndexPath) as? SkeletonUserTableViewCell
             cell?.configCell()
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             return cell ?? SkeletonUserTableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.userToFollow, for: indexPath as IndexPath) as? UserToFollowTableViewCell
             cell?.configCell(user: self.viewModel.users[indexPath.section])
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             return cell ?? UserToFollowTableViewCell()
         }

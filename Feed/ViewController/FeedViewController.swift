@@ -341,7 +341,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             if indexPath.section == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: FeedNibVars.TableViewCell.post, for: indexPath as IndexPath) as? NewPostTableViewCell
-                cell?.backgroundColor = UIColor.Asset.darkGray
+                cell?.backgroundColor = UIColor.Asset.cellBackground
                 cell?.configCell()
                 return cell ?? NewPostTableViewCell()
             } else {
@@ -422,7 +422,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     private func renderFeed(feed: Feed, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         if feed.type == .suggestionFollow {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.suggestionUser, for: indexPath as IndexPath) as? SuggestionUserTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             cell?.configCell(users: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
@@ -479,12 +479,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         switch cellType {
         case .activity:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.activityHeader, for: indexPath as IndexPath) as? ActivityHeaderTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.cellConfig(content: content)
             return cell ?? ActivityHeaderTableViewCell()
         case .header:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             if content.referencedCasts.type == .recasted {
                 cell?.configCell(type: type, content: originalContent, isDefaultContent: isDefaultContent)
@@ -494,7 +494,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             return cell ?? HeaderTableViewCell()
         case .footer:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             if content.referencedCasts.type == .recasted {
                 cell?.configCell(content: originalContent, isCommentView: false)
@@ -506,12 +506,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: tableView, indexPath: indexPath, isRenderForFeed: true)
         case .pageAds:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.adsPage, for: indexPath as IndexPath) as? AdsPageTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             return cell ?? AdsPageTableViewCell()
         case .reach:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             return cell ?? ReachedTableViewCell()
         default:
             return renderContentCell(content: content, originalContent: originalContent, tableView: tableView, indexPath: indexPath)

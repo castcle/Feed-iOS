@@ -159,13 +159,13 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
         switch cellType {
         case .header:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.headerFeed, for: indexPath as IndexPath) as? HeaderTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             cell?.configCell(type: .content, content: content, isDefaultContent: false)
             return cell ?? HeaderTableViewCell()
         case .footer:
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.footerFeed, for: indexPath as IndexPath) as? FooterTableViewCell
-            cell?.backgroundColor = UIColor.Asset.darkGray
+            cell?.backgroundColor = UIColor.Asset.cellBackground
             cell?.delegate = self
             cell?.configCell(content: content, isCommentView: false)
             return cell ?? FooterTableViewCell()

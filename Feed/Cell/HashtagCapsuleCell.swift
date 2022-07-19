@@ -39,7 +39,7 @@ class HashtagCapsuleCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.titleLabel.font = UIFont.asset(.bold, fontSize: .overline)
-        self.bgView.capsule(color: UIColor.Asset.darkGray, borderWidth: 1.0, borderColor: UIColor.Asset.black)
+        self.bgView.capsule(color: UIColor.Asset.cellBackground, borderWidth: 1.0, borderColor: UIColor.Asset.black)
         self.titleLabel.textColor = UIColor.Asset.white
     }
 
