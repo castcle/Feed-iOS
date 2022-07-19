@@ -40,7 +40,7 @@ class NewPostTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.searchView.custom(color: UIColor.Asset.cellBackground, cornerRadius: 18, borderWidth: 1, borderColor: UIColor.Asset.darkGraphiteBlue)
-        self.profileImage.circle(color: UIColor.Asset.darkGraphiteBlue)
+        self.profileImage.circle(color: UIColor.Asset.white)
         self.placeholderLabel.font = UIFont.asset(.light, fontSize: .overline)
         self.placeholderLabel.textColor = UIColor.Asset.lightGray
     }
