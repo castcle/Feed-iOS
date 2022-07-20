@@ -288,8 +288,8 @@ class FeedViewController: UIViewController {
         if !self.isLoadData {
             if self.tableView.contentOffset == .zero {
                 self.tableView.coreRefresh.beginHeaderRefresh()
-            } else {
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
+            } else if !self.viewModel.feeds.isEmpty {
+                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: (UserManager.shared.isLogin ? 0 : 1)) as IndexPath, at: .top, animated: true)
             }
         }
     }
