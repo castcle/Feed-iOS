@@ -128,6 +128,7 @@ class FeedViewController: UIViewController {
         } else {
             let rightIcon = NavBarButtonType.righProfile.barButton
             rightIcon.addTarget(self, action: #selector(self.authAction), for: .touchUpInside)
+            rightIcon.accessibilityIdentifier = "feed_authen_button"
             rightButton.append(UIBarButtonItem(customView: rightIcon))
         }
         self.navigationItem.rightBarButtonItems = rightButton
