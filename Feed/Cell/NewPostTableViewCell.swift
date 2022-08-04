@@ -62,6 +62,6 @@ class NewPostTableViewCell: UITableViewCell {
     }
 
     @IBAction func profileAction(_ sender: Any) {
-        ProfileOpener.openProfileDetail(UserManager.shared.rawCastcleId, displayName: "")
+        ProfileOpener.openProfileDetail(UserManager.shared.castcleId, displayName: "")
     }
 }
