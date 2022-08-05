@@ -49,20 +49,6 @@ final class FeedViewModel {
     private var isReset: Bool = true
 
     // MARK: - Input
-    public func getHashtags() {
-        self.feedRepository.getHashtags { (success, hashtagShelf) in
-            if success {
-                self.hashtagShelf = hashtagShelf
-                if UserManager.shared.isLogin {
-                    self.getFeedsMembers(isReset: true)
-                } else {
-                    self.getFeedsGuests(isReset: true)
-                }
-            }
-            self.didLoadHashtagsFinish?()
-        }
-    }
-
     public func getFeedsGuests(isReset: Bool) {
         self.isReset = isReset
         self.feedRequest.userFields = .none
