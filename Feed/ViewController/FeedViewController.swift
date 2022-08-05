@@ -547,9 +547,12 @@ extension FeedViewController: HeaderTableViewCellDelegate {
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
+                let reportDict: [String: Any] = [
+                    JsonKey.castcleId.rawValue: "",
+                    JsonKey.isReportContent.rawValue: true
+                ]
+                NotificationCenter.default.post(name: .openReportSuccessDelegate, object: nil, userInfo: reportDict)
             }
-
             UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
                 self.viewModel.feeds.remove(at: indexPath.section)
                 self.tableView.reloadData()

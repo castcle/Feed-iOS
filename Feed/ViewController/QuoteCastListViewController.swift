@@ -188,7 +188,11 @@ extension QuoteCastListViewController: HeaderTableViewCellDelegate {
 
     func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            Utility.currentViewController().navigationController?.pushViewController(ComponentOpener.open(.reportSuccess(true, "")), animated: true)
+            let reportDict: [String: Any] = [
+                JsonKey.castcleId.rawValue: "",
+                JsonKey.isReportContent.rawValue: true
+            ]
+            NotificationCenter.default.post(name: .openReportSuccessDelegate, object: nil, userInfo: reportDict)
         }
 
         if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
