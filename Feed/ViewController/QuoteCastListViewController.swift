@@ -81,6 +81,7 @@ class QuoteCastListViewController: UIViewController {
         super.viewWillAppear(animated)
         self.setupNavBar()
         Defaults[.screenId] = ""
+        self.tableView.reloadData()
     }
 
     func setupNavBar() {
@@ -108,7 +109,16 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.viewModel.loadState == .loaded {
-            return 4
+            let content = self.viewModel.contents[section]
+            if content.participate.recasted || ContentHelper.shared.isReportContent(contentId: content.id) {
+                if content.isShowContentReport && content.referencedCasts.type == .quoted {
+                    return 5
+                } else {
+                    return 1
+                }
+            } else {
+                return 4
+            }
         } else {
             return 1
         }
@@ -117,15 +127,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.viewModel.loadState == .loaded {
             let content = self.viewModel.contents[indexPath.section]
-            if indexPath.row == 0 {
-                return self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath)
-            } else if indexPath.row == 1 {
-                return self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath)
-            } else if indexPath.row == 2 {
-                return self.renderFeedCell(content: content, cellType: .quote, tableView: tableView, indexPath: indexPath)
-            } else {
-                return self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
-            }
+            return self.getContentCellWithContent(content: content, tableView: tableView, indexPath: indexPath)[indexPath.row]
         } else {
             return FeedCellHelper().renderSkeletonCell(tableView: tableView, indexPath: indexPath)
         }
@@ -151,6 +153,31 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
 
+    private func getContentCellWithContent(content: Content, tableView: UITableView, indexPath: IndexPath) -> [UITableViewCell] {
+        if content.participate.recasted || ContentHelper.shared.isReportContent(contentId: content.id) {
+            if content.isShowContentReport && content.referencedCasts.type == .quoted {
+                return [
+                    self.renderFeedCell(content: content, cellType: .activity, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(content: content, cellType: .quote, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
+                ]
+            } else {
+                return [
+                    self.renderFeedCell(content: content, cellType: .report, tableView: tableView, indexPath: indexPath)
+                ]
+            }
+        } else {
+            return [
+                self.renderFeedCell(content: content, cellType: .header, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(content: content, cellType: .content, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(content: content, cellType: .quote, tableView: tableView, indexPath: indexPath),
+                self.renderFeedCell(content: content, cellType: .footer, tableView: tableView, indexPath: indexPath)
+            ]
+        }
+    }
+
     func renderFeedCell(content: Content, cellType: FeedCellType, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         var originalContent = Content()
         if (content.referencedCasts.type == .recasted || content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: content.referencedCasts.id) {
@@ -171,6 +198,11 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
             return cell ?? FooterTableViewCell()
         case .quote:
             return FeedCellHelper().renderQuoteCastCell(content: originalContent, tableView: self.tableView, indexPath: indexPath, isRenderForFeed: true)
+        case .report:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.report, for: indexPath as IndexPath) as? ReportTableViewCell
+            cell?.backgroundColor = UIColor.Asset.cellBackground
+            cell?.delegate = self
+            return cell ?? ReportTableViewCell()
         default:
             if content.type == .long && !content.isExpand {
                 return FeedCellHelper().renderLongCastCell(content: content, tableView: self.tableView, indexPath: indexPath)
@@ -186,20 +218,13 @@ extension QuoteCastListViewController: HeaderTableViewCellDelegate {
         // Remove success
     }
 
-    func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
+    func didReport(_ headerTableViewCell: HeaderTableViewCell, contentId: String) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             let reportDict: [String: Any] = [
                 JsonKey.castcleId.rawValue: "",
-                JsonKey.isReportContent.rawValue: true
+                JsonKey.contentId.rawValue: contentId
             ]
-            NotificationCenter.default.post(name: .openReportSuccessDelegate, object: nil, userInfo: reportDict)
-        }
-
-        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-            UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                self.viewModel.contents.remove(at: indexPath.section)
-                self.tableView.reloadData()
-            })
+            NotificationCenter.default.post(name: .openReportDelegate, object: nil, userInfo: reportDict)
         }
     }
 }
@@ -210,6 +235,15 @@ extension QuoteCastListViewController: FooterTableViewCellDelegate {
             let viewController = PostOpener.open(.post(PostViewModel(postType: .quoteCast, content: content, page: page)))
             viewController.modalPresentationStyle = .fullScreen
             Utility.currentViewController().present(viewController, animated: true, completion: nil)
+        }
+    }
+}
+
+extension QuoteCastListViewController: ReportTableViewCellDelegate {
+    func didTabView(_ reportTableViewCell: ReportTableViewCell) {
+        if let indexPath = self.tableView.indexPath(for: reportTableViewCell) {
+            self.viewModel.contents[indexPath.section].isShowContentReport = true
+            self.tableView.reloadData()
         }
     }
 }

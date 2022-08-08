@@ -325,6 +325,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 let feed = self.viewModel.feeds[section - 1]
                 if feed.type == .suggestionFollow {
                     return 1
+                } else if ContentHelper.shared.isReportContent(contentId: feed.content.id) {
+                    if feed.content.isShowContentReport {
+                        return 4
+                    } else {
+                        return 1
+                    }
                 } else {
                     if feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted {
                         return 4
@@ -374,8 +380,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if (feed.content.referencedCasts.type == .recasted || feed.content.referencedCasts.type == .quoted), let tempContent = ContentHelper.shared.getContentRef(id: feed.content.referencedCasts.id) {
             originalContent = tempContent
         }
-
         if feed.type != .content {
+            return
+        }
+        if ContentHelper.shared.isReportContent(contentId: feed.content.id) {
             return
         }
         if feed.content.referencedCasts.type == .recasted {
@@ -409,6 +417,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         if feed.type != .content {
             return
         }
+        if ContentHelper.shared.isReportContent(contentId: feed.content.id) {
+            return
+        }
         if feed.content.referencedCasts.type == .recasted {
             if indexPath.row == 2 {
                 self.viewModel.castOffView(feedId: feed.id)
@@ -427,6 +438,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.delegate = self
             cell?.configCell(users: feed.userToFollow)
             return cell ?? SuggestionUserTableViewCell()
+        } else if ContentHelper.shared.isReportContent(contentId: feed.content.id) {
+            return self.getFeedCellWithFeed(feed: feed, tableView: tableView, indexPath: indexPath)[indexPath.row]
         } else if feed.type == .content || feed.type == .ads {
             self.trackingSeenContent(feed: feed, indexPath: indexPath)
             return self.getFeedCellWithFeed(feed: feed, tableView: tableView, indexPath: indexPath)[indexPath.row]
@@ -437,7 +450,20 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 
     private func getFeedCellWithFeed(feed: Feed, tableView: UITableView, indexPath: IndexPath) -> [UITableViewCell] {
         let isDefaultContent: Bool = feed.id == "default"
-        if feed.content.referencedCasts.type == .recasted {
+        if ContentHelper.shared.isReportContent(contentId: feed.content.id) {
+            if feed.content.isShowContentReport {
+                return [
+                    self.renderFeedCell(type: feed.type, content: feed.content, cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(type: feed.type, content: feed.content, cellType: .content, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
+                    self.renderFeedCell(type: feed.type, content: feed.content, cellType: .footer, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+                ]
+            } else {
+                return [
+                    self.renderFeedCell(type: feed.type, content: feed.content, cellType: .report, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath)
+                ]
+            }
+        } else if feed.content.referencedCasts.type == .recasted {
             return [
                 self.renderFeedCell(type: feed.type, content: feed.content, cellType: .activity, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
                 self.renderFeedCell(type: feed.type, content: feed.content, cellType: .header, isDefaultContent: isDefaultContent, tableView: tableView, indexPath: indexPath),
@@ -514,6 +540,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.reached, for: indexPath as IndexPath) as? ReachedTableViewCell
             cell?.backgroundColor = UIColor.Asset.cellBackground
             return cell ?? ReachedTableViewCell()
+        case .report:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComponentNibVars.TableViewCell.report, for: indexPath as IndexPath) as? ReportTableViewCell
+            cell?.backgroundColor = UIColor.Asset.cellBackground
+            cell?.delegate = self
+            return cell ?? ReportTableViewCell()
         default:
             return renderContentCell(content: content, originalContent: originalContent, tableView: tableView, indexPath: indexPath)
         }
@@ -539,24 +570,18 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 extension FeedViewController: HeaderTableViewCellDelegate {
     func didRemoveSuccess(_ headerTableViewCell: HeaderTableViewCell) {
         if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-            self.viewModel.feeds.remove(at: indexPath.section)
+            self.viewModel.feeds.remove(at: indexPath.section - 1)
             self.tableView.reloadData()
         }
     }
 
-    func didReportSuccess(_ headerTableViewCell: HeaderTableViewCell) {
-        if let indexPath = self.tableView.indexPath(for: headerTableViewCell) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                let reportDict: [String: Any] = [
-                    JsonKey.castcleId.rawValue: "",
-                    JsonKey.isReportContent.rawValue: true
-                ]
-                NotificationCenter.default.post(name: .openReportSuccessDelegate, object: nil, userInfo: reportDict)
-            }
-            UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                self.viewModel.feeds.remove(at: indexPath.section)
-                self.tableView.reloadData()
-            })
+    func didReport(_ headerTableViewCell: HeaderTableViewCell, contentId: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            let reportDict: [String: Any] = [
+                JsonKey.castcleId.rawValue: "",
+                JsonKey.contentId.rawValue: contentId
+            ]
+            NotificationCenter.default.post(name: .openReportDelegate, object: nil, userInfo: reportDict)
         }
     }
 }
@@ -589,6 +614,15 @@ extension FeedViewController: SuggestionUserTableViewCellDelegate {
 extension FeedViewController: AdsPageTableViewCellDelegate {
     func didAuthen(_ adsPageTableViewCell: AdsPageTableViewCell) {
         NotificationCenter.default.post(name: .openSignInDelegate, object: nil, userInfo: nil)
+    }
+}
+
+extension FeedViewController: ReportTableViewCellDelegate {
+    func didTabView(_ reportTableViewCell: ReportTableViewCell) {
+        if let indexPath = self.tableView.indexPath(for: reportTableViewCell) {
+            self.viewModel.feeds[indexPath.section - 1].content.isShowContentReport = true
+            self.tableView.reloadData()
+        }
     }
 }
 
