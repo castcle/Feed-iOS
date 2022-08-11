@@ -237,6 +237,10 @@ extension QuoteCastListViewController: FooterTableViewCellDelegate {
             Utility.currentViewController().present(viewController, animated: true, completion: nil)
         }
     }
+
+    func didTabComment(_ footerTableViewCell: FooterTableViewCell) {
+        // Not use
+    }
 }
 
 extension QuoteCastListViewController: ReportTableViewCellDelegate {
