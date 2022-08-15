@@ -110,7 +110,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.viewModel.loadState == .loaded {
             let content = self.viewModel.contents[section]
-            if content.participate.recasted || ContentHelper.shared.isReportContent(contentId: content.id) {
+            if content.participate.reported || ContentHelper.shared.isReportContent(contentId: content.id) {
                 if content.isShowContentReport && content.referencedCasts.type == .quoted {
                     return 5
                 } else {
@@ -154,7 +154,7 @@ extension QuoteCastListViewController: UITableViewDelegate, UITableViewDataSourc
     }
 
     private func getContentCellWithContent(content: Content, tableView: UITableView, indexPath: IndexPath) -> [UITableViewCell] {
-        if content.participate.recasted || ContentHelper.shared.isReportContent(contentId: content.id) {
+        if content.participate.reported || ContentHelper.shared.isReportContent(contentId: content.id) {
             if content.isShowContentReport && content.referencedCasts.type == .quoted {
                 return [
                     self.renderFeedCell(content: content, cellType: .activity, tableView: tableView, indexPath: indexPath),
