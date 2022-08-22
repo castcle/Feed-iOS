@@ -119,16 +119,6 @@ extension UserToFollowViewController: UITableViewDelegate, UITableViewDataSource
             return cell ?? UserToFollowTableViewCell()
         }
     }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 2
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 2))
-        footerView.backgroundColor = UIColor.clear
-        return footerView
-    }
 }
 
 extension UserToFollowViewController: UserToFollowTableViewCellDelegate {
