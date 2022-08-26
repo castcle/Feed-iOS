@@ -42,25 +42,16 @@ final class FeedViewModel {
     var feedsTemp: [Feed] = []
     var meta: Meta = Meta()
     let tokenHelper: TokenHelper = TokenHelper()
-    private var featureSlug: String = "feed"
     private var circleSlug: String = "forYou"
     var state: LoadState = .loading
     var isFirstLaunch: Bool = true
     private var isReset: Bool = true
 
     // MARK: - Input
-    public func getFeedsGuests(isReset: Bool) {
-        self.isReset = isReset
-        self.feedRequest.userFields = .none
-        self.feedRepository.getFeedsGuests(feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
-            self.handleFeedRespond(success: success, response: response, isRefreshToken: isRefreshToken)
-        }
-    }
-
-    public func getFeedsMembers(isReset: Bool) {
+    public func getFeeds(isReset: Bool) {
         self.isReset = isReset
         self.feedRequest.userFields = .relationships
-        self.feedRepository.getFeedsMembers(featureSlug: self.featureSlug, circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
+        self.feedRepository.getFeeds(circleSlug: self.circleSlug, feedRequest: self.feedRequest) { (success, response, isRefreshToken) in
             self.handleFeedRespond(success: success, response: response, isRefreshToken: isRefreshToken)
         }
     }
@@ -135,10 +126,6 @@ final class FeedViewModel {
 
 extension FeedViewModel: TokenHelperDelegate {
     public func didRefreshTokenFinish() {
-        if UserManager.shared.isLogin {
-            self.getFeedsMembers(isReset: self.isReset)
-        } else {
-            self.getFeedsGuests(isReset: self.isReset)
-        }
+        self.getFeeds(isReset: self.isReset)
     }
 }

@@ -65,26 +65,18 @@ class FeedViewController: UIViewController {
         self.tableView.coreRefresh.addHeadRefresh(animator: FastAnimator()) { [weak self] in
             guard let self = self else { return }
             self.isLoadData = true
-            self.viewModel.feedRequest.untilId = ""
+            self.viewModel.feedRequest.nextToken = ""
             self.viewModel.feedRequest.maxResults = 6
-            if UserManager.shared.isLogin {
-                self.viewModel.getFeedsMembers(isReset: true)
-            } else {
-                self.viewModel.getFeedsGuests(isReset: true)
-            }
+            self.viewModel.getFeeds(isReset: true)
         }
 
         self.tableView.coreRefresh.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
             if !self.viewModel.meta.oldestId.isEmpty {
                 self.isLoadData = true
-                self.viewModel.feedRequest.untilId = self.viewModel.meta.oldestId
+                self.viewModel.feedRequest.nextToken = self.viewModel.meta.nextToken
                 self.viewModel.feedRequest.maxResults = 25
-                if UserManager.shared.isLogin {
-                    self.viewModel.getFeedsMembers(isReset: false)
-                } else {
-                    self.viewModel.getFeedsGuests(isReset: false)
-                }
+                self.viewModel.getFeeds(isReset: false)
             } else {
                 self.tableView.coreRefresh.noticeNoMoreData()
             }
@@ -187,16 +179,12 @@ class FeedViewController: UIViewController {
         DispatchQueue.main.async {
             self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: true)
         }
-        self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.nextToken = ""
         self.viewModel.feedRequest.maxResults = 6
         self.viewModel.state = .loading
         self.tableView.isScrollEnabled = false
         self.tableView.reloadData()
-        if UserManager.shared.isLogin {
-            self.viewModel.getFeedsMembers(isReset: true)
-        } else {
-            self.viewModel.getFeedsGuests(isReset: true)
-        }
+        self.viewModel.getFeeds(isReset: true)
     }
 
     private func showAppUpdateAlert(force: Bool) {
@@ -296,13 +284,9 @@ class FeedViewController: UIViewController {
     }
 
     @IBAction func retryAction(_ sender: Any) {
-        self.viewModel.feedRequest.untilId = ""
+        self.viewModel.feedRequest.nextToken = ""
         self.viewModel.feedRequest.maxResults = 6
-        if UserManager.shared.isLogin {
-            self.viewModel.getFeedsMembers(isReset: true)
-        } else {
-            self.viewModel.getFeedsGuests(isReset: true)
-        }
+        self.viewModel.getFeeds(isReset: true)
     }
 }
 
