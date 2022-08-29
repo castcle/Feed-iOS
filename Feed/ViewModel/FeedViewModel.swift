@@ -80,7 +80,6 @@ final class FeedViewModel {
     }
 
     // MARK: - Output
-    var didLoadHashtagsFinish: (() -> Void)?
     var didLoadFeedsFinish: (() -> Void)?
 
     public init() {

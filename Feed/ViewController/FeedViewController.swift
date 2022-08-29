@@ -82,10 +82,6 @@ class FeedViewController: UIViewController {
             }
         }
 
-        self.viewModel.didLoadHashtagsFinish = {
-            // Load Hastag Finish
-        }
-
         self.viewModel.didLoadFeedsFinish = {
             self.viewModel.state = .loaded
             self.tableView.isScrollEnabled = true
