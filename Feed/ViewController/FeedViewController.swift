@@ -72,7 +72,7 @@ class FeedViewController: UIViewController {
 
         self.tableView.coreRefresh.addFootRefresh(animator: NormalFooterAnimator()) { [weak self] in
             guard let self = self else { return }
-            if !self.viewModel.meta.oldestId.isEmpty {
+            if !self.viewModel.meta.nextToken.isEmpty {
                 self.isLoadData = true
                 self.viewModel.feedRequest.nextToken = self.viewModel.meta.nextToken
                 self.viewModel.feedRequest.maxResults = 25

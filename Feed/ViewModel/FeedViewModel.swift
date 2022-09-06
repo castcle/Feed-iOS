@@ -64,7 +64,7 @@ final class FeedViewModel {
                 let shelf = FeedShelf(json: json)
                 self.feedsTemp = []
                 self.feedsTemp.append(contentsOf: shelf.feeds)
-                if isReset {
+                if self.isReset {
                     self.feeds = self.feedsTemp
                 } else {
                     self.feeds.append(contentsOf: self.feedsTemp)
